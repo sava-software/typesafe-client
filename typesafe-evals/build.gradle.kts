@@ -37,6 +37,11 @@ hardening {
     excludedClasses = listOf("*Test*")
     targetTests = "software.sava.typesafe.evals.rot.*Test*"
   }
+  mutation.register("docs") {
+    targetClasses = listOf("software.sava.typesafe.evals.docs.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.docs.*Test*"
+  }
   mutation.register("dedupe") {
     targetClasses = listOf("software.sava.typesafe.evals.dedupe.*")
     excludedClasses = listOf("*Test*")
@@ -73,6 +78,16 @@ tasks.register<JavaExec>("rot") {
   description = "Experiment A: acceptance-note rot detector"
   mainModule.set("software.sava.typesafe_evals")
   mainClass.set("software.sava.typesafe.evals.rot.RotExperiment")
+  classpath = sourceSets.main.get().runtimeClasspath
+  args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
+}
+
+// ./gradlew :typesafe-evals:docsMine -PevalArgs="--checkouts <dir> --repos sava,ravina --out <dir>"
+tasks.register<JavaExec>("docsMine") {
+  group = "experiments"
+  description = "Experiment C1: mine stale/fresh doc-comment pairs from public checkouts"
+  mainModule.set("software.sava.typesafe_evals")
+  mainClass.set("software.sava.typesafe.evals.docs.DocMiner")
   classpath = sourceSets.main.get().runtimeClasspath
   args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
 }
