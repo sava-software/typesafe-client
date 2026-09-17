@@ -17,6 +17,16 @@ hardening {
     excludedClasses = listOf("*Test*")
     targetTests = "software.sava.typesafe.evals.text.*Test*"
   }
+  mutation.register("corpus") {
+    targetClasses = listOf("software.sava.typesafe.evals.corpus.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.corpus.*Test*"
+  }
+  mutation.register("report") {
+    targetClasses = listOf("software.sava.typesafe.evals.report.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.report.*Test*"
+  }
 }
 
 dependencyAnalysis {

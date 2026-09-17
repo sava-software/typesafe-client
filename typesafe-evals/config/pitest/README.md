@@ -8,14 +8,19 @@ Keep all prose and inline, fenced, or tabular coordinate rosters source-line-fre
 retain line-less class/method/mutator evidence and meaningful multiplicity as `xN`
 (typographic `×N` is equivalent).
 
-One suite, `text`, over the lexical baselines the experiments compare against
-(`software.sava.typesafe.evals.text`). Experiment code gets its own suite when it lands.
+Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe.evals.text`),
+`corpus` (the public-repo gate, git reads, and the process runner), `report` (TSV output).
+Experiment code gets its own suite when it lands.
 
 ## Untriaged debt
 
-- None. First observation 2026-09-17: `text` 15/15 killed after replacing two early
-  returns in `Jaccard` (a null-text guard and a one-side-empty guard) with single-path
-  code; the both-empty case is decided at the division.
+- None. First observations 2026-09-17: `text` 19/19, `corpus` 52/52, `report` all killed.
+  `Jaccard` lost two early returns (a null-text guard and a one-side-empty guard) in favour
+  of single-path code with the both-empty case decided at the division.
+  `ProcessCommandRunner` lost a stderr drain thread: stderr now goes to a temp file under an
+  injectable directory, which is what lets a test prove the file is removed and the
+  failure message carries the whole stream without a race. `PublicRepoGate.normalize`
+  validates both `owner/repo` segments instead of a blank check the slash test subsumed.
 
 ## Accepted mutants
 
