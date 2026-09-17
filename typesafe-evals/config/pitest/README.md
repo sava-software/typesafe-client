@@ -9,12 +9,17 @@ retain line-less class/method/mutator evidence and meaningful multiplicity as `x
 (typographic `×N` is equivalent).
 
 Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe.evals.text`),
-`corpus` (the public-repo gate, git reads, and the process runner), `report` (TSV output).
+`corpus` (the public-repo gate, git reads, and the process runner), `report` (TSV output),
+`jev` (the recording batch runner), `metrics` (the arithmetic the experiment bars use).
 Experiment code gets its own suite when it lands.
 
 ## Untriaged debt
 
-- None. First observations 2026-09-17: `text` 19/19, `corpus` 52/52, `report` all killed.
+- None. First observations 2026-09-17: `text` 19/19, `corpus` 52/52, `report` 21/21,
+  `jev` 33/33, `metrics` 138/138 killed. `JevRunner` lost a semaphore (a synchronous
+  throw leaked a permit and a removed release deadlocked into a watchdog timeout) for
+  flush-when-full chunks with one failure path through `thenCompose`. `Metrics.pearson`
+  lost an empty-series guard the variance check subsumes.
   `Jaccard` lost two early returns (a null-text guard and a one-side-empty guard) in favour
   of single-path code with the both-empty case decided at the division.
   `ProcessCommandRunner` lost a stderr drain thread: stderr now goes to a temp file under an
