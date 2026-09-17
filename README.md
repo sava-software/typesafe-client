@@ -64,6 +64,23 @@ implementation("software.sava:typesafe-client:<version>")
 
 Hardening (PIT mutation suites, Jazzer fuzz targets) is described in [`AGENTS.md`](AGENTS.md).
 
+## Experiments
+
+`typesafe-evals` holds the two experiments described in [`docs/findings.md`](docs/findings.md).
+Each is a `JavaExec` task that reads only public-repository content (checked with
+`gh repo view --json visibility`, failing closed), records every API exchange under
+`typesafe-evals/recordings/<experiment>/`, and writes a blind labeling sheet plus a report
+under `typesafe-evals/experiments/<experiment>/`.
+
+```
+./gradlew :typesafe-evals:rot    -PevalArgs="--manifest <MANIFEST.txt> --golden-fleet <dir> --checkouts <dir> --out <dir> --recordings <dir> --mode record"
+./gradlew :typesafe-evals:dedupe -PevalArgs="--projects <dir,dir> --out <dir> --recordings <dir> --mode record"
+```
+
+`--mode replay` re-renders a report from the recordings with no key and no cost; add
+`--labels <labeling-sheet.tsv>` once the `label` column is filled in. Nothing here accepts,
+merges, or gates anything: Jev proposes, code and humans dispose.
+
 ## License
 
 Apache-2.0 (as the rest of the sava fleet).

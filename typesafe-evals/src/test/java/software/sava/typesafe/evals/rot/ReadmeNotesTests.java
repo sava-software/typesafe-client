@@ -44,10 +44,12 @@ final class ReadmeNotesTests {
     final var first = notes.getFirst();
     assertEquals(9, first.line());
     assertEquals("Triaged equivalent mutants (accepted with reasons)", first.section());
-    assertTrue(first.family().startsWith("**Allocation-size only** — baseline label `# allocation size` — the mutant changes how much"), first.family());
+    assertEquals("**Allocation-size only** — baseline label `# allocation size` — the mutant "
+        + "changes how much is allocated, never what is computed:", first.family(),
+        "the family is its own wrapped lines and stops at the bullet below them");
     assertEquals("- `Base58.decode` (all six variants): the limb-array sizing `limbsLength(to - i)` → `to + i` only over-allocates; `used` from `toLimbs` bounds what is read back out.", first.bullet());
     final var createTx = notes.get(2);
-    assertTrue(createTx.family().startsWith("**Fast-path routing** `# fast-path`"));
+    assertEquals("**Fast-path routing** `# fast-path` (`encoding`):", createTx.family());
     assertTrue(createTx.bullet().endsWith("432: the tail. Continued after a blank line because it is indented."), createTx.bullet());
     final var timeout = notes.get(6);
     assertEquals("Audited timeouts (`dispatch-timeouts.csv`)", timeout.section());
@@ -99,6 +101,10 @@ final class ReadmeNotesTests {
     assertEquals(List.of("TxBuilderImpl.MERGE_ACCOUNT_META", "JIUtil.escapeQuotes*", "ExponentialBackoffErrorHandler.<init>", "Foo.bar"),
         refs.stream().map(ReadmeNotes.MemberRef::display).toList());
     assertEquals("14", refs.get(2).lineHints());
+    assertTrue(ReadmeNotes.isExternal("java"), "a bare package name is foreign, dotted or not");
+    assertFalse(ReadmeNotes.isExternal("thing"), "a bare lowercase name that is no package prefix is not foreign");
+    assertThrows(StringIndexOutOfBoundsException.class, () -> ReadmeNotes.isExternal(".Map"),
+        "the segment before the first dot is what is classified, and a leading dot leaves none");
     assertTrue(ReadmeNotes.isExternal("java.util.Map"));
     assertTrue(ReadmeNotes.isExternal("com.sun.management.ThreadMXBean"));
     assertTrue(ReadmeNotes.isExternal("systems.comodal.JHex"), "any lowercase dotted prefix is a package, not a class");
@@ -112,5 +118,62 @@ final class ReadmeNotesTests {
     assertEquals(List.of(), ReadmeNotes.members(new ReadmeNotes.Note(1, "", "", "- nothing backticked")));
     final var duplicate = ReadmeNotes.members(new ReadmeNotes.Note(1, "", "", "- `A.b` then `A.b` again"));
     assertEquals(1, duplicate.size());
+  }
+
+  @Test
+  void aBulletEndsWhereItsContinuationStops() {
+    final var firstLine = ReadmeNotes.notes(List.of("- `A.b` on the first line"));
+    assertEquals(1, firstLine.size(), "a bullet on the first line has no line above it to read");
+    assertEquals(1, firstLine.getFirst().line());
+    assertEquals("- `A.b` on the first line", firstLine.getFirst().bullet());
+
+    final var prose = ReadmeNotes.notes(List.of("- `A.b` bullet", "", "plain prose"));
+    assertEquals("- `A.b` bullet", prose.getFirst().bullet(),
+        "a blank line followed by an unindented line ends the bullet");
+
+    final var trailingBlank = ReadmeNotes.notes(List.of("- `A.b` bullet", ""));
+    assertEquals("- `A.b` bullet", trailingBlank.getFirst().bullet(),
+        "a blank last line ends the bullet; there is no line after it to look at");
+
+    final var twoBlanks = ReadmeNotes.notes(List.of("- `A.b` bullet", "", "", "  indented tail"));
+    assertEquals(1, twoBlanks.size());
+    assertEquals("- `A.b` bullet", twoBlanks.getFirst().bullet(),
+        "only the line right after a single blank can continue a bullet");
+
+    final var indented = ReadmeNotes.notes(List.of("- `A.b` bullet", "", "  indented tail"));
+    assertEquals("- `A.b` bullet indented tail", indented.getFirst().bullet(),
+        "an indented line after a blank continues the bullet");
+
+    final var heading = ReadmeNotes.notes(List.of("- `A.b` one", "## Next", "- `C.d` two"));
+    assertEquals(2, heading.size());
+    assertEquals("- `A.b` one", heading.getFirst().bullet(), "a heading on the next line ends the bullet");
+    assertEquals("Next", heading.get(1).section(), "and the heading is still read as a section");
+
+    final var paragraph = ReadmeNotes.notes(List.of("- `A.b` one", "**F** two", "- `C.d` three"));
+    assertEquals(2, paragraph.size());
+    assertEquals("- `A.b` one", paragraph.getFirst().bullet(), "a family paragraph on the next line ends the bullet");
+    assertEquals("**F** two", paragraph.get(1).family(), "and the paragraph is still read as a family");
+  }
+
+  @Test
+  void aFamilyParagraphEndsWhereItsWrappingStops() {
+    final var leading = ReadmeNotes.notes(List.of("**F** on the first line", "- `A.b`"));
+    assertEquals("**F** on the first line", leading.getFirst().family(),
+        "a family on the first line has no line above it to read");
+
+    assertEquals(List.of(), ReadmeNotes.notes(List.of("**F** one", "wrapped prose")),
+        "a family that wraps to the last line is not read past it");
+
+    final var blank = ReadmeNotes.notes(List.of("**F** one", "", "- `A.b`"));
+    assertEquals("**F** one", blank.getFirst().family(), "a blank line ends the family paragraph");
+
+    final var hash = ReadmeNotes.notes(List.of("**F** one", "# H", "- `A.b`"));
+    assertEquals("**F** one", hash.getFirst().family(), "a heading ends the family paragraph");
+    assertEquals("", hash.getFirst().section(), "a single-hash line is no section of its own");
+
+    final var bullet = ReadmeNotes.notes(List.of("**F** one", "- `A.b`", "**G** two", "- `C.d`"));
+    assertEquals(2, bullet.size());
+    assertEquals("**F** one", bullet.getFirst().family(), "a bullet ends the family paragraph");
+    assertEquals("**G** two", bullet.get(1).family());
   }
 }

@@ -5,3 +5,4 @@ sava-software/http-servers	PUBLIC
 sava-software/idl-src-gen	PRIVATE
 sava-software/incident-client	PUBLIC
 glamsystems/vault-stat-service	PRIVATE
+glamsystems/glam-sdk-java	PUBLIC

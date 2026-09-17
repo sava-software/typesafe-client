@@ -62,7 +62,71 @@ Side findings from that round, each a deterministic fix with no model:
 
 ## Experiment A: acceptance-note rot detector
 
-_Status: harness pending._
+_Status: scored; awaiting hand labels. Harness: `typesafe-evals` (`software.sava.typesafe.evals.rot`),
+run with `./gradlew :typesafe-evals:rot -PevalArgs="..."`. Outputs in `typesafe-evals/experiments/rot/`;
+every API exchange recorded under `typesafe-evals/recordings/rot/`._
+
+**Corpus.** The golden-fleet snapshot READMEs pinned by sava-build's manifest, read at their
+snapshot commits, paired with the named member's source at HEAD of the public checkouts
+(sava, json-iterator, ravina, http-servers, incident-client). 18 modules produced rows; 4
+manifest entries were skipped as private or absent. 118 class-qualified member references
+became rows: 105 resolve at HEAD, 3 moved to another type, 1 was removed since the
+snapshot, 1 was never declared, and 8 name external types (Jetty, the JDK, sava-core from
+a dependent) and are not scored. Each row's state is the note window (section, family
+paragraph, bullet), up to two member bodies of at most 200 lines, sibling members the same
+section names, a `premise_facts` block computed from the code (member status, declaration
+count, backticked identifiers present and missing, "only implementation" claims with the
+implementor count, whether cited line numbers fall inside the body, covering tests named),
+and the file path. The deterministic control arm flags a row when the member is missing or
+a backticked identifier is absent from the body; it flagged 34 of the 110 scorable rows.
+
+**Run.** 110 requests, 161,028 input tokens, $0.0068, all answered. Answers: 30
+`construct_absent`, 78 `construct_present`, 2 `cannot_resolve`.
+
+**Provisional bars.** 33 rows carry a hint transcribed from the round-2 survey (11 absent,
+22 present); hints are not labels, and 16 of the 44 hints match no row because the snapshot
+README names those members in forms the parser does not take (a bare method under a class
+heading, a family paragraph, a CSV-only member).
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| recall of rot within the top 30% by P(absent) | 0.636 | >= 0.90 | no |
+| rot rows in the top 30% with no control flag | 3 | >= 3 | yes |
+| rot rows answered present at confidence >= 0.8 | 0 | 0 | yes |
+| present rows in unchanged (rung-0) modules answered absent | 0 | <= 1 | yes |
+
+The control arm alone: recall 0.364, precision 0.444 on the same 33 rows.
+
+The four hinted-absent rows outside the top 30% are three `CourteousBalancedCall.call`
+notes and `BytesJsonIterator.parseMultiByteString`. The survey marked them rotted because
+their cited line numbers no longer point at the construct; the constructs themselves
+(`hasCapacity` operands, `++i`, the `i >= maxTry` break, the `<= 0` wait branch,
+`buf[head++]` and the `head == tail` guard) are still in the bodies, and the question asks
+about constructs, not lines, by design: line drift is the deterministic
+`line_hints_inside_body` fact's job. Read by the construct definition those four are
+"present", every remaining hinted-absent row sits in the top 9 of the 33, and the recall bar
+would pass. That is a reading, not a label; the labeling sheet decides.
+
+**Catches the control arm missed** (no identifier flag, P(absent) shown): `JdkQueryHandler.handle`
+(0.84; the note names `process(exchange)` and `executor.execute(...)`, neither in HEAD's handler),
+`TransactionRecord.lambda$static$0` (0.89; the `Map.merge` lambda left the class),
+`SolanaJsonRpcWebsocket.run` (0.64; the while loop the note cites moved into `runLoop`),
+`LookupTableCacheMap.getOrFetchTables` (0.71; hinted absent). One high-ranked row is a harness
+artefact: `JsonUtil.parseEncodedData` (0.86) has four overloads and the state showed two; the
+logging call the note names lives in the core overload that was cut. Jev put 0.92 on
+`depends_on_unseen` for it, and `premise_facts.bodies_shown` (2 of 4) is the deterministic tell.
+A second reader, blind to Jev's answers, re-read these eight rows against HEAD and agreed
+on every one.
+
+**What did not work.** The `depends_on_unseen` Noul is uninformative here: 99 of 110 rows score
+it above 0.5, because every mutation-triage note depends on a test or a PIT run that is not
+shown. If kept it needs rewording to "depends on source code not shown". The `contradicted` Noul
+fired above 0.5 on three rows only, all moved or missing members, which the control arm already
+flags.
+
+**Next.** Label `labeling-sheet.tsv` (110 rows: `label` absent/present/cannot, by the
+construct definition above, before looking at `jev.tsv`), then
+`--mode replay --labels <file>` re-renders the bars from the recordings at no cost.
 
 ## Experiment B: finding dedupe between finder and refuter phases
 

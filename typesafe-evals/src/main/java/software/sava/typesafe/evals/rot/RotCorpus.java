@@ -86,18 +86,17 @@ public final class RotCorpus {
   /// `<suite>` from every `<suite>-accepted.csv` and `<suite>-timeouts.csv` in the snapshot.
   static Set<String> suiteNames(final Path snapshotDir) {
     final var names = new LinkedHashSet<String>();
-    if (!Files.isDirectory(snapshotDir)) {
-      return names;
-    }
-    try (final var files = Files.list(snapshotDir)) {
-      for (final var file : files.map(f -> f.getFileName().toString()).sorted().toList()) {
-        final int cut = file.indexOf("-accepted.csv") >= 0 ? file.indexOf("-accepted.csv") : file.indexOf("-timeouts.csv");
-        if (cut > 0) {
-          names.add(file.substring(0, cut));
+    if (Files.isDirectory(snapshotDir)) {
+      try (final var files = Files.list(snapshotDir)) {
+        for (final var file : files.map(f -> f.getFileName().toString()).sorted().toList()) {
+          final int cut = file.indexOf("-accepted.csv") >= 0 ? file.indexOf("-accepted.csv") : file.indexOf("-timeouts.csv");
+          if (cut > 0) {
+            names.add(file.substring(0, cut));
+          }
         }
+      } catch (final IOException e) {
+        throw new UncheckedIOException("failed to list " + snapshotDir, e);
       }
-    } catch (final IOException e) {
-      throw new UncheckedIOException("failed to list " + snapshotDir, e);
     }
     return names;
   }
@@ -133,14 +132,16 @@ public final class RotCorpus {
              final Map<ReadmeNotes.MemberRef, MemberResolver.Resolution> siblings) {
     final var methodSource = methodSource(ref, resolution);
     final var siblingSource = siblingSource(ref, siblings);
-    final var visible = (methodSource == null ? "" : methodSource) + '\n' + (siblingSource == null ? "" : siblingSource);
     final var flags = new ArrayList<String>();
     final var identifiers = identifiers(note, ref);
     final var present = new ArrayList<String>();
     final var missing = new ArrayList<String>();
     if (resolution.resolved()) {
+      // a resolved member always has a body, and its siblings may add another
       for (final var identifier : identifiers) {
-        (Pattern.compile("\\b" + Pattern.quote(identifier) + "\\b").matcher(visible).find() ? present : missing).add(identifier);
+        final var word = Pattern.compile("\\b" + Pattern.quote(identifier) + "\\b");
+        (word.matcher(methodSource).find() || (siblingSource != null && word.matcher(siblingSource).find())
+            ? present : missing).add(identifier);
       }
     } else {
       flags.add("member_missing");

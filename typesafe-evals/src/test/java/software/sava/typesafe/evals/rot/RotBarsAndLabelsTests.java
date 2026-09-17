@@ -111,6 +111,78 @@ final class RotBarsAndLabelsTests {
   }
 
   @Test
+  void recallExactlyAtTheBarClearsIt() {
+    // 27 rows, so the top 30% is a window of 9; 9 of the 10 rot rows are inside it
+    final var rows = new java.util.ArrayList<RotBars.Row>();
+    for (int i = 0; i < 9; i++) {
+      rows.add(row("rot-" + i, "absent", 3, false, score(0.03, 0.95 - i * 0.01, 0.02, 0.9)));
+    }
+    rows.add(row("rot-missed", "absent", 3, false, score(0.90, 0.05, 0.05, 0.7)));
+    for (int i = 0; i < 17; i++) {
+      rows.add(row("ok-" + i, "present", 3, false, score(0.85, 0.10, 0.05, 0.8)));
+    }
+    assertEquals(27, rows.size());
+    assertEquals(9, RotBars.caughtOnlyByJev(rows).size(), "the window is nine rows and all nine are rot");
+    assertEquals(0.9, RotBars.recallWithinTop(rows), "nine of ten rot rows inside the window");
+    final var checks = RotBars.checks(rows);
+    assertEquals("0.900", checks.getFirst().value());
+    assertEquals(">= 0.900", checks.getFirst().required());
+    assertTrue(checks.getFirst().pass(), "recall exactly at the bar clears the bar");
+    assertTrue(RotBars.keep(rows), checks.toString());
+  }
+
+  @Test
+  void eachBarCountsOnlyTheRowsItIsAbout() {
+    final var rows = List.of(
+        row("a1", "absent", 3, false, score(0.03, 0.95, 0.02, 0.9)),
+        row("p1", "present", 0, false, score(0.07, 0.90, 0.03, 0.8)),
+        row("a2", "absent", 0, false, score(0.10, 0.85, 0.05, 0.8)),
+        row("p2", "present", 0, false, score(0.15, 0.80, 0.05, 0.8)),
+        row("p3", "present", 2, false, score(0.20, 0.75, 0.05, 0.7)),
+        row("p4", "present", 0, true, score(0.90, 0.09, 0.01, 0.9)),
+        row("a3", "absent", 3, true, score(0.90, 0.08, 0.02, 0.5)),
+        row("p5", "present", 1, false, score(0.90, 0.07, 0.03, 0.9)),
+        row("p6", "present", 3, false, score(0.90, 0.06, 0.04, 0.9)),
+        row("p7", "present", 0, false, score(0.90, 0.05, 0.05, 0.9)));
+    assertEquals(List.of("a1", "p1", "a2"), RotBars.ranked(rows).subList(0, 3).stream().map(RotBars.Row::id).toList(),
+        "the top 30% of ten rows is three, and one of them is labeled present");
+    assertEquals(List.of("a1", "a2"), RotBars.caughtOnlyByJev(rows).stream().map(RotBars.Row::id).toList(),
+        "a present row inside the window is not rot that the control arm missed");
+    assertEquals(new RotBars.ControlArm(2, 1, 3), RotBars.controlArm(rows),
+        "a flagged present row counts as a flag but not as a true positive");
+    assertEquals(List.of("p1", "p2"), RotBars.falseAlarms(rows).stream().map(RotBars.Row::id).toList(),
+        "a rot row answered construct_absent is right, and a present row above rung 0 is out of scope");
+    assertTrue(RotBars.confidentlyWrong(rows).isEmpty(), "no rot row is answered present at confidence >= 0.8");
+    final var checks = RotBars.checks(rows);
+    assertEquals("2", checks.get(3).value());
+    assertEquals("<= 1", checks.get(3).required());
+    assertFalse(checks.get(3).pass(), "two false alarms is over the cap of one");
+  }
+
+  @Test
+  void anUnknownGoldLabelIsCountedAsCannotResolve() {
+    // "bCsent" and "qSesent" are not labels; their hashes collide with "absent" and
+    // "present", which is the first thing a switch over strings compares
+    assertEquals("absent".hashCode(), "bCsent".hashCode(), "the fixture needs a colliding hash");
+    assertEquals("present".hashCode(), "qSesent".hashCode(), "the fixture needs a colliding hash");
+    final var rows = List.of(
+        row("x1", "bCsent", 3, false, score(0.05, 0.90, 0.05, 0.9)),
+        row("x2", "qSesent", 0, false, score(0.90, 0.05, 0.05, 0.9)),
+        row("x3", "cannot", 1, false, score(0.20, 0.20, 0.60, 0.5)));
+    assertFalse(rows.getFirst().absent(), "a near miss of the label is not the label");
+    assertFalse(rows.get(1).present(), "a near miss of the label is not the label");
+    final var confusion = RotBars.confusion(rows);
+    assertEquals(3, confusion.total());
+    assertEquals(1, confusion.count("cannot_resolve", "construct_absent"));
+    assertEquals(1, confusion.count("cannot_resolve", "construct_present"));
+    assertEquals(1, confusion.count("cannot_resolve", "cannot_resolve"));
+    assertEquals(0, confusion.count("construct_absent", "construct_absent"),
+        "no gold row is counted as rot: none of these labels is absent");
+    assertEquals(0, confusion.count("construct_present", "construct_present"),
+        "and none of them is present");
+  }
+
+  @Test
   void labelsReadBothSheets(@TempDir final Path dir) throws Exception {
     final var sheet = dir.resolve("labels.tsv");
     Files.writeString(sheet, """
@@ -131,6 +203,9 @@ final class RotBarsAndLabelsTests {
     final var hints = dir.resolve("hints.tsv");
     Files.writeString(hints, "key\tlabel\tsource\nsava/sava-core#Base58.limbsLength\tpresent\tG1\n");
     assertEquals(Map.of("sava/sava-core#Base58.limbsLength", "present"), RotLabels.read(hints, "key").byKey());
+    Files.writeString(hints, "label\tkey\nabsent\tsava/sava-core#Base58.decode\n");
+    assertEquals(Map.of("sava/sava-core#Base58.decode", "absent"), RotLabels.read(hints, "key").byKey(),
+        "either column may come first; only their presence is required");
     Files.writeString(hints, "key\tlabel\nx\tgone\n");
     assertTrue(assertThrows(IllegalArgumentException.class, () -> RotLabels.read(hints, "key")).getMessage().contains("line 2"));
     Files.writeString(hints, "row_id\tlabel\nx\tabsent\n");

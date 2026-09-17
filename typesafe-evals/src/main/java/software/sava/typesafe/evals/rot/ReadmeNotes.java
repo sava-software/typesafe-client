@@ -102,7 +102,7 @@ public final class ReadmeNotes {
 
   static boolean isBullet(final String line) {
     final var stripped = line.stripLeading();
-    return (stripped.startsWith("- ") || stripped.startsWith("* ")) && !line.startsWith("#");
+    return stripped.startsWith("- ") || stripped.startsWith("* ");
   }
 
   /// A bullet continues through indented or wrapped lines and across a blank line only
@@ -110,8 +110,8 @@ public final class ReadmeNotes {
   private static boolean continues(final List<String> lines, final int j) {
     final var line = lines.get(j);
     if (line.isBlank()) {
-      return j + 1 < lines.size() && !lines.get(j + 1).isBlank() && Character.isWhitespace(lines.get(j + 1).charAt(0))
-          && !isBullet(lines.get(j + 1));
+      return j + 1 < lines.size() && !lines.get(j + 1).isBlank()
+          && Character.isWhitespace(lines.get(j + 1).charAt(0));
     }
     return !isBullet(line) && !line.startsWith("#") && !line.stripLeading().startsWith("**");
   }
@@ -153,14 +153,15 @@ public final class ReadmeNotes {
     return List.copyOf(refs);
   }
 
-  /// A package-qualified name, or a bare JDK type such as `Map` or `Math`.
+  /// A package-qualified name, or a bare JDK type such as `Map` or `Math`. `JDK_TYPES` holds
+  /// simple names only, so a dotted or `$`-joined name never matches one.
   static boolean isExternal(final String classPart) {
     final int dot = classPart.indexOf('.');
     final var first = dot < 0 ? classPart : classPart.substring(0, dot);
     if (Character.isLowerCase(first.charAt(0))) {
       return EXTERNAL_PREFIXES.contains(first) || dot >= 0;
     }
-    return dot < 0 && classPart.indexOf('$') < 0 && JDK_TYPES.contains(classPart);
+    return JDK_TYPES.contains(classPart);
   }
 
   private static String lastSegment(final String classPart) {

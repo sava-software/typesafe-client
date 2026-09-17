@@ -1,0 +1,11 @@
+# Audited timeout-detected mutants of the 'rot' suite (HARDENING.md, the audited-timeout
+# bullet): line-less class,method,mutator keys with a cause category; the structural cause
+# per member is in README.md, "Audited timeout causes". A timed-out mutant outside this set
+# is a reviewer-stop.
+software.sava.typesafe.evals.rot.TypeIndex,lineOf,ConditionalsBoundaryMutator # cause:liveness # line 343
+software.sava.typesafe.evals.rot.TypeIndex,lineOf,RemoveConditionalMutator_ORDER_IF # cause:liveness # line 343
+software.sava.typesafe.evals.rot.TypeIndex,lineOf,MathMutator # cause:liveness # lines 344, 348
+software.sava.typesafe.evals.rot.TypeIndex,mask,IncrementsMutator # cause:liveness # line 306
+software.sava.typesafe.evals.rot.TypeIndex,mask,MathMutator # cause:liveness # line 310
+software.sava.typesafe.evals.rot.TypeIndex,mask,RemoveConditionalMutator_EQUAL_ELSE # cause:liveness # lines 294, 299
+software.sava.typesafe.evals.rot.ReadmeNotes,notes,MathMutator # cause:liveness # line 78

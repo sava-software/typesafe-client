@@ -139,7 +139,7 @@ public final class TypeIndex {
     final var matcher = TYPE_DECL.matcher(masked);
     while (matcher.find()) {
       final int open = masked.indexOf('{', matcher.end());
-      if (open < 0) {
+      if (open == -1) {
         continue;
       }
       final int close = matchingBrace(masked, open);
@@ -148,7 +148,7 @@ public final class TypeIndex {
     for (final var f : found) {
       final var chain = new ArrayList<String>();
       for (final var outer : found) {
-        if (outer != f && outer.open() < f.declOffset() && outer.close() > f.close()) {
+        if (nestedIn(f.declOffset(), f.close(), outer.open(), outer.close())) {
           chain.add(outer.simpleName());
         }
       }
@@ -163,16 +163,20 @@ public final class TypeIndex {
       // nested type ranges are blanked before members are read
       final var body = new StringBuilder(masked);
       for (final var inner : found) {
-        if (inner != f && inner.declOffset() > f.open() && inner.close() < f.close()) {
-          for (int i = inner.declOffset(); i <= inner.close(); i++) {
-            if (body.charAt(i) != '\n') {
-              body.setCharAt(i, ' ');
-            }
-          }
+        if (nestedIn(inner.declOffset(), inner.close(), f.open(), f.close())) {
+          blank(body, inner.declOffset(), inner.close() + 1);
         }
       }
       membersByType.put(binaryName, members(body, f.open(), f.close(), f.simpleName(), lineStarts));
     }
+  }
+
+  /// True when a type declared at `declOffset` and closed at `close` sits inside the braces
+  /// `open..outerClose`. A declaration never starts at its own `{`, so a type is never nested
+  /// in itself.
+  private static boolean nestedIn(final int declOffset, final int close,
+                                  final int open, final int outerClose) {
+    return open < declOffset && close < outerClose;
   }
 
   /// Splits a type body at depth 1 into declarations: a head followed by `{...}` is a method,
@@ -239,15 +243,14 @@ public final class TypeIndex {
       return new Member(name, "method", startLine, endLine, head);
     }
     final var declaration = equals < 0 ? head : head.substring(0, equals).strip();
-    final int lastSpace = declaration.lastIndexOf(' ');
-    final var name = lastSpace < 0 ? declaration : declaration.substring(lastSpace + 1);
+    final var name = declaration.substring(declaration.lastIndexOf(' ') + 1);
     if (!FIELD_NAME.matcher(name).matches()) {
       return null;
     }
     return new Member(name, "field", startLine, endLine, head);
   }
 
-  private static int firstNonBlank(final CharSequence text, final int from, final int to) {
+  static int firstNonBlank(final CharSequence text, final int from, final int to) {
     for (int i = from; i < to; i++) {
       if (!Character.isWhitespace(text.charAt(i))) {
         return i;
@@ -283,17 +286,17 @@ public final class TypeIndex {
       final char c = source.charAt(i);
       if (c == '/' && i + 1 < n && source.charAt(i + 1) == '/') {
         int end = source.indexOf('\n', i);
-        end = end < 0 ? n : end;
+        end = end == -1 ? n : end;
         blank(out, i, end);
         i = end;
       } else if (c == '/' && i + 1 < n && source.charAt(i + 1) == '*') {
         int end = source.indexOf("*/", i + 2);
-        end = end < 0 ? n : end + 2;
+        end = end == -1 ? n : end + 2;
         blank(out, i, end);
         i = end;
-      } else if (c == '"' && source.startsWith("\"\"\"", i)) {
+      } else if (source.startsWith("\"\"\"", i)) {
         int end = source.indexOf("\"\"\"", i + 3);
-        end = end < 0 ? n : end + 3;
+        end = end == -1 ? n : end + 3;
         blank(out, i, end);
         i = end;
       } else if (c == '"' || c == '\'') {

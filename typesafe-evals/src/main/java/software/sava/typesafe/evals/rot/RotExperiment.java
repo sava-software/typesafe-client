@@ -259,9 +259,9 @@ public final class RotExperiment {
       out.append("## Jev\n\nRequests ").append(spend.requests()).append(" (").append(spend.succeeded()).append(" answered), input tokens ")
           .append(spend.inputTokens()).append(", cost $").append(String.format(Locale.ROOT, "%.4f", spend.dollars()))
           .append("; recording hits ").append(spend.hits()).append(", misses ").append(spend.misses()).append(".\n\n");
-      appendBars(out, "hand labels", barRows(rows, scores, r -> labels == null ? null : labels.get(r.id())), labels != null);
+      appendBars(out, "hand labels", barRows(rows, scores, r -> labels == null ? null : labels.get(r.id())));
       appendBars(out, "PROVISIONAL survey gold hints (" + hints.size() + " hints; not a substitute for labels)",
-          barRows(rows, scores, RotRow::goldHint), !hints.isEmpty());
+          barRows(rows, scores, RotRow::goldHint));
       appendRanking(out, rows, scores);
     } else {
       out.append("## Jev\n\nNot scored (corpus mode).\n");
@@ -274,9 +274,10 @@ public final class RotExperiment {
     }
   }
 
-  static void appendBars(final StringBuilder out, final String basis, final List<RotBars.Row> barRows, final boolean available) {
+  /// A basis with no labeled and scored rows (no labels file, no hints, or nothing scored yet) says so.
+  static void appendBars(final StringBuilder out, final String basis, final List<RotBars.Row> barRows) {
     out.append("## Bars against ").append(basis).append("\n\n");
-    if (!available || barRows.isEmpty()) {
+    if (barRows.isEmpty()) {
       out.append("No labeled and scored rows yet.\n\n");
       return;
     }

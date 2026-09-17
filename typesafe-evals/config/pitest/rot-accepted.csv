@@ -1,0 +1,7 @@
+!sava-hardening-baseline-schema,1
+software.sava.typesafe.evals.rot.ReadmeNotes,isExternal,ConditionalsBoundaryMutator,SURVIVED # leading-dot-throws-first # line 162
+software.sava.typesafe.evals.rot.ReadmeNotes,outer,ConditionalsBoundaryMutator,SURVIVED # outer-never-leads-with-dollar # line 174
+software.sava.typesafe.evals.rot.RotExperiment,run,RemoveConditionalMutator_EQUAL_IF,SURVIVED # self-sibling-unreachable # line 128
+software.sava.typesafe.evals.rot.TypeIndex,member,ConditionalsBoundaryMutator,SURVIVED # paren-equals-sentinel # line 231
+software.sava.typesafe.evals.rot.TypeIndex,member,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # empty-head-fallthrough # line 219
+software.sava.typesafe.evals.rot.TypeIndex,nestedIn,ConditionalsBoundaryMutator,SURVIVED # brace-is-not-keyword # line 179
