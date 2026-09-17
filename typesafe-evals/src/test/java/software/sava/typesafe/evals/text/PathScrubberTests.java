@@ -21,6 +21,7 @@ final class PathScrubberTests {
   @Test
   void otherHomePathsLoseTheUser() {
     assertEquals("~/docs/solana/agave/x.rs", PathScrubber.scrub("/Users/someone/docs/solana/agave/x.rs"));
+    assertEquals("<tmp>/sava-triage.log:202", PathScrubber.scrub("/private/tmp/sava-triage.log:202"));
     assertEquals("nothing to do", PathScrubber.scrub("nothing to do"));
     assertNull(PathScrubber.scrub(null));
   }

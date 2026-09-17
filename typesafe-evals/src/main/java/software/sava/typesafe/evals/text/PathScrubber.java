@@ -10,6 +10,7 @@ public final class PathScrubber {
   private static final Pattern SRC_CHECKOUT = Pattern.compile("/Users/[^/\\s]+/src/([^/\\s]+)/");
   private static final Pattern SCRATCHPAD = Pattern.compile("/private/tmp/claude-501/[^\\s'\"`)\\]]*");
   private static final Pattern CLAUDE_PROJECTS = Pattern.compile("/Users/[^/\\s]+/\\.claude/[^\\s'\"`)\\]]*");
+  private static final Pattern PRIVATE_TMP = Pattern.compile("/private/tmp/");
   private static final Pattern HOME = Pattern.compile("/Users/[^/\\s]+/");
 
   public static String scrub(final String text) {
@@ -19,6 +20,7 @@ public final class PathScrubber {
     var out = SRC_CHECKOUT.matcher(text).replaceAll("$1/");
     out = SCRATCHPAD.matcher(out).replaceAll("<scratchpad>");
     out = CLAUDE_PROJECTS.matcher(out).replaceAll("<claude-projects>");
+    out = PRIVATE_TMP.matcher(out).replaceAll("<tmp>/");
     return HOME.matcher(out).replaceAll("~/");
   }
 
