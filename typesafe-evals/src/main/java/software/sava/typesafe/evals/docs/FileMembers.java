@@ -65,9 +65,8 @@ public final class FileMembers {
     }
     final int close = matchingParen(head, open);
     final var inside = head.substring(open + 1, close).strip();
-    if (inside.isEmpty()) {
-      return "";
-    }
+    // an empty parameter list needs no special case: it splits into one empty part, whose
+    // sole token is the empty string
     final var types = new StringBuilder();
     for (final var param : splitTopLevel(inside)) {
       final var tokens = WS.split(param.replace("final ", "").strip());

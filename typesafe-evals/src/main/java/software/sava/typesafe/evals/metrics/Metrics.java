@@ -205,6 +205,57 @@ public final class Metrics {
     return varA == 0 || varB == 0 ? 0.0 : cov / Math.sqrt(varA * varB);
   }
 
+  /// Area under the ROC curve as the Mann-Whitney statistic: the fraction of (positive,
+  /// negative) score pairs the positive wins, ties counting one half. NaN when either side
+  /// is empty, since there is then nothing to rank.
+  public static double auroc(final List<Double> positives, final List<Double> negatives) {
+    if (positives.isEmpty() || negatives.isEmpty()) {
+      return Double.NaN;
+    }
+    double wins = 0;
+    for (final double p : positives) {
+      for (final double n : negatives) {
+        if (p > n) {
+          wins += 1;
+        } else if (p == n) {
+          wins += 0.5;
+        }
+      }
+    }
+    return wins / ((double) positives.size() * negatives.size());
+  }
+
+  /// Percentile bootstrap interval for the AUROC of a paired design: row `i` contributes
+  /// `positives[i]` and `negatives[i]`, rows are resampled together. Deterministic for a
+  /// seed. Returns {lower, upper} at 2.5% and 97.5%.
+  public static double[] aurocInterval(final List<Double> positives, final List<Double> negatives, final int resamples, final long seed) {
+    if (positives.size() != negatives.size()) {
+      throw new IllegalArgumentException("paired design: " + positives.size() + " vs " + negatives.size());
+    }
+    final int n = positives.size();
+    if (n == 0 || resamples <= 0) {
+      return new double[]{Double.NaN, Double.NaN};
+    }
+    final var random = new java.util.Random(seed);
+    final var samples = new double[resamples];
+    final var p = new ArrayList<Double>(n);
+    final var q = new ArrayList<Double>(n);
+    for (int r = 0; r < resamples; r++) {
+      p.clear();
+      q.clear();
+      for (int i = 0; i < n; i++) {
+        final int pick = random.nextInt(n);
+        p.add(positives.get(pick));
+        q.add(negatives.get(pick));
+      }
+      samples[r] = auroc(p, q);
+    }
+    java.util.Arrays.sort(samples);
+    final int lower = (int) Math.floor(0.025 * (resamples - 1));
+    final int upper = (int) Math.ceil(0.975 * (resamples - 1));
+    return new double[]{samples[lower], samples[upper]};
+  }
+
   /// Counts per label, in first-seen order; a small helper for report tables.
   public static Map<String, Integer> histogram(final List<String> labels) {
     final var out = new LinkedHashMap<String, Integer>();

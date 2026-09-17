@@ -2,6 +2,7 @@ package software.sava.typesafe.evals.docs;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import software.sava.typesafe.evals.corpus.CommandRunner;
 import software.sava.typesafe.evals.corpus.GitRepo;
 import software.sava.typesafe.evals.corpus.ProcessCommandRunner;
 
@@ -125,6 +126,95 @@ final class HistoryMinerTests {
     assertEquals(3, everything.mine().size(), "the test member's comment changed once; its rename carries no pair");
   }
 
+  /// A commit that only adds, deletes, or leaves alone a member's comment.
+  @Test
+  void commentsAppearingAndDisappearingAreBothEvents(@TempDir final Path dir) throws Exception {
+    final var repo = dir.resolve("repo");
+    final var main = repo.resolve("mod/src/main/java/p");
+    Files.createDirectories(main);
+    git(repo, "init", "-q", "-b", "main");
+    Files.writeString(main.resolve("B.java"), """
+        package p;
+        class B {
+          /// Documented and unchanged.
+          int stable() {
+            return 1;
+          }
+          /// Loses its comment.
+          int dropped() {
+            return 2;
+          }
+          int adopts() {
+            return 3;
+          }
+        }
+        """);
+    commit(repo, "one");
+    Files.writeString(main.resolve("B.java"), """
+        package p;
+        class B {
+          /// Documented and unchanged.
+          int stable() {
+            return 1;
+          }
+          int dropped() {
+            return 2;
+          }
+          /// Now documented.
+          int adopts() {
+            return 3;
+          }
+          /// Brand new.
+          int added() {
+            return 4;
+          }
+        }
+        """);
+    commit(repo, "two");
+
+    final var events = new HistoryMiner(repo).mine();
+    assertEquals(2, events.size(),
+        "the unchanged documented member and the member this commit added carry no event: " + events);
+    final var lost = events.getFirst();
+    assertEquals("B.dropped()", lost.key().toString());
+    assertEquals(1, lost.ordinal());
+    assertTrue(lost.commentChanged());
+    assertFalse(lost.bodyChanged(), "only the comment was deleted");
+    assertEquals("Loses its comment.", lost.oldComment());
+    assertNull(lost.newComment(), "a deleted comment is null after the commit");
+    final var gained = events.get(1);
+    assertEquals("B.adopts()", gained.key().toString());
+    assertTrue(gained.commentChanged());
+    assertFalse(gained.bodyChanged());
+    assertNull(gained.oldComment(), "the member was undocumented before the commit");
+    assertEquals("Now documented.", gained.newComment());
+  }
+
+  /// The two git reads parse their output row by row; a scripted runner pins what each row
+  /// has to look like to count.
+  @Test
+  void onlyWellFormedGitRowsCount() {
+    final CommandRunner scripted = (command, directory) -> {
+      if (command.contains("log")) {
+        return "aaa\n\nbbb\n";
+      }
+      if (command.contains("show")) {
+        return """
+            M\tmod/src/main/java/p/A.java
+            M\tmod/src/main/java/p/B.java\tmod/src/main/java/p/C.java
+
+            A\tmod/src/main/java/p/D.java
+            D\tmod/src/main/java/p/E.java
+            """;
+      }
+      throw new IllegalStateException(command.toString());
+    };
+    final var miner = new HistoryMiner(new GitRepo(Path.of("."), scripted), HistoryMiner.MAIN_SOURCES);
+    assertEquals(List.of("aaa", "bbb"), miner.commits(), "a blank line in the log is not a commit");
+    assertEquals(List.of("mod/src/main/java/p/A.java"), miner.modifiedFiles("aaa"),
+        "only a two-cell M row names a file modified in place");
+  }
+
   @Test
   void mainSourcesPredicate() {
     assertTrue(HistoryMiner.MAIN_SOURCES.test("a/src/main/java/p/X.java"));
@@ -143,5 +233,9 @@ final class HistoryMinerTests {
     assertThrows(IllegalArgumentException.class, () -> DocMiner.options(new String[]{"--checkouts", "c"}));
     assertThrows(IllegalArgumentException.class, () -> DocMiner.options(new String[]{"checkouts", "c", "--repos", "a"}));
     assertThrows(IllegalArgumentException.class, () -> DocMiner.options(new String[]{"--repos", "a", "--checkouts"}), "a dangling option is dropped, leaving --checkouts missing");
+    final var stray = assertThrows(IllegalArgumentException.class,
+        () -> DocMiner.options(new String[]{"--checkouts", "c", "--repos", "a", "out", "o"}));
+    assertEquals("expected an option at out", stray.getMessage(),
+        "a bare word is rejected even when both required options are present");
   }
 }

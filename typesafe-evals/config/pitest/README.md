@@ -12,15 +12,27 @@ Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe
 `corpus` (the public-repo gate, git reads, and the process runner), `report` (TSV output),
 `jev` (the recording batch runner), `metrics` (the arithmetic the experiment bars use),
 `rot` (Experiment A: README note parsing, the brace-matching type index, member resolution,
-corpus rows, bars, and the report) and `dedupe` (Experiment B: questions, corpus, pairs,
-bars, and the report).
+corpus rows, bars, and the report), `dedupe` (Experiment B: questions, corpus, pairs,
+bars, and the report), `docs` (Experiment C1: doc-comment attachment, member keys, the
+history miner, the stale/fresh pairing, and the miner's TSV output), and `hardening`
+(Experiment C2: baseline rows, README families, operator descriptions, the corpus with its
+swapped arm, the bars and decision table, and the driver).
 
 ## Untriaged debt
 
 - None. First observations 2026-09-17: `text` 19/19, `corpus` 52/52, `report` 21/21,
   `jev` 33/33, `metrics` 138/138, `rot` 5/5 (question definitions only; the full package
   landed later the same day at 792/798 detected: 6 accepted below, 9 timeout-detected and
-  audited), `dedupe` 11/11 killed. `JevRunner` lost a semaphore (a synchronous
+  audited), `dedupe` 11/11 killed. `docs` first landed at 218 killed with 35 survivors and
+  11 uncovered mutants, and reached 256/256 killed with none accepted once the miner's entry
+  point grew a runner seam that a temporary checkout and a scripted `gh` can drive.
+  `DocComment` lost two `ArrayList` capacity hints (arithmetic with no observable effect)
+  and, in the block-comment branch, an underflow check the search bound makes dead: stopping
+  the search for the opening line at the first line of the file decides a close with no open
+  at the same test the plain-block case already decides. `FileMembers.parameterTypes` lost an
+  early return for an empty parameter list, which the general path subsumes because an empty
+  list splits into one empty part whose only token is the empty string.
+  `JevRunner` lost a semaphore (a synchronous
   throw leaked a permit and a removed release deadlocked into a watchdog timeout) for
   flush-when-full chunks with one failure path through `thenCompose`. `Metrics.pearson`
   lost an empty-series guard the variance check subsumes.

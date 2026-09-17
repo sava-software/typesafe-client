@@ -77,6 +77,28 @@ final class DocCommentAndMembersTests {
     assertNull(DocComment.above(lines, 1), "nothing above the first line");
     assertNull(DocComment.above(List.of("/** open", "int x;"), 2), "an unterminated block is not a comment above line 2");
     assertNull(DocComment.above(List.of("x */", "int y;"), 2), "a close with no open runs off the top");
+    final var onLineOne = DocComment.above(List.of("/// doc", "int x;"), 2);
+    assertNotNull(onLineOne, "line 1 is directly above line 2");
+    assertEquals("markdown", onLineOne.style());
+    assertEquals(1, onLineOne.startLine());
+    assertEquals(1, onLineOne.endLine());
+    assertEquals("doc", onLineOne.text());
+    final var runToLineOne = DocComment.above(List.of("/// one", "/// two", "int x;"), 3);
+    assertNotNull(runToLineOne);
+    assertEquals(1, runToLineOne.startLine(), "the run of markers stops at the first line of the file");
+    assertEquals(2, runToLineOne.endLine());
+    assertEquals("one\ntwo", runToLineOne.text());
+    final var blockOnLineOne = DocComment.above(List.of("/** doc */", "int x;"), 2);
+    assertNotNull(blockOnLineOne, "a javadoc block that opens on line 1 is documentation");
+    assertEquals("javadoc", blockOnLineOne.style());
+    assertEquals(1, blockOnLineOne.startLine());
+    assertEquals(1, blockOnLineOne.endLine());
+    assertEquals("doc", blockOnLineOne.text());
+    final var blockFromLineOne = DocComment.above(List.of("/**", " * doc", " */", "int x;"), 4);
+    assertNotNull(blockFromLineOne);
+    assertEquals(1, blockFromLineOne.startLine());
+    assertEquals(3, blockFromLineOne.endLine());
+    assertEquals("doc", blockFromLineOne.text());
   }
 
   @Test
@@ -101,6 +123,11 @@ final class DocCommentAndMembersTests {
     assertEquals("", FileMembers.parameterTypes(new TypeIndex.Member("m", "method", 1, 1, "void m")), "no parenthesis at all");
     assertEquals("int", FileMembers.parameterTypes(new TypeIndex.Member("m", "method", 1, 1, "void m(int")), "unterminated list");
     assertEquals("a", FileMembers.parameterTypes(new TypeIndex.Member("m", "method", 1, 1, "void m(a)")), "a lone token is the type");
+    assertEquals("int", FileMembers.parameterTypes(new TypeIndex.Member("m", "method", 1, 1, "(int a)")),
+        "a parameter list that opens at the first character of the head");
+    assertEquals("@Size(min = 1) String",
+        FileMembers.parameterTypes(new TypeIndex.Member("m", "method", 1, 1, "void m(@Size(min = 1) String s)")),
+        "the list ends at the paren matching the opening one, not at the first close paren");
     assertEquals(List.of("a", " b<c, d>", " e(f, g)", " h[i]"), FileMembers.splitTopLevel("a, b<c, d>, e(f, g), h[i]"));
     assertEquals(List.of(""), FileMembers.splitTopLevel(""));
   }

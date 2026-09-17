@@ -1,6 +1,8 @@
 package software.sava.typesafe.evals.docs;
 
+import software.sava.typesafe.evals.corpus.CommandRunner;
 import software.sava.typesafe.evals.corpus.GitRepo;
+import software.sava.typesafe.evals.corpus.ProcessCommandRunner;
 import software.sava.typesafe.evals.corpus.PublicRepoGate;
 import software.sava.typesafe.evals.report.Tsv;
 
@@ -25,11 +27,17 @@ public final class DocMiner {
   }
 
   public static void main(final String[] args) {
-    final var options = options(args);
+    run(options(args), ProcessCommandRunner.INSTANCE);
+  }
+
+  /// Mines every checkout named by `--repos` under `--checkouts`, writes `stale-pairs.tsv`,
+  /// `excluded.tsv`, and `summary.tsv` under `--out`, and returns one summary per repository
+  /// that was mined. `runner` answers the `gh` visibility lookups the public-repo gate makes.
+  static List<RepoSummary> run(final Map<String, String> options, final CommandRunner runner) {
     final var checkouts = Path.of(options.get("--checkouts"));
     final var out = Path.of(options.getOrDefault("--out", "build/experiments/docs"));
     final var repos = List.of(options.get("--repos").split(","));
-    final var gate = new PublicRepoGate(software.sava.typesafe.evals.corpus.ProcessCommandRunner.INSTANCE,
+    final var gate = new PublicRepoGate(runner,
         Path.of(options.getOrDefault("--visibility-cache", out.resolve("visibility.tsv").toString())));
     final var rows = new Tsv("repo", "label", "source", "reconciling_commit", "stale_since", "path", "member", "kind", "signature",
         "comment_jaccard", "overlap", "strict_overlap", "comment", "body");
@@ -79,6 +87,7 @@ public final class DocMiner {
     } catch (final java.io.IOException e) {
       throw new java.io.UncheckedIOException(e);
     }
+    return summaries;
   }
 
   static Map<String, String> options(final String[] args) {

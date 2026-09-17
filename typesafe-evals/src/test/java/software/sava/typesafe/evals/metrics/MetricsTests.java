@@ -118,6 +118,39 @@ final class MetricsTests {
   }
 
   @Test
+  void aurocIsTheMannWhitneyStatistic() {
+    assertEquals(1.0, Metrics.auroc(List.of(0.9, 0.8), List.of(0.1, 0.2)));
+    assertEquals(0.0, Metrics.auroc(List.of(0.1, 0.2), List.of(0.9, 0.8)));
+    assertEquals(0.5, Metrics.auroc(List.of(0.5), List.of(0.5)), "a tie counts one half");
+    // wins: 0.9>0.1, 0.9>0.5, 0.5>0.1, 0.5==0.5 -> 3.5 of 4
+    assertEquals(0.875, Metrics.auroc(List.of(0.9, 0.5), List.of(0.1, 0.5)));
+    assertTrue(Double.isNaN(Metrics.auroc(List.of(), List.of(0.1))));
+    assertTrue(Double.isNaN(Metrics.auroc(List.of(0.1), List.of())));
+  }
+
+  @Test
+  void aurocIntervalIsDeterministicAndBracketsThePointEstimate() {
+    final var positives = List.of(0.9, 0.8, 0.7, 0.4, 0.6, 0.95);
+    final var negatives = List.of(0.1, 0.3, 0.5, 0.45, 0.2, 0.35);
+    final var point = Metrics.auroc(positives, negatives);
+    final var interval = Metrics.aurocInterval(positives, negatives, 200, 7L);
+    assertEquals(2, interval.length);
+    assertTrue(interval[0] <= point && point <= interval[1], java.util.Arrays.toString(interval) + " around " + point);
+    assertTrue(interval[0] < interval[1], "the resamples are not all identical");
+    assertArrayEquals(interval, Metrics.aurocInterval(positives, negatives, 200, 7L), "same seed, same interval");
+    final var other = Metrics.aurocInterval(positives, negatives, 200, 8L);
+    assertTrue(other[0] <= point && point <= other[1], "another seed still brackets the point estimate");
+    final var perfect = Metrics.aurocInterval(List.of(0.9, 0.8), List.of(0.1, 0.2), 50, 1L);
+    assertArrayEquals(new double[]{1.0, 1.0}, perfect, "every resample of a perfect ranker is perfect");
+    // the percentile indexes: with 200 resamples the lower is floor(0.025*199)=4, the upper ceil(0.975*199)=195
+    final var narrow = Metrics.aurocInterval(List.of(0.9, 0.1), List.of(0.5, 0.5), 200, 3L);
+    assertTrue(narrow[0] >= 0.0 && narrow[1] <= 1.0);
+    assertTrue(Double.isNaN(Metrics.aurocInterval(List.of(), List.of(), 10, 1L)[0]));
+    assertTrue(Double.isNaN(Metrics.aurocInterval(List.of(0.5), List.of(0.5), 0, 1L)[1]), "no resamples, no interval");
+    assertThrows(IllegalArgumentException.class, () -> Metrics.aurocInterval(List.of(0.5), List.of(), 10, 1L));
+  }
+
+  @Test
   void histogramKeepsFirstSeenOrder() {
     assertEquals(Map.of("b", 2, "a", 1), Metrics.histogram(List.of("b", "a", "b")));
     assertEquals(List.of("b", "a"), List.copyOf(Metrics.histogram(List.of("b", "a", "b")).keySet()));

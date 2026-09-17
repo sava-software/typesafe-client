@@ -24,21 +24,22 @@ public record DocComment(int startLine, int endLine, String style, String text) 
       while (first > 1 && lines.get(first - 2).strip().startsWith("///")) {
         --first;
       }
-      final var text = new ArrayList<String>(i - first + 1);
+      final var text = new ArrayList<String>();
       for (int n = first; n <= i; ++n) {
         text.add(stripMarker(lines.get(n - 1).strip(), "///"));
       }
       return new DocComment(first, i, "markdown", String.join("\n", text));
     }
     if (last.endsWith("*/")) {
+      // the opening line, or line 1 when the block has no opening line above it
       int first = i;
-      while (first >= 1 && !lines.get(first - 1).strip().startsWith("/*")) {
+      while (first > 1 && !lines.get(first - 1).strip().startsWith("/*")) {
         --first;
       }
-      if (first < 1 || !lines.get(first - 1).strip().startsWith("/**")) {
-        return null; // a plain block comment is not documentation
+      if (!lines.get(first - 1).strip().startsWith("/**")) {
+        return null; // a plain block comment, or a close with no open, is not documentation
       }
-      final var text = new ArrayList<String>(i - first + 1);
+      final var text = new ArrayList<String>();
       for (int n = first; n <= i; ++n) {
         var line = lines.get(n - 1).strip();
         if (n == first) {

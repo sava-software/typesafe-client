@@ -42,6 +42,11 @@ hardening {
     excludedClasses = listOf("*Test*")
     targetTests = "software.sava.typesafe.evals.docs.*Test*"
   }
+  mutation.register("hardening") {
+    targetClasses = listOf("software.sava.typesafe.evals.hardening.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.hardening.*Test*"
+  }
   mutation.register("dedupe") {
     targetClasses = listOf("software.sava.typesafe.evals.dedupe.*")
     excludedClasses = listOf("*Test*")
@@ -88,6 +93,16 @@ tasks.register<JavaExec>("docsMine") {
   description = "Experiment C1: mine stale/fresh doc-comment pairs from public checkouts"
   mainModule.set("software.sava.typesafe_evals")
   mainClass.set("software.sava.typesafe.evals.docs.DocMiner")
+  classpath = sourceSets.main.get().runtimeClasspath
+  args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
+}
+
+// ./gradlew :typesafe-evals:hardening -PevalArgs="--checkouts <dir> --repos sava,ravina --out <dir> --recordings <dir> --mode record|replay|corpus"
+tasks.register<JavaExec>("hardening") {
+  group = "experiments"
+  description = "Experiment C2: hardening evidence versus the mutant it explains"
+  mainModule.set("software.sava.typesafe_evals")
+  mainClass.set("software.sava.typesafe.evals.hardening.HardeningExperiment")
   classpath = sourceSets.main.get().runtimeClasspath
   args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
 }

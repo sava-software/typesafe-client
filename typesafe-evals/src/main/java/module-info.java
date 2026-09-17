@@ -7,6 +7,7 @@ module software.sava.typesafe_evals {
   exports software.sava.typesafe.evals.corpus;
   exports software.sava.typesafe.evals.dedupe;
   exports software.sava.typesafe.evals.docs;
+  exports software.sava.typesafe.evals.hardening;
   exports software.sava.typesafe.evals.jev;
   exports software.sava.typesafe.evals.metrics;
   exports software.sava.typesafe.evals.report;

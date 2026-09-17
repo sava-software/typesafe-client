@@ -73,9 +73,14 @@ Each is a `JavaExec` task that reads only public-repository content (checked wit
 under `typesafe-evals/experiments/<experiment>/`.
 
 ```
-./gradlew :typesafe-evals:rot    -PevalArgs="--manifest <MANIFEST.txt> --golden-fleet <dir> --checkouts <dir> --out <dir> --recordings <dir> --mode record"
-./gradlew :typesafe-evals:dedupe -PevalArgs="--projects <dir,dir> --out <dir> --recordings <dir> --mode record"
+./gradlew :typesafe-evals:rot       -PevalArgs="--manifest <MANIFEST.txt> --golden-fleet <dir> --checkouts <dir> --out <dir> --recordings <dir> --mode record"
+./gradlew :typesafe-evals:dedupe    -PevalArgs="--projects <dir,dir> --out <dir> --recordings <dir> --mode record"
+./gradlew :typesafe-evals:hardening -PevalArgs="--checkouts <dir> --repos <name,name> --out <dir> --recordings <dir> --mode record"
+./gradlew :typesafe-evals:docsMine  -PevalArgs="--checkouts <dir> --repos <name,name> --out <dir>"
 ```
+
+`docsMine` makes no API call: it mines git history for the doc-comment label source that
+Experiment C1 needed and records why that source is empty on this fleet.
 
 `--mode replay` re-renders a report from the recordings with no key and no cost; add
 `--labels <labeling-sheet.tsv>` once the `label` column is filled in. Nothing here accepts,
