@@ -136,6 +136,9 @@ final class JournalCorpusTests {
     assertNull(noLines.lineDelta());
     final var otherNoFile = new CorpusFinding("w1#h", "w1", "h", "findings", "t", null, null, null, null, null, null, null);
     assertEquals(List.of(), FindingPair.block(List.of(noFile, otherNoFile)), "findings without a basename never pair, even with each other");
+    final var scratch1 = new CorpusFinding("w1#s1", "w1", "s1", "findings", "t", null, null, "<scratchpad>", "<scratchpad>", 1, null, null);
+    final var scratch2 = new CorpusFinding("w1#s2", "w1", "s2", "findings", "t", null, null, "<scratchpad>", "<scratchpad>", 1, null, null);
+    assertEquals(List.of(), FindingPair.block(List.of(scratch1, scratch2)), "a placeholder location is not a file to block on");
   }
 
   private static CorpusFinding finding(final String workflow, final String agent, final String file, final Integer line, final String text, final String scenario) {

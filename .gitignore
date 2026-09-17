@@ -67,3 +67,7 @@ Crash_*.java
 
 # License.
 !/LICENSE
+
+# Recorded API exchanges (experiment provenance): the sidecars have no extension.
+!**/recordings/**/*.request-id
+!**/recordings/**/default-model

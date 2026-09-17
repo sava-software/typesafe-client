@@ -22,11 +22,13 @@ public record FindingPair(String id, CorpusFinding a, CorpusFinding b, double ja
   }
 
   /// All same-workflow, same-basename pairs in a stable order (by first appearance of the
-  /// block, then the two finding ids). Findings without a basename are never paired.
+  /// block, then the two finding ids). Findings without a basename, or whose location was
+  /// scrubbed to a placeholder such as `<scratchpad>`, are never paired: a placeholder is not
+  /// a file.
   public static List<FindingPair> block(final List<CorpusFinding> findings) {
     final var byKey = new LinkedHashMap<String, List<CorpusFinding>>();
     for (final var finding : findings) {
-      if (finding.basename() == null) {
+      if (finding.basename() == null || finding.basename().startsWith("<")) {
         continue;
       }
       byKey.computeIfAbsent(finding.workflow() + "::" + finding.basename(), _ -> new ArrayList<>()).add(finding);

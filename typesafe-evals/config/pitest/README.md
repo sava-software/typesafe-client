@@ -29,7 +29,14 @@ Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe
 
 ## Accepted mutants
 
-- None.
+- `# self-union-noop` (1 row, `Clusters.union`, `ConditionalsBoundaryMutator` on the
+  first-seen-order comparison that picks which root survives). Property: the root of a
+  merged component is its earliest-added member. Oracle: `ClustersAndLabelsTests` unions
+  in both argument orders and asserts the root and the cluster listing. The boundary
+  direction (`<` against `<=`) differs only when the two roots are the same node, and
+  there both branches write that node as its own parent, which it already was. Becomes
+  killable only if a self-union ever has to be observable (for example, if union() started
+  counting merges); re-triage then.
 
 ## Audited timeout causes
 

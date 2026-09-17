@@ -29,6 +29,7 @@ final class TsvTests {
     final var tsv = new Tsv("a", "b");
     assertThrows(IllegalArgumentException.class, () -> tsv.row("only one"));
     assertThrows(IllegalArgumentException.class, () -> new Tsv(List.of()));
+    assertEquals("a\tb\n\tx\n", new Tsv("a", "b").row((Object) null, "x").render(), "varargs rows accept null cells");
     assertEquals("", Tsv.cell(null));
     assertEquals("x y", Tsv.cell("x\ny"));
   }

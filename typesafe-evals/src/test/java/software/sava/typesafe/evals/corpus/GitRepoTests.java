@@ -104,10 +104,11 @@ final class GitRepoTests {
   void anInterruptedWaitRestoresTheFlag() {
     Thread.currentThread().interrupt();
     try {
-      // the flag is checked by waitFor, so even an instant command takes the interrupt path
+      // waitFor only notices the flag when it has to wait: the command closes stdout at once
+      // (so the read returns) and then keeps running, so the wait is reached with the flag set
       final var failure = assertThrows(IllegalStateException.class,
-          () -> ProcessCommandRunner.INSTANCE.run(List.of("true"), null));
-      assertTrue(failure.getMessage().startsWith("interrupted running `true`"));
+          () -> ProcessCommandRunner.INSTANCE.run(List.of("sh", "-c", "exec >&-; sleep 2"), null));
+      assertTrue(failure.getMessage().startsWith("interrupted running `sh -c exec >&-; sleep 2`"), failure.getMessage());
       assertTrue(Thread.currentThread().isInterrupted(), "the interrupt flag is re-set for the caller");
     } finally {
       Thread.interrupted();

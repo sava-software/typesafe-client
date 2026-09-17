@@ -66,4 +66,34 @@ _Status: harness pending._
 
 ## Experiment B: finding dedupe between finder and refuter phases
 
-_Status: harness pending._
+_Status: scored; awaiting hand labels. Harness: `typesafe-evals` (`software.sava.typesafe.evals.dedupe`),
+run with `./gradlew :typesafe-evals:dedupe -PevalArgs="..."`. Outputs in `typesafe-evals/experiments/dedupe/`;
+every API exchange recorded under `typesafe-evals/recordings/dedupe/`._
+
+**Corpus.** 38 workflow journals from the public sava and sava-openjdk projects; 433 finder
+findings after excluding the merge stage's re-emissions, differential-test outcomes, and
+all-clears; 1,185 same-workflow, same-basename pairs, of which 118 share an exact line.
+Attribution is by result shape, since only 168 of 901 journal records carry a phase label.
+
+**Run.** 270 pairs scored (the 178 selected for labeling plus every pair of the named
+workflow) in two arms, prose only and prose plus code-computed facts: 540 requests,
+544,071 input tokens, $0.023, all answered. Level distribution in the prose arm: 110
+different, 66 narrowed, 94 restated; 46 of the 94 restated at confidence >= 0.8.
+
+**Named case (`wf_82d378e6-c04`, 26 findings, 78 refuters spent originally).**
+
+| rule | six at Transaction.java:266 | five at CONVENTIONS.md:64 | two distinct at Transaction.java:435 | groups |
+| --- | --- | --- | --- | --- |
+| pre-registered: level 2 at confidence >= 0.8 | six singletons | one group | separate | 21 |
+| post-hoc: same underlying defect, P(different) <= 0.2 | one group | one group (plus the line-9 finding) | separate | 12 |
+
+The pre-registered rule misses the six because Jev puts almost no mass on "different"
+for them (0.05 to 0.2) but splits the rest between "narrowed" and "restated": each of the
+six stresses a different aspect of one defect, which the literal reading of level 1
+absorbs. The distinct pair at 435 scores level 0 at confidence 0.98 under both rules. The
+post-hoc rule also grouped three findings at line 438 and two at 443 that read as the
+same defect each. It is reported beside the pre-registered bars, not in them; the labels
+decide whether it holds up (merge safety on gold-0 pairs is computed for it too).
+
+**Next.** Label `labeling-sheet.tsv` (178 rows: `label` 0/1/2, `needed_source` y/n),
+then `--mode replay --labels <file>` re-renders the bars from the recordings at no cost.

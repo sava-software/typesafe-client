@@ -24,6 +24,9 @@ import static java.util.Objects.requireNonNull;
 /// - `<key>.response.json`: the response body verbatim
 /// - `<key>.request-id`: the `x-typesafe-request-id` header, when the API sent one
 ///
+/// plus one `default-model` file naming the model the recording was made with, so a
+/// replay-only client resolves a request that left its model null to the same body.
+///
 /// A recorded evaluation therefore re-renders byte for byte with no key and no spend, and the
 /// request file beside each response is its provenance. Editing a question changes the body,
 /// so a stale recording is never replayed by accident.
@@ -36,9 +39,12 @@ public final class RecordingTypeSafeClient implements TypeSafeClient {
     REPLAY_ONLY
   }
 
+  static final String DEFAULT_MODEL_FILE = "default-model";
+
   private final TypeSafeClient delegate;
   private final Path directory;
   private final Mode mode;
+  private final String defaultModel;
   private final AtomicLong hits = new AtomicLong();
   private final AtomicLong misses = new AtomicLong();
 
@@ -46,6 +52,22 @@ public final class RecordingTypeSafeClient implements TypeSafeClient {
     this.delegate = delegate;
     this.directory = directory;
     this.mode = mode;
+    this.defaultModel = delegate != null ? delegate.defaultModel() : recordedModel(directory);
+  }
+
+  /// The model a replay-only client answers `defaultModel()` with: the recording's, else the
+  /// client default.
+  private static String recordedModel(final Path directory) {
+    final var file = directory.resolve(DEFAULT_MODEL_FILE);
+    if (!Files.isRegularFile(file)) {
+      return DEFAULT_MODEL;
+    }
+    try {
+      final var model = Files.readString(file, StandardCharsets.UTF_8).strip();
+      return model.isEmpty() ? DEFAULT_MODEL : model;
+    } catch (final IOException e) {
+      throw new UncheckedIOException("failed to read " + file, e);
+    }
   }
 
   public static RecordingTypeSafeClient record(final TypeSafeClient delegate, final Path directory) {
@@ -74,7 +96,7 @@ public final class RecordingTypeSafeClient implements TypeSafeClient {
 
   @Override
   public String defaultModel() {
-    return delegate == null ? DEFAULT_MODEL : delegate.defaultModel();
+    return defaultModel;
   }
 
   /// The recording key for `body`: lower-case hex SHA-256 of its UTF-8 bytes.
@@ -123,6 +145,8 @@ public final class RecordingTypeSafeClient implements TypeSafeClient {
   private void store(final String key, final String requestBody, final SystemOneResponse response) {
     try {
       Files.createDirectories(directory);
+      // the same content every time, so rewriting it is idempotent and needs no guard
+      write(directory.resolve(DEFAULT_MODEL_FILE), defaultModel + '\n');
       write(directory.resolve(key + ".request.json"), requestBody);
       if (response.requestId() != null) {
         write(directory.resolve(key + ".request-id"), response.requestId() + '\n');

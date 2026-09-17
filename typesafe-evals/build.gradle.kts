@@ -56,3 +56,13 @@ dependencyAnalysis {
     }
   }
 }
+
+// ./gradlew :typesafe-evals:dedupe -PevalArgs="--projects <dir,dir> --out <dir> --mode record|replay|corpus"
+tasks.register<JavaExec>("dedupe") {
+  group = "experiments"
+  description = "Experiment B: finding dedupe between finder and refuter phases"
+  mainModule.set("software.sava.typesafe_evals")
+  mainClass.set("software.sava.typesafe.evals.dedupe.DedupeExperiment")
+  classpath = sourceSets.main.get().runtimeClasspath
+  args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
+}

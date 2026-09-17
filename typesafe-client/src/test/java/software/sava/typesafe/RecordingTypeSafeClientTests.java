@@ -72,8 +72,9 @@ final class RecordingTypeSafeClientTests {
     assertEquals(TestBodies.SMOKE, Files.readString(cache.resolve(key + ".response.json")));
     assertEquals(TestBodies.SMOKE_REQUEST_ID + "\n", Files.readString(cache.resolve(key + ".request-id")));
     try (final var files = Files.list(cache)) {
-      assertEquals(3, files.count(), "no temp files left behind");
+      assertEquals(4, files.count(), "three exchange files plus default-model, no temp files left behind");
     }
+    assertEquals("jev-stub\n", Files.readString(cache.resolve(RecordingTypeSafeClient.DEFAULT_MODEL_FILE)));
 
     final var second = recording.systemOne(request()).join();
     assertEquals(1, stub.calls.get(), "a hit never reaches the delegate");
@@ -83,8 +84,10 @@ final class RecordingTypeSafeClientTests {
     assertEquals(first.raw(), second.raw());
 
     final var replay = RecordingTypeSafeClient.replayOnly(cache);
+    assertEquals("jev-stub", replay.defaultModel(), "the recording remembers its model");
+    assertEquals(second, replay.systemOne(request()).join(), "a null-model request resolves to the recorded model and replays");
     assertEquals(second, replay.systemOne(request().withDefaultModel("jev-stub")).join());
-    assertEquals(1, replay.hits());
+    assertEquals(2, replay.hits());
   }
 
   @Test
@@ -93,7 +96,7 @@ final class RecordingTypeSafeClientTests {
     final var response = recording.systemOne(request()).join();
     assertNull(response.requestId());
     try (final var files = Files.list(dir)) {
-      assertEquals(2, files.count());
+      assertEquals(3, files.count(), "request, response, default-model; no request-id file");
     }
     assertNull(recording.systemOne(request()).join().requestId());
   }
@@ -114,10 +117,14 @@ final class RecordingTypeSafeClientTests {
   }
 
   @Test
-  void replayOnlyFailsAMissWithoutCallingAnything(@TempDir final Path dir) {
+  void replayOnlyFailsAMissWithoutCallingAnything(@TempDir final Path dir) throws Exception {
     final var replay = RecordingTypeSafeClient.replayOnly(dir);
     assertEquals(RecordingTypeSafeClient.Mode.REPLAY_ONLY, replay.mode());
-    assertEquals(TypeSafeClient.DEFAULT_MODEL, replay.defaultModel());
+    assertEquals(TypeSafeClient.DEFAULT_MODEL, replay.defaultModel(), "no recording yet: the client default");
+    Files.writeString(dir.resolve(RecordingTypeSafeClient.DEFAULT_MODEL_FILE), " \n");
+    assertEquals(TypeSafeClient.DEFAULT_MODEL, RecordingTypeSafeClient.replayOnly(dir).defaultModel(), "a blank model file is ignored");
+    Files.writeString(dir.resolve(RecordingTypeSafeClient.DEFAULT_MODEL_FILE), "jev-recorded\n");
+    assertEquals("jev-recorded", RecordingTypeSafeClient.replayOnly(dir).defaultModel());
     final var failure = assertThrows(CompletionException.class, () -> replay.systemOne(request()).join());
     final var missing = assertInstanceOf(NoSuchElementException.class, failure.getCause());
     assertTrue(missing.getMessage().contains(RecordingTypeSafeClient.key(request().withDefaultModel(TypeSafeClient.DEFAULT_MODEL).body())));

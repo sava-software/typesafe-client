@@ -43,8 +43,9 @@ public final class Tsv {
     return this;
   }
 
+  /// Varargs form; null cells are allowed (`List.of` would reject them).
   public Tsv row(final Object... cells) {
-    return row(List.of(cells));
+    return row(java.util.Arrays.asList(cells));
   }
 
   /// A cell: null is empty; tabs, carriage returns, and line feeds become single spaces.
