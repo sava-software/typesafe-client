@@ -1,0 +1,111 @@
+row_id	choice	p_absent	p_present	p_cannot	confidence	contradicted	depends_on_unseen	control_flags	gold_hint
+sava/sava-core#114#AccountMetaReadOnlySigner.merge	construct_present	0.010	0.990	0.000	0.990	0.160	0.650		present
+sava/sava-core#114#AccountMetaWrite.merge	construct_present	0.010	0.990	0.000	0.990	0.170	0.710		present
+sava/sava-core#231#Transaction.exceedsSizeLimit	construct_absent	0.750	0.220	0.030	0.630	0.060	0.970	identifier_missing:TransactionRecord identifier_missing:exceedsSizeLimitBoundary	present
+sava/sava-core#235#TransactionRecord.setBlockHash	construct_absent	0.980	0.000	0.020	0.970	0.620	0.940	member_missing	
+sava/sava-core#241#Transaction.createTx	cannot_resolve	0.270	0.070	0.660	0.490	0.060	0.910		
+sava/sava-core#244#Transaction.createTx	cannot_resolve	0.440	0.040	0.520	0.270	0.060	0.950		
+sava/sava-core#246#InstructionRecord.extraAccounts	construct_present	0.020	0.930	0.050	0.890	0.060	0.770		
+sava/sava-core#248#TransactionRecord.sign	construct_absent	0.980	0.000	0.020	0.980	0.590	0.960	member_missing	absent
+sava/sava-core#260#Transaction.createTx	construct_absent	0.880	0.000	0.120	0.820	0.050	0.970	identifier_missing:addAccountIfExists	
+sava/sava-core#266#InstructionRecord.equals	construct_present	0.020	0.980	0.000	0.970	0.060	0.290		
+sava/sava-core#269#InstructionRecord.toString	construct_present	0.010	0.990	0.000	0.980	0.050	0.520		
+sava/sava-core#273#TransactionRecord.lambda$static$0	construct_absent	0.890	0.000	0.110	0.840	0.050	0.940		absent
+sava/sava-core#275#TransactionRecord.sign	construct_absent	0.990	0.000	0.010	0.990	0.210	0.950	member_missing	absent
+sava/sava-core#277#AccountIndexLookupTableView.compareTo	construct_present	0.180	0.810	0.010	0.700	0.080	0.900	identifier_missing:viewCompareToReadsTheOtherViewsBackingTable	
+sava/sava-core#286#TransactionSkeleton.deserializeSkeleton	construct_absent	0.510	0.330	0.160	0.270	0.090	0.930	identifier_missing:TransactionSkeletonRecord	present
+sava/sava-core#328#Jex.isValid	construct_present	0.030	0.960	0.010	0.940	0.050	0.160		present
+sava/sava-core#331#Base58.limbsLength	construct_present	0.220	0.600	0.180	0.400	0.090	0.890		present
+sava/sava-core#337#AddressLookupTableOverlay.lambda$keysToString$1	construct_present	0.060	0.930	0.010	0.900	0.050	0.670		
+sava/sava-core#343#SubsequenceRecord.formatCharOptions	construct_absent	0.620	0.350	0.030	0.430	0.060	0.920		
+sava/sava-core#40#Base58.decode	construct_present	0.050	0.860	0.090	0.780	0.060	0.860		
+sava/sava-core#43#Base58.limbsLength	construct_present	0.370	0.570	0.060	0.360	0.070	0.870	identifier_missing:TestAllocation	present
+sava/sava-core#51#Base58.toLimbs	construct_present	0.040	0.950	0.010	0.920	0.050	0.730		
+sava/sava-core#54#Jex.decodePrimIterChecked	construct_present	0.010	0.990	0.000	0.970	0.060	0.230		
+sava/sava-core#57#TokenMetadata.read	construct_present	0.010	0.990	0.000	0.980	0.170	0.660		
+sava/sava-core#67#Token2022.parseExtensions	construct_present	0.000	1.000	0.000	0.990	0.110	0.780		present
+sava/sava-core#70#Codec.decode32	construct_present	0.130	0.840	0.030	0.760	0.050	0.920		
+sava/sava-core#70#Ed25519Util.pack25519	construct_present	0.080	0.850	0.070	0.790	0.050	0.930		present
+sava/sava-rpc#258#RpcCustomError.parseError	construct_present	0.240	0.730	0.030	0.590	0.070	0.940	identifier_missing:ParseCustomErrorCodeTests	
+sava/sava-rpc#267#Lamports.amount	construct_present	0.030	0.950	0.020	0.930	0.060	0.960		present
+sava/sava-rpc#275#JsonUtil.parseEncodedData	construct_absent	0.730	0.010	0.260	0.590	0.060	0.960		
+sava/sava-rpc#281#JsonUtil.parseEncodedData	construct_absent	0.970	0.000	0.030	0.950	0.060	0.970	identifier_missing:reset identifier_missing:skipRestOfArray identifier_missing:mark2 identifier_missing:skippedValuesLeaveTheIteratorAligned	
+sava/sava-rpc#290#JsonUtil.parseEncodedData	construct_absent	0.860	0.010	0.130	0.780	0.080	0.920		
+sava/sava-rpc#292#JsonUtil.toJsonIntArray	construct_present	0.010	0.990	0.000	0.990	0.060	0.670		
+sava/sava-rpc#317#SolanaJsonRpcWebsocket.run	construct_absent	0.640	0.060	0.300	0.450	0.130	0.920		
+http-servers/http-servers-jdk#33#JdkQueryHandler.handle	construct_absent	0.840	0.110	0.050	0.770	0.180	0.860		
+http-servers/http-servers-jdk#37#JdkController.serverError	construct_absent	0.990	0.010	0.000	0.980	0.330	0.930	member_missing	absent
+http-servers/http-servers-jdk#37#JdkQueryHandler.lambda$handle$0	construct_absent	0.900	0.050	0.050	0.850	0.320	0.940		absent
+http-servers/http-servers-jdk#41#JdkController.handle	construct_present	0.200	0.780	0.020	0.670	0.230	0.670		
+http-servers/http-servers-jdk#45#JdkHttpServer.start	construct_present	0.080	0.910	0.010	0.860	0.050	0.940		
+incident-client/incident-io#32#CreateIncidentRequestRecord.body	construct_absent	0.890	0.090	0.020	0.830	0.070	0.950	identifier_missing:bearerToken	
+incident-client/incident-io#32#IncidentIoConfig.createClientBuilder	construct_present	0.350	0.640	0.010	0.450	0.070	0.920		
+incident-client/incident-io#48#IncidentIoRequestException$Parser.create	construct_present	0.010	0.990	0.000	0.990	0.050	0.490		
+incident-client/incident-io#54#IncidentIoConfig$Parser.test	construct_present	0.070	0.900	0.030	0.860	0.060	0.950		
+ravina/ravina-solana#42#LookupTableCacheMap.getOrFetchTables	construct_absent	0.710	0.260	0.030	0.560	0.090	0.870		absent
+ravina/ravina-solana#54#LookupTableCacheMap.refreshStaleAccounts	construct_present	0.030	0.960	0.010	0.950	0.060	0.480		present
+ravina/ravina-solana#59#TxCommitmentMonitorService.validateResponseAndAwaitCommitmentViaWebSocket	construct_present	0.020	0.970	0.010	0.960	0.050	0.910		
+ravina/ravina-solana#62#TxCommitmentMonitorService.lambda$tryAwaitCommitmentViaWebSocket$1	construct_present	0.080	0.910	0.010	0.870	0.050	0.580		
+ravina/ravina-solana#66#BaseTxMonitorService.run	construct_present	0.110	0.800	0.090	0.700	0.070	0.890		
+ravina/ravina-solana#69#TxExpirationMonitorService.lambda$processTransactions$1	construct_present	0.120	0.840	0.040	0.760	0.130	0.920		
+ravina/ravina-solana#77#EpochInfoServiceImpl.awaitInitialized	construct_present	0.060	0.940	0.000	0.900	0.050	0.620		
+http-servers/http-servers-core#59#PathCanonicalizer.canonicalize	construct_present	0.260	0.730	0.010	0.600	0.120	0.690		
+http-servers/http-servers-core#63#HandlerUtil.indexOfParam	construct_present	0.090	0.900	0.010	0.860	0.050	0.320		
+http-servers/http-servers-core#67#HandlerUtil.parseIntParams	construct_present	0.080	0.910	0.010	0.880	0.110	0.270		
+http-servers/http-servers-core#90#HttpServerBuilderFactory.findFirst	construct_present	0.280	0.680	0.040	0.520	0.050	0.980	identifier_missing:NullReturnVals identifier_missing:provides identifier_missing:findFirstThrowsWhenNoBackendIsOnThePath identifier_missing:findFirstDiscoversABackend	present
+http-servers/http-servers-fusionauth#43#FusionAuthHttpServer.start	construct_absent	0.960	0.020	0.020	0.940	0.090	0.950	identifier_missing:startOnAnOccupiedPortThrows identifier_missing:localhost	
+http-servers/http-servers-fusionauth#43#FusionAuthServerBuilder.initRestServer	construct_absent	0.960	0.020	0.020	0.930	0.080	0.940	identifier_missing:startOnAnOccupiedPortThrows identifier_missing:localhost	
+http-servers/http-servers-fusionauth#51#FusionAuthRequest.body	construct_present	0.340	0.640	0.020	0.470	0.100	0.960	identifier_missing:bodyOnAGetRequestIsEmptyNotNull	
+http-servers/http-servers-jetty#127#JettyController.handle	construct_present	0.040	0.950	0.010	0.940	0.100	0.830		
+http-servers/http-servers-jetty#135#JettyQueryHandler.handle	construct_present	0.160	0.830	0.010	0.750	0.050	0.590		
+http-servers/http-servers-jetty#138#JettyCachedJsonResponseHandler.handle	construct_present	0.110	0.810	0.080	0.720	0.050	0.780		
+http-servers/http-servers-jetty#76#JettyCachedJsonResponseHandler.handle	construct_present	0.130	0.800	0.070	0.700	0.050	0.930		
+http-servers/http-servers-jetty#76#JettyQueryHandler.handle	construct_present	0.100	0.850	0.050	0.770	0.050	0.930		
+http-servers/http-servers-sava#105#SvmExactSettler.settle	construct_present	0.190	0.790	0.020	0.680	0.070	0.940	identifier_missing:NullReturnVals identifier_missing:malformedTransactionPayloadDoesNotSubmit identifier_missing:nullPayloadDoesNotSubmit	
+http-servers/http-servers-sava#52#SvmExactVerifier.verify	construct_absent	0.500	0.440	0.060	0.250	0.140	0.850		present
+http-servers/http-servers-sava#80#SvmExactSettler.settle	construct_present	0.040	0.950	0.010	0.930	0.220	0.940		
+json-iterator/json-iterator#236#BaseJsonIterator.reduceScale	construct_present	0.050	0.950	0.000	0.910	0.050	0.520		present
+json-iterator/json-iterator#240#BaseJsonIterator.skipObject	construct_present	0.090	0.900	0.010	0.860	0.150	0.730		present
+json-iterator/json-iterator#244#BytesJsonIterator.parseMultiByteString	construct_present	0.440	0.540	0.020	0.300	0.090	0.630		absent
+json-iterator/json-iterator#248#CharsJsonIterator.parse	construct_present	0.060	0.930	0.010	0.900	0.050	0.180		present
+json-iterator/json-iterator#251#CharsJsonIterator.skipPastEndQuote	construct_present	0.160	0.830	0.010	0.750	0.060	0.910		present
+json-iterator/json-iterator#255#JIUtil.escapeQuotesChecked	construct_present	0.170	0.830	0.000	0.730	0.050	0.320		present
+json-iterator/json-iterator#259#FieldMatcher.of	construct_present	0.050	0.940	0.010	0.920	0.220	0.200		present
+json-iterator/json-iterator#297#BaseJsonIterator.skipTrue	construct_present	0.360	0.580	0.060	0.360	0.080	0.950	identifier_missing:tque identifier_missing:trqe	
+json-iterator/json-iterator#307#JHex.INIT_DIGITS	construct_absent	0.970	0.000	0.030	0.950	0.820	0.950	member_missing	
+json-iterator/json-iterator#62#DoubleParser.parse	construct_present	0.030	0.950	0.020	0.920	0.190	0.900		
+json-iterator/json-iterator#65#BytesJsonIterator.parse	construct_absent	0.840	0.100	0.060	0.750	0.070	0.950	identifier_missing:readInt identifier_missing:readLong identifier_missing:parseFieldName identifier_missing:handleEscapes	
+json-iterator/json-iterator#65#CharsJsonIterator.parse	construct_absent	0.830	0.070	0.100	0.740	0.080	0.950	identifier_missing:readInt identifier_missing:readLong identifier_missing:parseFieldName identifier_missing:handleEscapes	present
+json-iterator/json-iterator#65#FieldMatcher.match	construct_absent	0.710	0.230	0.060	0.570	0.070	0.940	identifier_missing:readInt identifier_missing:readLong identifier_missing:parseFieldName identifier_missing:handleEscapes	
+json-iterator/json-iterator#65#JIUtil.escapeQuotes*	construct_absent	0.650	0.250	0.100	0.470	0.070	0.950	identifier_missing:readInt identifier_missing:readLong identifier_missing:parseFieldName identifier_missing:handleEscapes	
+ravina/ravina-core#100#CapacityStateVal.hasCapacity	construct_absent	0.590	0.190	0.220	0.390	0.070	0.920	identifier_missing:BooleanTrueReturnVals	
+ravina/ravina-core#105#ExceptionUtil.containsIOException	construct_present	0.070	0.890	0.040	0.840	0.040	0.880		
+ravina/ravina-core#112#LoadBalancerConfig$Parser.parseProperties	construct_absent	0.640	0.340	0.020	0.470	0.050	0.860	identifier_missing:BooleanTrueReturnVals	
+ravina/ravina-core#119#ArrayLoadBalancer.peek	construct_present	0.310	0.680	0.010	0.520	0.090	0.270		
+ravina/ravina-core#121#SortedLoadBalancer.nextNoSkip	construct_present	0.260	0.730	0.010	0.590	0.070	0.380		
+ravina/ravina-core#344#CourteousBalancedCall.call	construct_absent	0.580	0.370	0.050	0.360	0.060	0.970	identifier_missing:aFailedClaimIsFinalUnlessTheFailoverItemIsADifferentOne identifier_missing:RacingCapacityState identifier_missing:CapacityState	absent
+ravina/ravina-core#356#CapacityStateVal.tryClaimRequest	construct_absent	0.960	0.030	0.010	0.940	0.070	0.980	identifier_missing:casUpdatedAt identifier_missing:WedgedClaimState identifier_missing:aClaimThatLosesTheRaceIsPutBack identifier_missing:aPacingGatedClaimReturnsFalseWithoutClaiming identifier_missing:LosingTimestampState identifier_missing:aTimestampCasThatLosesMustNotReplenish	
+ravina/ravina-core#37#ExponentialBackoffErrorHandler.<init>	construct_present	0.060	0.840	0.100	0.770	0.050	0.950	identifier_missing:qualityGate identifier_missing:pitestBackoff	
+ravina/ravina-core#64#Backoff.fibonacci	construct_present	0.190	0.750	0.060	0.620	0.180	0.890		present
+ravina/ravina-core#67#ExponentialBackoffErrorHandler.<init>	construct_present	0.120	0.510	0.370	0.260	0.060	0.930		
+ravina/ravina-core#76#ComposedCall.get	construct_present	0.380	0.600	0.020	0.400	0.070	0.700		
+ravina/ravina-core#79#CourteousBalancedCall.call	construct_present	0.130	0.850	0.020	0.770	0.080	0.820		absent
+ravina/ravina-core#82#CourteousBalancedCall.call	construct_present	0.160	0.830	0.010	0.750	0.050	0.840		absent
+ravina/ravina-core#89#CourteousBalancedCall.call	construct_present	0.210	0.780	0.010	0.670	0.060	0.630		absent
+ravina/ravina-core#93#CourteousCall.call	construct_present	0.390	0.510	0.100	0.270	0.070	0.890		
+ravina/ravina-core#96#UncheckedBalancedCall.get	construct_present	0.440	0.500	0.060	0.240	0.080	0.710		
+http-servers/http-servers-hello#20#HelloServer.start	construct_present	0.010	0.990	0.000	0.980	0.070	0.840		
+http-servers/http-servers-hello#23#HelloServer.start	construct_absent	0.420	0.400	0.180	0.130	0.090	0.950	identifier_missing:VoidMethodCall identifier_missing:helloServesAndExcludedPathDoesNot	
+incident-client/incident-core#43#IncidentAlertBuilder.create	construct_present	0.030	0.960	0.010	0.940	0.310	0.880		present
+incident-client/incident-core#52#IncidentAlertBuilder.<init>	construct_present	0.260	0.730	0.010	0.590	0.060	0.810		
+incident-client/incident-core#58#IncidentClients.createClient	construct_present	0.100	0.850	0.050	0.780	0.050	0.970	identifier_missing:IncidentClientsTests identifier_missing:PagerDutyIncidentClientFactoryTests identifier_missing:IncidentIoIncidentClientFactoryTests identifier_missing:targetTests identifier_missing:provides	
+incident-client/incident-core#73#IncidentServiceVal.retry	construct_present	0.000	1.000	0.000	0.990	0.050	0.860		
+incident-client/incident-pagerduty#72#PagerDutyConfig$Parser.test	construct_present	0.060	0.930	0.010	0.900	0.060	0.950		
+incident-client/incident-webhook#54#TelegramTextFormat.render	construct_present	0.010	0.990	0.000	0.980	0.060	0.880		
+incident-client/incident-webhook#60#WebhookConfig$Parser.test	construct_present	0.090	0.880	0.030	0.820	0.060	0.950		
+incident-client/incident-webhook#65#WebhookClient$Builder.createClient	construct_present	0.030	0.960	0.010	0.940	0.100	0.950	identifier_missing:JsonHttpClient	
+incident-client/incident-webhook#70#WebhookClientImpl.lambda$static$0	construct_present	0.020	0.970	0.010	0.970	0.070	0.920		
+incident-client/incident-webhook#76#WebhookClientImpl.lambda$static$0	construct_present	0.120	0.870	0.010	0.800	0.140	0.960	identifier_missing:ofInputStream identifier_missing:readAllBytes	
+ravina/ravina-kms/google#56#GoogleKMSClientFactory.createService	construct_present	0.250	0.710	0.040	0.560	0.060	0.960	identifier_missing:UncheckedIOException	
+ravina/ravina-kms/google#61#GoogleKMSClient.lambda$publicKey$0	construct_present	0.160	0.600	0.240	0.410	0.050	0.860		
+ravina/ravina-kms/google#64#GoogleKMSClient.lambda$sign$0	construct_present	0.030	0.940	0.030	0.910	0.060	0.940	identifier_missing:KeyManagementServiceClient	

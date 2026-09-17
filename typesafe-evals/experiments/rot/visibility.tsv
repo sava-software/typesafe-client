@@ -1,0 +1,7 @@
+sava-software/sava	PUBLIC
+sava-software/ravina	PUBLIC
+sava-software/json-iterator	PUBLIC
+sava-software/http-servers	PUBLIC
+sava-software/idl-src-gen	PRIVATE
+sava-software/incident-client	PUBLIC
+glamsystems/vault-stat-service	PRIVATE

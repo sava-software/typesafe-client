@@ -41,6 +41,11 @@ public record GitRepo(Path root, CommandRunner runner) {
     return out.lines().map(String::strip).filter(line -> line.endsWith(".java")).toList();
   }
 
+  /// Any other read-only git command, for callers with needs beyond the helpers above.
+  public String run(final String... args) {
+    return git(args);
+  }
+
   private String git(final String... args) {
     final var command = new java.util.ArrayList<String>(args.length + 3);
     command.add("git");

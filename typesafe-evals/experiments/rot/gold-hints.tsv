@@ -1,0 +1,45 @@
+key	label	source	note
+sava/sava-core#TransactionRecord.sign	absent	hardest-6	signing moved to BaseTransaction.signInOrder; no sign( in TransactionRecord at HEAD
+sava/sava-core#TransactionRecord.lambda$static$0	absent	hardest-5	MERGE_ACCOUNT_META moved to TxBuilderImpl; TransactionRecord only imports it
+sava/sava-core#Transaction.exceedsSizeLimit	present	hardest-4	interface default still exists at Transaction.java:908; the acceptance was retired, the construct was not
+sava/sava-core#Hmac.hmacSHA512	absent	G29	the (byte[], byte[]) overload was removed; only hmacSHA512() remains
+sava/sava-core#Token2022.parseExtensions	present	G25	the null guard is still there; the acceptance was dropped because it was killed
+sava/sava-core#TransactionSkeleton.deserializeSkeleton	present	G24	method still exists; rows were killed, not the code
+sava/sava-core#TransactionSkeletonRecord.<init>	absent	G24	TransactionSkeletonRecord.java deleted at HEAD
+sava/sava-core#Base58.limbsLength	present	G1	the bit-bound estimate is still there; the argument was withdrawn, the construct was not
+sava/sava-core#AccountMetaWrite.merge	present	G37	AccountMeta* files unchanged since the snapshot (negative control)
+sava/sava-core#AccountMetaReadOnlySigner.merge	present	G37	unchanged since the snapshot (negative control)
+sava/sava-core#AccountMetaInvoked.merge	present	G37	unchanged since the snapshot (negative control)
+sava/sava-core#Ed25519Util.pack25519	present	tier3	line 385 unchanged
+sava/sava-core#Jex.isValid	present	tier3	line 571 unchanged
+sava/sava-rpc#Builder.clock	absent	hardest-7	clock moved off the websocket Builder interface to SolanaRpcWebsocketBuilder
+sava/sava-rpc#SolanaJsonRpcWebsocket.checkCycle	absent	G20	ws family members removed wholesale before 2026-08-01
+sava/sava-rpc#SolanaJsonRpcWebsocket.ensureCapacity	absent	G20	removed with the ws rewrite
+sava/sava-rpc#SolanaJsonRpcWebsocket.queueUnsubscribe	absent	G20	removed with the ws rewrite
+sava/sava-rpc#SolanaJsonRpcWebsocket.onWholeMessage	absent	G20	removed with the ws rewrite
+sava/sava-rpc#JsonHttpClient.gzipBufferSize	present	G19	still exists; the combined acceptance was split, the construct stayed
+sava/sava-rpc#Lamports.amount	present	G34	still both branches; the universal claim was narrowed in prose
+ravina/ravina-core#CourteousBalancedCall.call	absent	G5/G6	loop counter widened to long; the ++i IncrementsMutator site no longer exists as described
+ravina/ravina-core#Backoff.fibonacci	present	G4	the wrap guard still exists; the liveness argument was wrong
+ravina/ravina-solana#WebSocketManagerImpl.checkConnection	absent	G13	no such method at HEAD
+ravina/ravina-solana#WebSocketManagerImpl.resetWebsocket	absent	G13	websocket rewrite; rows pruned as arguing about code that no longer exists
+ravina/ravina-solana#LookupTableCacheMap.getOrFetchTables	absent	G10	retired by removing the mutation site
+ravina/ravina-solana#LookupTableCacheMap.refreshStaleAccounts	present	G12	member remains; one sibling mutant retired
+ravina/ravina-solana#Epoch.create	absent	G31	the else-branch recomputation vanished from the note and Epoch.java changed
+ravina/ravina-solana#SlotPerformanceStats.calculateStats	present	G31	still named at HEAD
+json-iterator/json-iterator#BytesJsonIterator.parseMultiByteString	absent	G9	line 575 is blank now; appends stop at tail; retired by repair
+json-iterator/json-iterator#CharsJsonIterator.skipPastEndQuote	present	G7	construct present; the family claim was wrong
+json-iterator/json-iterator#BaseJsonIterator.reduceScale	present	tier3	line 1021 unchanged
+json-iterator/json-iterator#BaseJsonIterator.skipObject	present	tier3	lines 1122 and 1127 unchanged
+json-iterator/json-iterator#CharsJsonIterator.parse	present	tier3	line 136 unchanged
+json-iterator/json-iterator#JIUtil.escapeQuotesChecked	present	tier3	line 170 unchanged
+json-iterator/json-iterator#FieldMatcher.of	present	tier3	line 51 unchanged
+http-servers/http-servers-jdk#JdkQueryHandler.process	absent	G14/hardest-8	folded into handle
+http-servers/http-servers-jdk#JdkQueryHandler.lambda$handle$0	absent	G14	the executor task no longer exists
+http-servers/http-servers-jdk#JdkController.serverError	absent	G15	replaced by answerWithoutBody(exchange, 500)
+http-servers/http-servers-core#HttpServerBuilderFactory.findFirst	present	G3	member remains; the acceptance was killed by a test
+http-servers/http-servers-sava#SvmExactVerifier.verify	present	G17	member remains; five rows pruned
+http-servers/http-servers-jetty#JettyServerBuilder.initRestServer	present	G16	member remains; the timeout admission was falsified
+incident-client/incident-core#IncidentAlertBuilder.create	present	rung0	no source drift in incident-core
+incident-client/incident-core#IncidentAlertBuilder.customDetail	present	rung0	no source drift in incident-core
+incident-client/incident-io#IncidentIoConfig$Parser.test	present	G36	the prose line was already wrong at the snapshot; the member is present

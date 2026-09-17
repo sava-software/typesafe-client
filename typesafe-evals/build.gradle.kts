@@ -66,3 +66,13 @@ tasks.register<JavaExec>("dedupe") {
   classpath = sourceSets.main.get().runtimeClasspath
   args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
 }
+
+// ./gradlew :typesafe-evals:rot -PevalArgs="--manifest <file> --golden-fleet <dir> --checkouts <dir> --out <dir> --mode record|replay|corpus"
+tasks.register<JavaExec>("rot") {
+  group = "experiments"
+  description = "Experiment A: acceptance-note rot detector"
+  mainModule.set("software.sava.typesafe_evals")
+  mainClass.set("software.sava.typesafe.evals.rot.RotExperiment")
+  classpath = sourceSets.main.get().runtimeClasspath
+  args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
+}
