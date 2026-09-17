@@ -10,13 +10,13 @@ retain line-less class/method/mutator evidence and meaningful multiplicity as `x
 
 Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe.evals.text`),
 `corpus` (the public-repo gate, git reads, and the process runner), `report` (TSV output),
-`jev` (the recording batch runner), `metrics` (the arithmetic the experiment bars use).
-Experiment code gets its own suite when it lands.
+`jev` (the recording batch runner), `metrics` (the arithmetic the experiment bars use),
+`rot` and `dedupe` (each experiment's question definitions; the corpus builders join them).
 
 ## Untriaged debt
 
 - None. First observations 2026-09-17: `text` 19/19, `corpus` 52/52, `report` 21/21,
-  `jev` 33/33, `metrics` 138/138 killed. `JevRunner` lost a semaphore (a synchronous
+  `jev` 33/33, `metrics` 138/138, `rot` 5/5, `dedupe` 11/11 killed. `JevRunner` lost a semaphore (a synchronous
   throw leaked a permit and a removed release deadlocked into a watchdog timeout) for
   flush-when-full chunks with one failure path through `thenCompose`. `Metrics.pearson`
   lost an empty-series guard the variance check subsumes.

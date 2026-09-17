@@ -32,6 +32,16 @@ hardening {
     excludedClasses = listOf("*Test*")
     targetTests = "software.sava.typesafe.evals.metrics.*Test*"
   }
+  mutation.register("rot") {
+    targetClasses = listOf("software.sava.typesafe.evals.rot.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.rot.*Test*"
+  }
+  mutation.register("dedupe") {
+    targetClasses = listOf("software.sava.typesafe.evals.dedupe.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.dedupe.*Test*"
+  }
   mutation.register("report") {
     targetClasses = listOf("software.sava.typesafe.evals.report.*")
     excludedClasses = listOf("*Test*")
