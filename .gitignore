@@ -1,0 +1,69 @@
+# =============================================================================
+# Deny by default: nothing is tracked unless explicitly allowed below.
+# Add a matching "!" rule when you introduce a new kind of tracked file.
+# =============================================================================
+*
+
+# Descend into every directory so the allow rules below can match.
+# Files inside are still ignored unless allowed; directories re-ignored in the
+# next block are never descended into at all.
+!*/
+
+# -----------------------------------------------------------------------------
+# Directories to stay out of entirely (build output, IDE/tool state).
+# A file under an ignored directory can never be re-included, so these win over
+# every allow rule below.
+# -----------------------------------------------------------------------------
+build/
+# ...but a Java package literally named "build" is source, not output.
+!**/src/**/build/
+.gradle/
+.gradletasknamecache
+.idea/
+.claude/
+/symlinks/
+# arcmutate incremental-analysis history (machine-local, written by the hardening plugin)
+.pitest-history/
+
+# -----------------------------------------------------------------------------
+# Tracked file types.
+# -----------------------------------------------------------------------------
+!*.java
+!*.kts
+!*.properties
+!*.json
+!*.csv
+!*.md
+!*.yml
+!*.tsv
+!/arcmutate-licence.txt
+
+# Mutation-record provenance written by the hardening plugin's BaselineRebase
+# (the PIT version file has no extension; the toolchain sidecar is *.tsv above).
+!**/config/pitest/*-pitest-version
+
+# Gradle wrapper.
+!/gradlew
+!/gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+
+# Jazzer seed corpora.
+!**/src/test/resources/fuzz/**/*.bin
+
+# ServiceLoader provider declarations (named after the service interface, no extension).
+!**/src/main/resources/META-INF/services/*
+
+# This file.
+!.gitignore
+
+# -----------------------------------------------------------------------------
+# Exceptions that would otherwise be picked up by the allow rules above.
+# -----------------------------------------------------------------------------
+# Machine-specific agent guidance (see AGENTS.md)
+AGENTS.local.md
+# Jazzer crash reproducers
+crash-*
+Crash_*.java
+
+# License.
+!/LICENSE
