@@ -229,7 +229,7 @@ public final class DocCorpus {
   /// The comment as Jev sees it: block tags removed with their continuation lines, links
   /// reduced to their target name, and each of `names` masked as an identifier and as its
   /// word sequence.
-  static String shown(final String comment, final List<String> names) {
+  public static String shown(final String comment, final List<String> names) {
     final var kept = new ArrayList<String>();
     boolean inTag = false;
     for (final var line : comment.split("\n", -1)) {
@@ -278,7 +278,7 @@ public final class DocCorpus {
     return Pattern.compile(regex.toString());
   }
 
-  static String normalize(final String text) {
+  public static String normalize(final String text) {
     return text.replaceAll("\\s+", " ").strip();
   }
 

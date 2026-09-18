@@ -47,6 +47,11 @@ hardening {
     excludedClasses = listOf("*Test*")
     targetTests = "software.sava.typesafe.evals.hardening.*Test*"
   }
+  mutation.register("drift") {
+    targetClasses = listOf("software.sava.typesafe.evals.drift.*")
+    excludedClasses = listOf("*Test*")
+    targetTests = "software.sava.typesafe.evals.drift.*Test*"
+  }
   mutation.register("dedupe") {
     targetClasses = listOf("software.sava.typesafe.evals.dedupe.*")
     excludedClasses = listOf("*Test*")
@@ -113,6 +118,16 @@ tasks.register<JavaExec>("docsExperiment") {
   description = "Experiment C1: doc comments versus member bodies (swapped comments and a blind-labeled sample)"
   mainModule.set("software.sava.typesafe_evals")
   mainClass.set("software.sava.typesafe.evals.docs.DocExperiment")
+  classpath = sourceSets.main.get().runtimeClasspath
+  args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
+}
+
+// ./gradlew :typesafe-evals:drift -PevalArgs="--checkouts <dir> --repos sava,ravina --out <dir> --recordings <dir> --mode record|replay|corpus"
+tasks.register<JavaExec>("drift") {
+  group = "experiments"
+  description = "Experiment D: doc drift at change time"
+  mainModule.set("software.sava.typesafe_evals")
+  mainClass.set("software.sava.typesafe.evals.drift.DriftExperiment")
   classpath = sourceSets.main.get().runtimeClasspath
   args = (project.findProperty("evalArgs") as String?)?.trim()?.split(Regex("\\s+"))?.filter { it.isNotEmpty() } ?: emptyList()
 }
