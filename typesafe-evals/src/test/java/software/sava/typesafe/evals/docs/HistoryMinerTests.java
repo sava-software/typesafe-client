@@ -88,6 +88,9 @@ final class HistoryMinerTests {
     assertEquals(List.of(), miner.modifiedFiles(commits.get(0)), "the root commit only adds files");
     assertEquals(List.of("mod/src/main/java/p/W.java"), miner.modifiedFiles(commits.get(1)), "test sources are excluded");
     assertEquals(List.of("mod/src/main/java/p/W.java"), miner.modifiedFiles(commits.get(2)), "a rename is not a modification");
+    final var before = miner.membersBefore(commits.get(1), "mod/src/main/java/p/W.java");
+    assertEquals(List.of("W.m(int)", "W.undocumented()"), before.keySet().stream().map(Object::toString).toList(), "the file as it stood before commit two");
+    assertTrue(before.values().iterator().next().body().contains("cache.get(k)"), "the parent's body, not commit two's");
 
     final var events = miner.mine();
     assertEquals(2, events.size(), events.toString());

@@ -151,6 +151,18 @@ final class MetricsTests {
   }
 
   @Test
+  void aurocIntervalIsPinnedForOneSeed() {
+    // four paired rows resampled 80 times under seed 30: the sorted AUROCs begin 0.0, 0.1875,
+    // 0.25, 0.25 and end at 1.0; the lower index is floor(0.025 * 79) = 1 and the upper
+    // ceil(0.975 * 79) = 78. Pinned so that a resample that keeps the previous draws, draws one
+    // row too many, skips the sort, or moves the lower index reads a different pair.
+    final var interval = Metrics.aurocInterval(List.of(0.9, 0.7, 0.4, 0.1), List.of(0.2, 0.6, 0.3, 0.8), 80, 30L);
+    assertArrayEquals(new double[]{0.1875, 1.0}, interval);
+    // one row: every resample is that row, and a single resample is its own interval
+    assertArrayEquals(new double[]{1.0, 1.0}, Metrics.aurocInterval(List.of(0.9), List.of(0.1), 1, 5L));
+  }
+
+  @Test
   void histogramKeepsFirstSeenOrder() {
     assertEquals(Map.of("b", 2, "a", 1), Metrics.histogram(List.of("b", "a", "b")));
     assertEquals(List.of("b", "a"), List.copyOf(Metrics.histogram(List.of("b", "a", "b")).keySet()));

@@ -85,6 +85,15 @@ decision table with its commit bootstrap, the blind sheet, and the driver).
   a commit hash leads every id), a checkout that is not a repository, one that is not public, one
   that is not a directory at all, a failed request, an answer with no usage block, and a labels
   path that names no file.
+  Second observation 2026-09-18 of the suites that grew after their first pass: `corpus` 86
+  mutants, `GitRepo.run` uncovered until a test read its output back, now 86/86; `docs` 685,
+  `HistoryMiner.membersBefore` uncovered until the miner test read a file as it stood before a
+  commit, now 685/685 (the four loop-guard timeouts unchanged); `metrics` 175 once
+  `aurocInterval` arrived with Experiment C2, at 165 killed with 9 survivors and 1 timeout. Six
+  of the nine died to one pinned seeded interval (a resample that keeps the previous draws,
+  draws one row too many, skips the sort, or moves the lower percentile index reads a different
+  pair), three are accepted below as guards whose mutated arm computes the NaN they return, and
+  the loop-guard timeout is audited.
 
 ## Accepted mutants
 
@@ -189,6 +198,23 @@ history-free run before acceptance:
   classes the running sum is still 0.0, and 0.0 / 0 is the NaN the guard returns. Oracle:
   `DriftBatchTests.aurocsOverScoredCandidates`.
 
+Three `metrics` rows, each a guard whose mutated arm reaches the NaN the guard returns; every
+one was argued and then re-measured on a clean history-free run before acceptance:
+
+- `# empty-side-divides-to-nan` (2 rows, `Metrics.auroc`, `RemoveConditionalMutator_EQUAL_ELSE`
+  and `RemoveConditionalMutator_EQUAL_IF`, the two mutants that skip the empty-side return, one
+  for each side). Property: with nothing to rank there is no AUROC. With the return skipped an
+  empty side leaves the win count at zero and the pair count at zero, and 0.0 / 0 is the NaN the
+  guard returns. Oracle: `MetricsTests.aurocIsTheMannWhitneyStatistic`, which reads NaN from an
+  empty side of either kind.
+- `# no-rows-resample-to-nan` (`Metrics.aurocInterval`, `RemoveConditionalMutator_EQUAL_IF`, the
+  mutant that skips the early return when there are no rows). With no rows the draw loop runs
+  zero times per resample, so no draw is made against an empty population, every resample is the
+  AUROC of two empty lists, and the percentiles of an all-NaN array are the pair the guard
+  returns. The no-resamples half of the same return is killed by
+  `MetricsTests.aurocIntervalIsDeterministicAndBracketsThePointEstimate`, where an empty sample
+  array would be indexed.
+
 ## Audited timeout causes
 
 `rot-timeouts.csv` holds seven line-less keys (nine mutant instances), all `cause:liveness`:
@@ -229,3 +255,12 @@ are whole source files; the audited set is the cheaper control while the corpus 
   pre-registered resample count itself. The siblings that force the same two comparisons false
   leave both loops empty, which is an outcome the corpus already states, and are killed by
   `DriftCorpusAndBarsTests.separationReadsTheCommitBootstrapAgainstTheBar`.
+
+`metrics-timeouts.csv` holds one line-less key (one mutant instance), `cause:liveness`:
+
+- `Metrics.aurocInterval` (`RemoveConditionalMutator_ORDER_IF`): the per-resample draw loop loses
+  its only bound. Forced true, the draw counter never reaches the row count, the first resample
+  never completes, and no percentile is read; the watchdog is the detector by construction. It is
+  an ordinary counted loop over the row count with no seam a deterministic budget could bound.
+  The sibling that forces the bound false draws nothing, reads the AUROC of two empty lists, and
+  is killed by `MetricsTests.aurocIntervalIsPinnedForOneSeed`.

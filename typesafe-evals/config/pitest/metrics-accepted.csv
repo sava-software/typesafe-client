@@ -1,0 +1,4 @@
+!sava-hardening-baseline-schema,1
+software.sava.typesafe.evals.metrics.Metrics,auroc,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # empty-side-divides-to-nan # line 212
+software.sava.typesafe.evals.metrics.Metrics,auroc,RemoveConditionalMutator_EQUAL_IF,SURVIVED # empty-side-divides-to-nan # line 212
+software.sava.typesafe.evals.metrics.Metrics,aurocInterval,RemoveConditionalMutator_EQUAL_IF,SURVIVED # no-rows-resample-to-nan # line 236

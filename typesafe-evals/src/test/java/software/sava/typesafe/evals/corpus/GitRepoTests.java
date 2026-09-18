@@ -59,6 +59,8 @@ final class GitRepoTests {
     ));
     final var repo = new GitRepo(Path.of("/repo"), git);
     assertEquals("abc123", repo.head());
+    assertEquals("abc123\n", repo.run("rev-parse", "HEAD"), "run hands back the command's output untouched");
+    assertEquals(List.of("git", "-C", "/repo", "rev-parse", "HEAD"), git.calls.getLast());
     assertEquals("# title\n", repo.show("deadbeef", "sava-core/README.md"));
     assertEquals(List.of("sava-core/src/main/java/A.java", "sava-core/src/main/java/B.java"),
         repo.changedJavaFiles("deadbeef", "sava-core/src/main/java"));
