@@ -366,3 +366,105 @@ not belong to this code" (AUROC 0.90 post hoc), is not the question anyone needs
 here, because comments in this fleet are fixed in the same commit as the code. There is no
 product to propose for doc comments; the deterministic checks (parameter names, thrown types,
 referenced identifiers) remain the right tool for the part of the problem that exists.
+
+## Experiment D: doc drift at change time
+
+_Status: run and labeled; the pre-registered decision table lands on kill at the separation
+bar, and the labels show why. Pre-registration: the plan file's Experiment D section, its
+batched arm, and the amendments after a three-lens review (15 findings, 14 stood), all written
+before the first request. Harness: `software.sava.typesafe.evals.drift`
+(`./gradlew :typesafe-evals:drift`). Outputs in `typesafe-evals/experiments/drift/`; recordings
+under `typesafe-evals/recordings/drift/`._
+
+**The question.** The static question (is this comment wrong at HEAD) was killed in C1. The
+question that matters to the fleet is the one asked at change time: when a member's body
+changes, does its comment need to change too? History labels it for free, or seems to: in
+each commit that changed a documented member's body, the author either also changed the
+comment (CO_EDIT) or left it byte-identical (BODY_ONLY). One Choice per row over the comment
+before the change, the lines removed and added, and the member after the change, with four
+options that partition: contradicted_by_change, needs_addition, unaffected, not_checkable;
+the score is the sum of the first two. A batched arm sends one request per changed file with
+one Noul per documented comment in it, the shape a pull-request mode would use.
+
+**What the review changed before the run.** Classes split on the comment as shown rather than
+the raw text (tag-only edits are not co-edits); one row per member, its latest change, so one
+commit cannot supply a cluster; line counts out of the state (member length is a baseline, not
+an input); seven two-sided baselines including the one-bit "abstract member gained or lost a
+body" flag, which the reviewers predicted would carry the signal; a bootstrap that resamples
+commits rather than rows; a single shuffled blind sheet of every row in both classes, from
+which an oracle ceiling is computed before the value bar is read; and a value bar with a
+control (the affected rate in the top 30 BODY_ONLY rows against the rate in the rest).
+
+**Corpus.** 76 rows in 37 commits across the six public repositories: 29 CO_EDIT and 47
+BODY_ONLY (sava 25 and 30, incident-client 3 and 2, json-iterator 1 and 7, ravina 0 and 4,
+http-servers 0 and 2, glam-sdk-java 0 and 2). The per-member rule removed 45 earlier changes;
+60 events had comments under 40 characters as shown, 16 were retouches, 7 lost their comment.
+13 rows are abstract-toggle rows, all CO_EDIT, all from sava's `Transaction` and
+`TransactionSkeleton` interfaces gaining default bodies. The batched arm has 42 (commit, file)
+requests over 385 candidate comments, 25 of them positives.
+
+**Run.** 118 requests (76 pair, 42 batched), 244,890 input tokens, $0.0103, all answered.
+Pair-arm choices: CO_EDIT contradicted 8, needs_addition 7, unaffected 13, not_checkable 1;
+BODY_ONLY contradicted 3, needs_addition 21, unaffected 23.
+
+**Bars (first match wins).**
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| score correlates with diff size (Pearson -0.060, Spearman 0.017) | 0.060 | both <= 0.8 | yes |
+| separation AUROC, CO_EDIT over BODY_ONLY (commit bootstrap 95% 0.370 to 0.710) | 0.594 | lower bound >= 0.75 | no |
+| lift over the best deterministic baseline (member lines before, 0.773) | -0.179 | >= 0.10 | no |
+| affected rows among the top 30 BODY_ONLY (30 read; the other 17 hold 0) | 6 | >= 5, and Wilson lower bound above the rest's upper bound | no (0.095 against 0.184) |
+| **decision** | **kill: separation** | | |
+
+Without the 13 abstract-toggle rows the AUROC is 0.420. The strongest baseline is the length
+of the member before the change, two-sided 0.773: short interface stubs are the co-edits.
+
+**Why it failed: the label, measured.** The blind sheet (76 rows, two readers each, 70 agreed,
+6 adjudicated) says the author's behaviour is not the drift label. Readers marked 13 of the 29
+co-edits affected (6 contradicted, 7 needs_addition) and 16 unaffected: the comment was touched
+in the same commit for reasons the body change does not require (a visibility widened, a
+`volatile` added, a delegation extracted, a default body supplied under a still-true comment).
+In BODY_ONLY, 6 of 47 were marked affected. A judge that agreed with the readers on every row
+would separate the two classes at 0.5 + (0.448 - 0.128) / 2 = 0.660, below the 0.75 bar.
+Jev's 0.594 is a miss against a target that could not have been hit; the bar was set on the
+assumption, stated in the pre-registration, that the noise would be smaller.
+
+**Against the readers' labels, post hoc and not in the bars.** With the readers' affected /
+unaffected as the gold (19 against 57), the same scores rank at AUROC 0.799: 0.853 within the
+co-edits, 0.699 within the body-only rows; P(contradicted_by_change) against the readers'
+8 contradicted rows ranks at 0.841. The four-way choice matches the readers' label on 39 of 76
+rows and the two-way split on 46: the systematic error is over-calling needs_addition (20 of
+the 57 unaffected rows), which is the literal reading of "adds or removes a behaviour the
+comment would need to describe" applied to any added line. All six body-only rows the readers
+marked affected sit in Jev's top 30 of 47, at ranks 1, 5, 11, 22, 25, and 30, and none in the
+remaining 17. The pre-registered bound rule fails on 17 control rows (the rest's Wilson upper
+bound is 0.184); the chance of that placement under a random ranking is 0.055.
+
+**The six missed updates are real.** They are what the experiment was looking for: comments
+whose authors changed the code and not the words. `SolanaJsonRpcWebsocket.escalateUnanswered`
+still says the connection is aborted here after the `abort()` call left the member (the same
+comment C1's readers found at HEAD); `SolanaAccounts.stakeConfig` says it is deprecated after
+the annotation was removed; `BaseJsonIterator.skipLiteral` lost its refill path;
+`EpochInfoServiceImpl.checkCycle` gained a null-sample return the comment's enumeration of
+outcomes does not list; `SolanaJsonRpcWebsocket.deferredBuild` and `startBuild` gained
+behaviour (an in-flight registration, a precondition throw) under comments written for the
+previous body. Fixes are one line each.
+
+**Batched arm (reported, no bar).** 42 requests, 154,166 input tokens: 400 tokens and 0.11
+requests per judged comment against 1,193 tokens and one request in the pair arm. Pooled AUROC
+of the Noul over all negatives 0.875, mean within-request 0.915, but against changed-member
+negatives only 0.631, and the changed-member negatives are themselves separated from the
+untouched ones at 0.872. The batched Noul mostly reads which member's name appears in
+`changes`, a fact the diff already states. A file mode that ships would filter candidates to
+the changed members deterministically first and ask Jev only about those, at which point it is
+the pair arm's question again and the pair arm's numbers apply.
+
+**Verdict: kill under the table; the label is the finding.** Co-edit history cannot serve as
+the gold for drift in this fleet: half of the co-edits are not about the body change, and the
+ceiling that leaves (0.66) is below any bar worth setting. The signal Jev showed against blind
+reader labels (0.80 pooled, all six missed updates in the top 30) is post hoc and rests on 19
+positives; it is a reason to pre-register a follow-up with reader labels as the gold from the
+start and a larger corpus than six repositories' history provides, not a reason to ship.
+Until then the change-time product is the same deterministic one as at HEAD: parameter names,
+thrown types, and referenced identifiers checked against the diff.

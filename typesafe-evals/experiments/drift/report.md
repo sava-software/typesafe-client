@@ -42,10 +42,12 @@ AUROC 0.594 (commit bootstrap 95% 0.370 to 0.710; separation kill); without abst
 | score correlates with diff size (Pearson -0.0599, Spearman 0.0173) | 0.060 | both <= 0.8 | yes |
 | separation AUROC, CO_EDIT over BODY_ONLY (commit bootstrap 0.3704 to 0.7104) | 0.594 | interval lower bound >= 0.75 | NO |
 | lift over the best deterministic baseline (member lines before, 0.7729) | -0.179 | >= 0.1 | NO |
-| BODY_ONLY rows in the top 30 readers marked affected (0 read; rest 0 of 0) | 0.000 | >= 5 and Wilson lower bound above the rest's upper bound | NO |
+| BODY_ONLY rows in the top 30 readers marked affected (30 read; rest 0 of 17) | 6.000 | >= 5 and Wilson lower bound above the rest's upper bound | NO |
 | **decision** | **kill: separation** | | |
 
-Oracle ceiling: the blind sheet has not been read yet (`labeling-sheet.tsv`).
+Oracle ceiling: readers marked 0.448 of CO_EDIT rows and 0.128 of BODY_ONLY rows affected, so a perfect judge of the readers' labels would separate the classes at about 0.660.
+
+Value bar: top 30 BODY_ONLY rows 6 of 30 = 0.200 (0.095 to 0.373) affected; the rest 0 of 17 = 0.000 (0.000 to 0.184).
 
 Choices, CO_EDIT: {contradicted_by_change=8, needs_addition=7, not_checkable=1, unaffected=13}; BODY_ONLY: {contradicted_by_change=3, needs_addition=21, unaffected=23}.
 

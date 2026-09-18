@@ -232,6 +232,7 @@ final class DriftExperimentTests {
     assertEquals("0.500", DriftExperiment.fmt(0.5));
     assertEquals("n/a", DriftExperiment.rate(DriftBars.Rate.of(0, 0)));
     assertEquals("1 of 4 = 0.250 (0.046 to 0.699)", DriftExperiment.rate(DriftBars.Rate.of(1, 4)));
+    assertEquals("a\\\\b\\nc", DriftExperiment.escape("a\\b\nc"), "backslashes double before line breaks become backslash-n");
     final var file = dir.resolve("labels.tsv");
     Files.writeString(file, "row_id\tlabel\na\tContradicted by change\nb\tneeds-addition\nc\t\nd\tunaffected\ne\tnot checkable\n");
     assertEquals(Map.of("a", "contradicted_by_change", "b", "needs_addition", "d", "unaffected", "e", "not_checkable"), DriftLabels.read(file).byKey());

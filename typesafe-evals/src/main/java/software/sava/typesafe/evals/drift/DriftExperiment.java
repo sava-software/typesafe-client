@@ -187,7 +187,8 @@ public final class DriftExperiment {
     }
     writeScores(scored, config.out().resolve("jev.tsv"));
     writeBatchScores(batchScored, config.out().resolve("batched.tsv"));
-    final var labels = config.labels() != null && Files.isRegularFile(config.labels()) ? DriftLabels.read(config.labels()).byKey() : Map.<String, String>of();
+    // an absent sheet named on the command line is an error, never a silent run without labels
+    final var labels = config.labels() != null ? DriftLabels.read(config.labels()).byKey() : Map.<String, String>of();
     final var verdict = DriftBars.verdict(scored, labels);
     final var batchSummary = new BatchSummary(batches.size(), batchRequests, batchScored.size(),
         (int) batchScored.stream().filter(s -> s.candidate().positive()).count(), batchTokens,
@@ -244,9 +245,15 @@ public final class DriftExperiment {
     final var shuffled = new ArrayList<>(rows);
     Collections.shuffle(shuffled, new Random(DriftBars.SEED));
     for (final var row : shuffled) {
-      tsv.row(row.id(), "", "", row.repo(), row.key().toString(), row.state().comment(), row.diffText(), row.state().newSource());
+      tsv.row(row.id(), "", "", row.repo(), row.key().toString(), escape(row.state().comment()), escape(row.diffText()), escape(row.state().newSource()));
     }
     tsv.write(file);
+  }
+
+  /// Keeps line structure inside a one-line TSV cell: a backslash becomes two, a line break
+  /// becomes the two characters backslash and n. Readers of the sheet undo the same two steps.
+  static String escape(final String text) {
+    return text.replace("\\", "\\\\").replace("\n", "\\n");
   }
 
   static String fmt(final double value) {
