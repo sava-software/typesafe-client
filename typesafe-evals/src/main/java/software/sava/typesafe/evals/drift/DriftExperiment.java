@@ -62,7 +62,18 @@ public final class DriftExperiment {
   }
 
   /// @param spend null in corpus mode
-  public record Summary(int repos, int skipped, int rows, int coEdits, int bodyOnly, JevRunner.Totals spend, DriftBars.Verdict verdict) {
+  /// @param batch  the batched arm's numbers; null in corpus mode
+  public record Summary(int repos, int skipped, int rows, int coEdits, int bodyOnly, JevRunner.Totals spend, DriftBars.Verdict verdict,
+                        BatchSummary batch) {
+  }
+
+  /// @param requests        batched requests made
+  /// @param candidates      candidate comments judged
+  /// @param pooledAuroc     positives over all negatives
+  /// @param changedOnlyAuroc positives over changed-member negatives (like the pair arm)
+  /// @param meanRequestAuroc mean within-request AUROC over requests holding both classes
+  public record BatchSummary(int batches, int requests, int candidates, int positives, long inputTokens, double pooledAuroc,
+                             double changedOnlyAuroc, double meanRequestAuroc, int requestsWithBoth) {
   }
 
   private DriftExperiment() {
@@ -82,6 +93,8 @@ public final class DriftExperiment {
     final var gate = new PublicRepoGate(commands, config.visibilityCache());
     final var rows = new ArrayList<DriftCorpus.Row>();
     final var excluded = new TreeMap<String, Integer>();
+    final var mined = new LinkedHashMap<String, List<HistoryMiner.Event>>();
+    final var miners = new LinkedHashMap<String, HistoryMiner>();
     int skipped = 0;
     for (final var name : config.repos()) {
       final var checkout = config.checkouts().resolve(name);
@@ -101,7 +114,11 @@ public final class DriftExperiment {
         skipped++;
         continue;
       }
-      final var result = DriftCorpus.rows(name, new HistoryMiner(git, HistoryMiner.MAIN_SOURCES).mine());
+      final var miner = new HistoryMiner(git, HistoryMiner.MAIN_SOURCES);
+      final var events = miner.mine();
+      mined.put(name, events);
+      miners.put(name, miner);
+      final var result = DriftCorpus.rows(name, events);
       rows.addAll(result.rows());
       for (final var ex : result.excluded()) {
         excluded.merge(ex.reason(), ex.count(), Integer::sum);
@@ -115,8 +132,16 @@ public final class DriftExperiment {
     }
     writeRows(rows, config.out().resolve("rows.tsv"));
     final int coEdits = (int) rows.stream().filter(r -> r.klass().equals(DriftCorpus.CO_EDIT)).count();
+    final var batches = new ArrayList<DriftBatch.Batch>();
+    for (final var name : miners.keySet()) {
+      batches.addAll(DriftBatch.build(name, rows, mined.get(name), miners.get(name)));
+    }
+    writeBatches(batches, config.out().resolve("batches.tsv"));
     if ("corpus".equals(config.mode())) {
-      final var summary = new Summary(config.repos().size(), skipped, rows.size(), coEdits, rows.size() - coEdits, null, null);
+      final var summary = new Summary(config.repos().size(), skipped, rows.size(), coEdits, rows.size() - coEdits, null, null,
+          new BatchSummary(batches.size(), 0, batches.stream().mapToInt(b -> b.candidates().size()).sum(),
+              (int) batches.stream().flatMap(b -> b.candidates().stream()).filter(DriftBatch.Candidate::positive).count(), 0,
+              Double.NaN, Double.NaN, Double.NaN, (int) batches.stream().filter(DriftBatch.Batch::hasBothClasses).count()));
       writeReport(config.out().resolve("report.md"), summary, rows, excluded, List.of());
       return summary;
     }
@@ -126,13 +151,33 @@ public final class DriftExperiment {
     for (final var row : rows) {
       requests.put(row.id(), DriftQuestions.request(row.state()));
     }
+    for (final var batch : batches) {
+      requests.put(batch.id() + "#batch", batch.request());
+    }
     final var outcomes = jev.run(requests);
     if ("record".equals(config.mode())) {
       jev.prune(requests);
     }
+    final var batchScored = new ArrayList<DriftBatch.Scored>();
+    long batchTokens = 0;
+    int batchRequests = 0;
+    final var batchById = new LinkedHashMap<String, DriftBatch.Batch>();
+    for (final var batch : batches) {
+      batchById.put(batch.id() + "#batch", batch);
+    }
+    for (final var outcome : outcomes) {
+      final var batch = batchById.get(outcome.id());
+      if (batch != null && outcome.succeeded()) {
+        batchRequests++;
+        if (outcome.response().usage() != null) {
+          batchTokens += outcome.response().usage().inputTokens();
+        }
+        batchScored.addAll(DriftBatch.scores(batch, outcome.response()));
+      }
+    }
     final var scores = new LinkedHashMap<String, DriftScore>();
     for (final var outcome : outcomes) {
-      if (outcome.succeeded()) {
+      if (outcome.succeeded() && !batchById.containsKey(outcome.id())) {
         scores.put(outcome.id(), DriftScore.of(outcome.response()));
       }
     }
@@ -151,7 +196,13 @@ public final class DriftExperiment {
     final var noiseLabels = config.labelsNoise() != null && Files.isRegularFile(config.labelsNoise())
         ? DriftLabels.read(config.labelsNoise(), DriftLabels.NOISE_LABELS).byKey() : Map.<String, String>of();
     final var verdict = DriftBars.verdict(scored, topLabels, noiseLabels);
-    final var summary = new Summary(config.repos().size(), skipped, rows.size(), coEdits, rows.size() - coEdits, jev.totals(outcomes), verdict);
+    writeBatchScores(batchScored, config.out().resolve("batched.tsv"));
+    final var batchSummary = new BatchSummary(batches.size(), batchRequests, batchScored.size(),
+        (int) batchScored.stream().filter(s -> s.candidate().positive()).count(), batchTokens,
+        DriftBatch.pooledAuroc(batchScored, false), DriftBatch.pooledAuroc(batchScored, true), DriftBatch.meanRequestAuroc(batchScored),
+        (int) batches.stream().filter(DriftBatch.Batch::hasBothClasses).count());
+    final var summary = new Summary(config.repos().size(), skipped, rows.size(), coEdits, rows.size() - coEdits, jev.totals(outcomes), verdict,
+        batchSummary);
     writeReport(config.out().resolve("report.md"), summary, rows, excluded, scored);
     return summary;
   }
@@ -196,6 +247,25 @@ public final class DriftExperiment {
     tsv.write(file);
   }
 
+  static void writeBatches(final List<DriftBatch.Batch> batches, final Path file) {
+    final var tsv = new Tsv("batch_id", "repo", "commit", "path", "candidates_shown", "candidates_total", "positives", "changed_members", "diff_chars");
+    for (final var b : batches) {
+      tsv.row(b.id(), b.repo(), b.commit(), b.path(), b.candidates().size(), b.candidatesTotal(),
+          b.candidates().stream().filter(DriftBatch.Candidate::positive).count(),
+          b.candidates().stream().filter(DriftBatch.Candidate::memberChanged).count(), b.change().length());
+    }
+    tsv.write(file);
+  }
+
+  static void writeBatchScores(final List<DriftBatch.Scored> scored, final Path file) {
+    final var tsv = new Tsv("batch_id", "candidate", "member", "positive", "member_changed", "p_affected");
+    for (final var s : scored) {
+      tsv.row(s.batch().id(), s.candidate().index(), s.candidate().key().toString(), s.candidate().positive(), s.candidate().memberChanged(),
+          fmt(s.pAffected()));
+    }
+    tsv.write(file);
+  }
+
   static String fmt(final double value) {
     return Double.isNaN(value) ? "" : String.format(Locale.ROOT, "%.3f", value);
   }
@@ -229,12 +299,28 @@ public final class DriftExperiment {
       appendBars(out, summary.verdict());
       appendChoices(out, scored);
       appendTop(out, scored);
+      appendBatch(out, summary.batch(), summary.spend(), scored.size());
     }
     try {
       Files.createDirectories(file.toAbsolutePath().getParent());
       Files.writeString(file, out.toString(), StandardCharsets.UTF_8);
     } catch (final IOException e) {
       throw new UncheckedIOException("failed to write " + file, e);
+    }
+  }
+
+  static void appendBatch(final StringBuilder out, final BatchSummary batch, final JevRunner.Totals spend, final int pairRows) {
+    out.append("## Batched arm: one request per changed file, one Noul per candidate comment (reported, no bar)\n\n");
+    out.append("| batches | requests answered | candidates judged | positives | requests with both classes | input tokens |\n| --- | --- | --- | --- | --- | --- |\n| ")
+        .append(batch.batches()).append(" | ").append(batch.requests()).append(" | ").append(batch.candidates()).append(" | ").append(batch.positives())
+        .append(" | ").append(batch.requestsWithBoth()).append(" | ").append(batch.inputTokens()).append(" |\n\n");
+    out.append("AUROC pooled, positives over all negatives: ").append(fmt(batch.pooledAuroc())).append("; over changed-member negatives only (like the pair arm): ")
+        .append(fmt(batch.changedOnlyAuroc())).append("; mean within-request AUROC: ").append(fmt(batch.meanRequestAuroc())).append(".\n\n");
+    if (batch.candidates() > 0 && pairRows > 0 && spend != null) {
+      final long pairTokens = spend.inputTokens() - batch.inputTokens();
+      out.append("Cost per judged comment: batched ").append(batch.inputTokens() / Math.max(1, batch.candidates())).append(" input tokens in ")
+          .append(String.format(Locale.ROOT, "%.2f", (double) batch.requests() / Math.max(1, batch.candidates()))).append(" requests; pair arm ")
+          .append(pairTokens / Math.max(1, pairRows)).append(" input tokens in 1 request.\n\n");
     }
   }
 

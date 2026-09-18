@@ -74,6 +74,11 @@ public final class HistoryMiner {
     return files;
   }
 
+  /// The file's members as they stood before `commit`.
+  public Map<FileMembers.Key, FileMembers.Snapshot> membersBefore(final String commit, final String path) {
+    return FileMembers.of(Path.of(path), repo.show(commit + "^", path));
+  }
+
   /// Events for every documented member whose comment or body differs between the parent
   /// and `commit`, for one file. A member is "documented" when it has a doc comment on
   /// either side.

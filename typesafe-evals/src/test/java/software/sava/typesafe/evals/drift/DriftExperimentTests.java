@@ -64,6 +64,20 @@ final class DriftExperimentTests {
     public CompletableFuture<SystemOneResponse> systemOne(final SystemOneRequest request) {
       final var state = request.state().toJson();
       final boolean affected = state.contains("-    return cache.");
+      if (state.contains("\"comments\":[")) {
+        // the batched arm: one noul per candidate; the total() comment is the one the cache change affects
+        final var answers = new StringBuilder();
+        for (final var id : request.questions().keySet()) {
+          final int index = Integer.parseInt(id.substring(1));
+          final boolean isTotal = state.contains("{\"id\":" + index + ",\"member\":\"Widget.total(int)\"");
+          if (!answers.isEmpty()) {
+            answers.append(',');
+          }
+          answers.append('"').append(id).append("\":{\"type\":\"noul\",\"noul\":").append(affected && isTotal ? "0.9" : "0.1").append('}');
+        }
+        final var batch = "{\"model\":\"jev-stub\",\"answers\":{" + answers + "},\"usage\":{\"input_tokens\":500,\"output_tokens\":5}}";
+        return CompletableFuture.completedFuture(SystemOneResponse.parse(batch.getBytes(StandardCharsets.UTF_8), "req_batch"));
+      }
       final var body = affected
           ? "{\"model\":\"jev-stub\",\"answers\":{\"affected\":{\"type\":\"choice\",\"choice\":\"affected\",\"confidence\":0.9,\"probabilities\":{\"affected\":0.9,\"unaffected\":0.05,\"not_checkable\":0.05}}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}"
           : "{\"model\":\"jev-stub\",\"answers\":{\"affected\":{\"type\":\"choice\",\"choice\":\"unaffected\",\"confidence\":0.85,\"probabilities\":{\"affected\":0.1,\"unaffected\":0.85,\"not_checkable\":0.05}}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}";
@@ -136,7 +150,25 @@ final class DriftExperimentTests {
     var config = DriftExperiment.Config.parse(new String[]{"--checkouts", checkouts.toString(), "--repos", "repo", "--out", out.toString(),
         "--recordings", dir.resolve("rec").toString()});
     final var summary = DriftExperiment.run(config, runner, commands());
-    assertEquals(new JevRunner.Totals(2, 2, 600, 10, 0, 2), summary.spend());
+    assertEquals(new JevRunner.Totals(4, 4, 1600, 20, 0, 4), summary.spend(), "two pair requests and two batched requests");
+    final var batch = summary.batch();
+    assertEquals(2, batch.batches(), "commit two and commit three each changed Widget.java");
+    assertEquals(2, batch.requests());
+    assertEquals(4, batch.candidates(), "both documented members in each of the two batches");
+    assertEquals(1, batch.positives(), "total's comment in commit three");
+    assertEquals(1000, batch.inputTokens());
+    assertEquals(1, batch.requestsWithBoth());
+    assertEquals(1.0, batch.pooledAuroc(), "the positive at 0.9 over three negatives at 0.1");
+    assertEquals(1.0, batch.changedOnlyAuroc(), "the one changed-member negative is size in commit two, at 0.1");
+    assertEquals(1.0, batch.meanRequestAuroc());
+    final var batched = Files.readAllLines(out.resolve("batched.tsv"));
+    assertEquals("batch_id\tcandidate\tmember\tpositive\tmember_changed\tp_affected", batched.getFirst());
+    assertEquals(5, batched.size());
+    assertTrue(batched.stream().anyMatch(l -> l.contains("\tWidget.total(int)\ttrue\ttrue\t0.900")), batched.toString());
+    assertTrue(batched.stream().anyMatch(l -> l.contains("\tWidget.size(int)\tfalse\ttrue\t0.100")), batched.toString());
+    final var batches = Files.readAllLines(out.resolve("batches.tsv"));
+    assertEquals("batch_id\trepo\tcommit\tpath\tcandidates_shown\tcandidates_total\tpositives\tchanged_members\tdiff_chars", batches.getFirst());
+    assertEquals(3, batches.size());
     assertFalse(Files.exists(dir.resolve("rec/0000stale.response.json")), "record mode prunes stale recordings");
     final var verdict = summary.verdict();
     assertEquals(1.0, verdict.auroc(), "the co-edit at 0.9 outranks the body-only change at 0.1");
@@ -154,7 +186,11 @@ final class DriftExperimentTests {
     assertEquals(2, noise.size(), "one co-edit row");
     assertTrue(noise.get(1).contains("Recomputes the total for the key on every call"), noise.get(1));
     var report = Files.readString(out.resolve("report.md"));
-    assertTrue(report.contains("Requests 2 (2 answered), input tokens 600, cost $0.0000; recording hits 0, misses 2; 2 rows scored."), report);
+    assertTrue(report.contains("Requests 4 (4 answered), input tokens 1600, cost $0.0001; recording hits 0, misses 4; 2 rows scored."), report);
+    assertTrue(report.contains("## Batched arm: one request per changed file, one Noul per candidate comment (reported, no bar)"), report);
+    assertTrue(report.contains("| 2 | 2 | 4 | 1 | 1 | 1000 |"), report);
+    assertTrue(report.contains("AUROC pooled, positives over all negatives: 1.000; over changed-member negatives only (like the pair arm): 1.000; mean within-request AUROC: 1.000."), report);
+    assertTrue(report.contains("Cost per judged comment: batched 250 input tokens in 0.50 requests; pair arm 300 input tokens in 1 request."), report);
     assertTrue(report.contains("Choices, CO_EDIT: {affected=1}; BODY_ONLY: {unaffected=1}."), report);
     assertTrue(report.contains("Noise estimate: the CO_EDIT sample has not been read yet"), report);
     assertTrue(report.contains("## Top BODY_ONLY rows by P(affected)"), report);
@@ -168,7 +204,7 @@ final class DriftExperimentTests {
         "--recordings", dir.resolve("rec").toString(), "--mode", "replay", "--labels-top", dir.resolve("top.tsv").toString(),
         "--labels-noise", dir.resolve("noise.tsv").toString()});
     final var replayed = DriftExperiment.run(config, null, commands());
-    assertEquals(2, replayed.spend().hits());
+    assertEquals(4, replayed.spend().hits());
     assertEquals("nothing missed", replayed.verdict().decision(), "one confirmed miss of the five required");
     assertEquals(1, replayed.verdict().noiseRelated());
     assertEquals(1.0, replayed.verdict().ceiling(), "every sampled co-edit was related");
