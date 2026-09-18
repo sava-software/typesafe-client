@@ -15,6 +15,11 @@ import static software.sava.typesafe.exceptions.TypeSafeRequestException.REQUEST
 
 /// One `POST /v1/systemone` response.
 ///
+/// `model` is required: a 200 that is not a System One response — a proxy's `{"detail":"..."}`
+/// page, an empty object, a bare `null` — fails the parse with an [IllegalStateException]
+/// rather than reporting success with a null model. An absent `answers` map is still
+/// tolerated and reads as empty, as it is in the Python SDK.
+///
 /// @param model     the model that answered, as reported (an alias resolves to its version)
 /// @param answers   answers keyed by question id, in wire order
 /// @param usage     token accounting; may be null when the API omits it
@@ -36,9 +41,13 @@ public record SystemOneResponse(String model,
     return parse(JsonIterator.parse(body), requestId, new String(body, StandardCharsets.UTF_8));
   }
 
+  /// @throws IllegalStateException when the body carries no `model`
   public static SystemOneResponse parse(final JsonIterator ji, final String requestId, final String raw) {
     final var parser = new Parser();
     ji.testObject(Parser.FIELDS, parser);
+    if (parser.model == null) {
+      throw new IllegalStateException("System One response without a model");
+    }
     return new SystemOneResponse(
         parser.model,
         parser.answers == null ? Map.of() : Collections.unmodifiableMap(parser.answers),

@@ -9,5 +9,8 @@ score legends.
 - `docs-choice.bin` — the documented Choice response example.
 - `unknown-type.bin` — an answer type this client does not know beside one it does, so the
   keep-unknown path is seeded.
+- `rich-legend.bin` — a score whose legend echoes back an object criterion, from the Python
+  SDK's `test_rich_descriptions` (tests/test_clients.py:215-224), so the legend value walk is
+  seeded with a nested object and array.
 
 A finding lands here as a new seed plus a named regression test.

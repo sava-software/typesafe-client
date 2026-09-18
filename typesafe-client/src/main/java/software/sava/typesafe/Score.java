@@ -10,7 +10,18 @@ import static java.util.Objects.requireNonNull;
 /// probability-weighted mean level plus the per-level distribution. Levels should describe
 /// concrete situations that stand on their own, not relative degrees.
 ///
-/// @param levels one description per level (string, object, array, or null), at least one
+/// One level is accepted. That matches the Python SDK, which rejects only an empty list
+/// (`_core/questions.py`, fixture `Score(instructions="Quality?", criteria=["good"])` in
+/// tests/test_questions.py), and the generated schema, whose `ScoreQuestion.criteria` carries
+/// `min_length=1` (`_schemas/models.py`). It diverges from the JS SDK, which rejects fewer
+/// than two levels at both the type level and runtime ('at least two scores are required').
+/// No reference bounds the levels above, and neither does this client.
+///
+/// A level may be a string, an object or an array, but not null: the schema's
+/// `list[str | dict | list]` has no null member, and a null level made the two
+/// [Question] factories disagree (one threw, the other sent `null`).
+///
+/// @param levels one description per level (string, object, or array), at least one, none null
 public record Score(JsonContent instructions, List<JsonContent> levels) implements Question {
 
   public static final String TYPE = "score";
@@ -20,7 +31,14 @@ public record Score(JsonContent instructions, List<JsonContent> levels) implemen
     if (levels.isEmpty()) {
       throw new IllegalArgumentException("a score needs at least one level");
     }
-    levels = Collections.unmodifiableList(new ArrayList<>(levels));
+    final var copy = new ArrayList<JsonContent>(levels.size());
+    for (final var level : levels) {
+      if (level == null) {
+        throw new IllegalArgumentException("score level " + copy.size() + " must not be null");
+      }
+      copy.add(level);
+    }
+    levels = Collections.unmodifiableList(copy);
   }
 
   @Override

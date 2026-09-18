@@ -6,13 +6,26 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/// A response with a status, optional request-id header, and a byte[] body, for pinning
-/// code that reads responses without a socket.
-public record FakeHttpResponse(int statusCode, String requestId, byte[] body) implements HttpResponse<Object> {
+/// A response with a status, optional request-id header, further headers, and a byte[] body,
+/// for pinning code that reads responses without a socket.
+public record FakeHttpResponse(int statusCode,
+                               String requestId,
+                               byte[] body,
+                               Map<String, List<String>> extraHeaders) implements HttpResponse<Object> {
+
+  public FakeHttpResponse(final int statusCode, final String requestId, final byte[] body) {
+    this(statusCode, requestId, body, Map.of());
+  }
+
+  /// A response carrying one header beyond the request id, for the `retry-after` family.
+  public static FakeHttpResponse withHeader(final int statusCode, final String name, final String value) {
+    return new FakeHttpResponse(statusCode, null, null, Map.of(name, List.of(value)));
+  }
 
   @Override
   public HttpRequest request() {
@@ -26,9 +39,11 @@ public record FakeHttpResponse(int statusCode, String requestId, byte[] body) im
 
   @Override
   public HttpHeaders headers() {
-    return requestId == null
-        ? HttpHeaders.of(Map.of(), (a, b) -> true)
-        : HttpHeaders.of(Map.of("x-typesafe-request-id", List.of(requestId)), (a, b) -> true);
+    final var values = new LinkedHashMap<>(extraHeaders);
+    if (requestId != null) {
+      values.put("x-typesafe-request-id", List.of(requestId));
+    }
+    return HttpHeaders.of(values, (a, b) -> true);
   }
 
   @Override

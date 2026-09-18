@@ -17,6 +17,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import static java.net.http.HttpResponse.BodyHandlers.ofInputStream;
 import static java.util.Objects.requireNonNullElse;
 
 final class TypeSafeClientImpl extends JsonHttpClient implements TypeSafeClient {
@@ -72,14 +73,37 @@ final class TypeSafeClientImpl extends JsonHttpClient implements TypeSafeClient 
                      final Duration requestTimeout,
                      final UnaryOperator<HttpRequest.Builder> extendRequest,
                      final BiPredicate<HttpResponse<?>, byte[]> testResponse) {
-    super(baseEndpoint.resolve(SYSTEM_ONE_PATH), httpClient, requestTimeout, extendRequest, testResponse);
-    this.modelsEndpoint = baseEndpoint.resolve(MODELS_PATH);
+    super(appendPath(baseEndpoint, SYSTEM_ONE_PATH), httpClient, requestTimeout, extendRequest, testResponse);
+    this.modelsEndpoint = appendPath(baseEndpoint, MODELS_PATH);
     this.defaultModel = defaultModel;
+  }
+
+  /// Appends a call path to the configured base, stripping the base's trailing slashes.
+  ///
+  /// Both SDKs concatenate (`config.base_url + path` over an `rstrip("/")` base;
+  /// `${this.baseURL}${req.path}` over `stripTrailingSlashes`), and a base with a gateway
+  /// prefix is a supported, tested configuration there. [URI#resolve(String)] would instead
+  /// replace the whole path, silently dropping the prefix: `https://gw.corp/typesafe`
+  /// resolved against `/v1/systemone` is `https://gw.corp/v1/systemone`.
+  // package-private for tests
+  static URI appendPath(final URI baseEndpoint, final String path) {
+    final var base = baseEndpoint.toString();
+    int end = base.length();
+    while (end > 0 && base.charAt(end - 1) == '/') {
+      --end;
+    }
+    return URI.create(base.substring(0, end) + path);
   }
 
   @Override
   public String defaultModel() {
     return defaultModel;
+  }
+
+  /// The composed request decorator: the caller's extender, then the client-owned headers.
+  // package-private for tests: the outgoing headers are otherwise only visible on a socket
+  UnaryOperator<HttpRequest.Builder> requestExtender() {
+    return extendRequest;
   }
 
   @Override
@@ -92,8 +116,17 @@ final class TypeSafeClientImpl extends JsonHttpClient implements TypeSafeClient 
     );
   }
 
+  /// Built as a plain request rather than through `JsonHttpClient`'s JSON GET helper, which
+  /// routes every builder through a private `newJsonRequest` that always sets
+  /// `Content-Type: application/json`. This call has no body, and both SDKs take care never
+  /// to declare an entity media type on it. Everything downstream — the caller's extender and
+  /// the client headers, the status gate, the parser and the `testResponse` seam — is the
+  /// same as on the POST path.
   @Override
   public CompletableFuture<List<ModelCard>> models() {
-    return sendGetRequest(modelsEndpoint, MODELS_PARSER);
+    final var request = extendRequest
+        .apply(HttpRequest.newBuilder(modelsEndpoint).GET().timeout(requestTimeout))
+        .build();
+    return httpClient.sendAsync(request, ofInputStream()).thenApply(wrapResponseParser(MODELS_PARSER));
   }
 }

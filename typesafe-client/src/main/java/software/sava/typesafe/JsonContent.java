@@ -17,6 +17,12 @@ import static java.util.Objects.requireNonNull;
 ///
 /// [Raw] carries pre-serialized JSON verbatim and is the caller's promise that it is valid.
 /// Every other variant escapes what it holds.
+///
+/// Strings are escaped by [#writeString(StringBuilder,String)]: json-iterator's escaping for
+/// `"`, `\` and the C0 controls, plus a backslash-u escape for any unpaired surrogate. A well
+/// formed surrogate pair is left alone and goes out as UTF-8. Escaping the lone half matches
+/// the JS SDK, whose `JSON.stringify` has been well-formed since ES2019; without it the JDK's
+/// UTF-8 encoder silently substitutes `?` for the unpaired code unit.
 public sealed interface JsonContent
     permits JsonContent.Text, JsonContent.Num, JsonContent.Bool, JsonContent.Raw, JsonContent.Obj, JsonContent.Arr {
 
@@ -35,6 +41,46 @@ public sealed interface JsonContent
     } else {
       content.writeTo(out);
     }
+  }
+
+  /// Writes `value` as a quoted JSON string: escaped with json-iterator, except that an
+  /// unpaired surrogate is written as a backslash-u escape instead of being handed to the UTF-8
+  /// encoder, which would replace it with `?`. Used for every string on the wire, map keys and
+  /// the request's own `model` and question ids included.
+  static void writeString(final StringBuilder out, final String value) {
+    out.append('"');
+    final int length = value.length();
+    // the span since the last escape; unguarded, since an empty span escapes to an empty
+    // string and `value.substring(0)` is the same instance, so a guard would only be an
+    // optimization -- and an equivalent mutant
+    int from = 0;
+    for (int i = 0; i < length; i++) {
+      final char c = value.charAt(i);
+      if (!Character.isSurrogate(c) || isPaired(value, i, c)) {
+        continue;
+      }
+      out.append(JIUtil.escapeJson(value.substring(from, i)));
+      appendUnicodeEscape(out, c);
+      from = i + 1;
+    }
+    out.append(JIUtil.escapeJson(value.substring(from)));
+    out.append('"');
+  }
+
+  /// True when the surrogate `c` at `i` is one half of a well-formed pair, which UTF-8 encodes
+  /// as it stands and which therefore needs no escape.
+  private static boolean isPaired(final String value, final int i, final char c) {
+    return Character.isHighSurrogate(c)
+        ? i + 1 < value.length() && Character.isLowSurrogate(value.charAt(i + 1))
+        : i > 0 && Character.isHighSurrogate(value.charAt(i - 1));
+  }
+
+  private static void appendUnicodeEscape(final StringBuilder out, final char c) {
+    out.append("\\u")
+        .append(Character.forDigit((c >> 12) & 0xF, 16))
+        .append(Character.forDigit((c >> 8) & 0xF, 16))
+        .append(Character.forDigit((c >> 4) & 0xF, 16))
+        .append(Character.forDigit(c & 0xF, 16));
   }
 
   static Text text(final String value) {
@@ -90,7 +136,7 @@ public sealed interface JsonContent
 
     @Override
     public void writeTo(final StringBuilder out) {
-      out.append('"').append(JIUtil.escapeJson(value)).append('"');
+      writeString(out, value);
     }
   }
 
@@ -160,7 +206,8 @@ public sealed interface JsonContent
         } else {
           out.append(',');
         }
-        out.append('"').append(JIUtil.escapeJson(entry.getKey())).append("\":");
+        writeString(out, entry.getKey());
+        out.append(':');
         write(out, entry.getValue());
       }
       out.append('}');

@@ -10,6 +10,13 @@ import static java.util.Objects.requireNonNull;
 /// every key, and a confidence summarizing how concentrated that distribution is. Include an
 /// `other` or `none` key when the list might not cover every input.
 ///
+/// [#MAX_OPTIONS] is this client's reading of the documented per-question limit, recorded from
+/// the vendor documentation in `docs/lessons.md` ("Choice (up to 255 described options...)")
+/// and restated in this module's README. It is not API-verified, and neither reference SDK
+/// encodes it: both send an over-long choice, an empty criteria map and a blank option name
+/// unvalidated and let the server answer. The empty-map, blank-name and option-count
+/// rejections below are therefore this client's own policy.
+///
 /// @param criteria option name to description (string, object, array, or null); insertion
 ///                 order is the order sent. At most [#MAX_OPTIONS] entries.
 public record Choice(JsonContent instructions, SequencedMap<String, JsonContent> criteria) implements Question {
