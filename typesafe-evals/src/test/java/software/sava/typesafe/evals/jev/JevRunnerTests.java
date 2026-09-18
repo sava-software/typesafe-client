@@ -172,4 +172,36 @@ final class JevRunnerTests {
     assertEquals(new JevRunner.Totals(1, 1, 0, 0, 0, 1), runner.totals(runner.run(requests)));
     assertThrows(IllegalArgumentException.class, () -> new JevRunner(RecordingTypeSafeClient.record(noUsage, dir), 0));
   }
+
+  @Test
+  void pruneRemovesRecordingsOfRequestsNoLongerMade(@TempDir final Path dir) throws Exception {
+    final var runner = new JevRunner(RecordingTypeSafeClient.record(new StubClient(), dir), 2);
+    final var requests = new LinkedHashMap<String, SystemOneRequest>();
+    requests.put("keep", request("keep me"));
+    requests.put("drop", request("drop me"));
+    runner.run(requests);
+    final var keepKey = RecordingTypeSafeClient.key(request("keep me").withDefaultModel("jev-stub").body());
+    final var dropKey = RecordingTypeSafeClient.key(request("drop me").withDefaultModel("jev-stub").body());
+    java.nio.file.Files.writeString(dir.resolve("notes"), "no key prefix, stays\n");
+    java.nio.file.Files.writeString(dir.resolve(".DS_Store"), "a dotfile has an empty key prefix and stays\n");
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve(dropKey + ".response.json")));
+    final var live = new LinkedHashMap<String, SystemOneRequest>();
+    live.put("keep", request("keep me"));
+    assertEquals(1, runner.prune(live), "one key removed, however many files it had");
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve(keepKey + ".request.json")));
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve(keepKey + ".response.json")));
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve(keepKey + ".request-id")));
+    assertFalse(java.nio.file.Files.exists(dir.resolve(dropKey + ".request.json")));
+    assertFalse(java.nio.file.Files.exists(dir.resolve(dropKey + ".response.json")));
+    assertFalse(java.nio.file.Files.exists(dir.resolve(dropKey + ".request-id")));
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve("default-model")), "the model file has no key");
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve("notes")));
+    assertTrue(java.nio.file.Files.isRegularFile(dir.resolve(".DS_Store")));
+    assertEquals(0, runner.prune(live), "nothing stale is left");
+    assertEquals(0, new JevRunner(RecordingTypeSafeClient.record(new StubClient(), dir.resolve("absent")), 1).prune(live),
+        "no directory, nothing to prune");
+    java.nio.file.Files.writeString(dir.resolve("stray.response.json"), "{}");
+    assertEquals(1, runner.prune(live), "a keyed file the corpus never produced is stale too");
+    assertFalse(java.nio.file.Files.exists(dir.resolve("stray.response.json")));
+  }
 }

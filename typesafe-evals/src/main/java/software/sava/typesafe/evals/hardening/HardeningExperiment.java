@@ -137,6 +137,10 @@ public final class HardeningExperiment {
       requests.put(row.id() + "#swapped", HardeningQuestions.request(row.swappedState()));
     }
     final var outcomes = jev.run(requests);
+    if ("record".equals(config.mode())) {
+      // recordings of states the corpus no longer produces would otherwise pose as live
+      jev.prune(requests);
+    }
     final var scores = new LinkedHashMap<String, HardeningScore>();
     for (final var outcome : outcomes) {
       if (outcome.succeeded()) {

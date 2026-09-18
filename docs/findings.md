@@ -59,6 +59,7 @@ Side findings from that round, each a deterministic fix with no model:
 | Finding dedupe before refuters | Keep | In one sava workflow, 30 of 78 refuter agents re-verified two defects. Exact file:line over-merges and over-splits; 72% of same-line pairs sit in a Jaccard band holding both duplicates and distinct defects. All 463 findings across 12 finder schemas carry a summary-like field, so no schema change is needed. |
 | Cross-round convergence / stop signal | Reject | The one multi-round trajectory is in a private repository; public PRs top out at 3 comments; HARDENING already assigns the stop judgment to a human. |
 | Dependabot release-note screening | Reject | The one bump that cost real work had a one-line PR body with no notes; the crisp prose positives cost one line each. No label exists that is not circular. |
+| Description-versus-code consistency (added after A and B ran) | Pre-registered as Experiment C after a second adversarial review | Generalises A to doc comments (C1) and to the hardening evidence itself (C2). C1 had no label source on this fleet; C2 ran, cleared its separation bar by 0.005, and waits on the human value bar. See below. |
 
 ## Experiment A: acceptance-note rot detector
 
@@ -161,3 +162,81 @@ decide whether it holds up (merge safety on gold-0 pairs is computed for it too)
 
 **Next.** Label `labeling-sheet.tsv` (178 rows: `label` 0/1/2, `needed_source` y/n),
 then `--mode replay --labels <file>` re-renders the bars from the recordings at no cost.
+
+## Experiment C: description-versus-code consistency
+
+_Status: C2 run; its pre-registered table lands on the human value bar. C1 not run (no label
+source). Pre-registration: the plan file's Experiment C section, written after an adversarial
+review (six lenses, adjudication, two refuters per high finding, 27 agents; seven findings
+stood). Harness: `software.sava.typesafe.evals.hardening` (`./gradlew :typesafe-evals:hardening`)
+and `software.sava.typesafe.evals.docs` (`./gradlew :typesafe-evals:docsMine`). Outputs in
+`typesafe-evals/experiments/hardening/`; recordings under `typesafe-evals/recordings/hardening/`._
+
+**C1, doc comments versus member bodies: no label source.** The idea was to label stale
+comments from git history: a body-only edit later reconciled by a comment-only edit of the
+same member. A member-level miner over the six public checkouts (1,066 Java commits) found
+3 such members, plus 38 co-edits whose comment change names identifiers the body change
+touched. Sampled pairs are additions (a deprecation note, a paragraph about new v1 handling),
+not contradictions; only 3 pass the strict test (a word dropped from the comment names an
+identifier dropped from the body). The review's refuters reproduced the counts. C1 can only
+run on hand labels (frame and bars are pre-registered in the plan file) and was not run.
+
+**C2, hardening evidence versus the mutant it explains.** Unit: one labeled accepted-baseline
+row at HEAD (`class,method,mutator,status # label # line`) whose label a README family
+paragraph declares, joined to the member at HEAD and to PIT's description of the operator.
+Files come from `git ls-files` (a filesystem walk had counted worktree copies four times
+over). 19 modules, 651 rows, 644 scorable (7 members missing at HEAD). The SWAPPED arm keeps
+row, paragraph, member source, and facts byte-identical and substitutes the description of
+an operator from another family, so neither the label nor the member name can separate the
+arms, which the review had shown string matching alone could do (AUROC 0.84) under the
+first design.
+
+**Run.** 1,232 distinct requests (28 rows share a key with another label and so a request),
+1,969,192 input tokens, $0.083, all answered. Choices in the REAL arm: applies 363,
+does_not_apply 178, cannot_tell 103; SWAPPED arm: does_not_apply 517, cannot_tell 100,
+applies 27. The swapped arm scored higher than its real twin in 530 of 616 unique rows.
+
+A harness defect surfaced between the first and the final run, found by the mutation triage
+of the harness itself: the declaration spanning a row's `# line` hint was sorted last instead
+of first, so for the 102 rows whose member has more than two declarations the relevant body
+could be cut from the state. The first run, with that defect, scored AUROC 0.844 and would
+have been killed; 164 rows were re-scored after the fix. Both numbers are recorded here
+because the bar sits between them.
+
+**Bars (first match wins).**
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| P(does_not_apply) correlates with paragraph length | r = -0.082 | abs(r) <= 0.8 | yes |
+| separation AUROC, SWAPPED over REAL (bootstrap 95% 0.836 to 0.874) | 0.855 | >= 0.85 | yes |
+| lift over the mutator-word baseline (0.617) | 0.238 | >= 0.10 | yes |
+| problems confirmed among the top 30 REAL rows | pending | >= 5 | |
+| **decision** | **value bar pending** | | |
+
+The separation bar is cleared by 0.005 with the interval straddling it: a pass, but a fragile
+one, and it should be read together with the split below. The decision now rests on the
+human value bar: `labeling-sheet.tsv` holds the 30 REAL rows with the highest
+P(does_not_apply), in id order and without scores (labels mis-filed / rotted / fine). The
+ranking is led by `KeyedFlatFileImpl.deleteEntry` in glam-sdk-java/services (four rows at
+P 0.99 to 1.00), `ScoredTable.scoreTables` and `ScoredTableMeta.scoreTables` in
+ravina-solana, and the `SolanaJsonRpcWebsocket` rows in sava-rpc whose labels record
+provenance; 17 of the 30 come from glam-sdk-java/services and 9 from sava-rpc. Five or more
+confirmed problems keep the candidate and propose `baselineNotesReport` in sava-build's
+plugin as a ranked review list; fewer records "no problem found at the top" and stops.
+
+**Post-hoc, reported beside the bars and not in them.** 95 rows are `cannot_tell` in both
+arms (the paragraph records history rather than reasoning, so no description applies);
+without them the AUROC is 0.899. Splitting by label kind: the 80 provenance-labeled rows
+(`killed retained`, `retired implementation retained`, flip-insurance families) score 0.596,
+the other 536 score 0.887. Per module: sava-rpc 0.718 and glam-sdk-java/services 0.714 carry
+most of the provenance rows; sava-core 0.938, ravina-solana 0.952, ravina-core 0.940,
+incident-pagerduty 1.000. The review had argued, and the pre-registration accepted, that
+provenance rows stay in because they are the rows most likely to be stale; a follow-up that
+pre-registers the split (reasoning paragraphs versus provenance paragraphs, with a "records
+history" option) is the natural next design.
+
+**What did work.** Jev's `cannot_tell` lands on the provenance paragraphs, which is the right
+answer for text that argues nothing. Cost and speed were as before: eight cents for 1,232
+judgments. The leakage controls held: the length proxy is absent and the word baseline is
+beaten by 0.24. And the mutation triage of the harness caught a state-assembly bug that a
+green test suite had not.

@@ -43,8 +43,8 @@ public final class ReadmeFamilies {
 
   /// A label is declared by any non-bullet, non-heading paragraph that backticks it (bold
   /// family paragraphs and plain ones alike); the bullets that follow such a paragraph,
-  /// up to the next non-bullet paragraph or heading, are its bullets. A bullet that
-  /// declares a label no paragraph declared is a family of its own.
+  /// up to the next family paragraph or heading, are its bullets. A bullet that declares a
+  /// label no paragraph declared is a family of its own.
   public static ReadmeFamilies parse(final List<String> lines) {
     final var families = new LinkedHashMap<String, Family>();
     String section = "";
@@ -52,11 +52,12 @@ public final class ReadmeFamilies {
     int paragraphStart = 0;
     final var declaring = new ArrayList<String>(); // labels of the paragraph the bullets below belong to
     final var bullets = new ArrayList<String>();
-    final var bulletLines = new ArrayList<Integer>();
     final var bullet = new StringBuilder();
-    int bulletStart = 0;
-    for (int i = 0; i <= lines.size(); i++) {
-      final var line = i < lines.size() ? lines.get(i) : "";
+    // one empty line past the end closes the last bullet and the last paragraph
+    final var padded = new ArrayList<>(lines);
+    padded.add("");
+    for (int i = 0; i < padded.size(); i++) {
+      final var line = padded.get(i);
       final var stripped = line.strip();
       final boolean heading = stripped.startsWith("#");
       final boolean isBullet = stripped.startsWith("- ") || stripped.startsWith("* ");
@@ -67,24 +68,19 @@ public final class ReadmeFamilies {
       }
       if (!bullet.isEmpty()) {
         bullets.add(bullet.toString());
-        bulletLines.add(bulletStart);
         bullet.setLength(0);
       }
       if (isBullet) {
         // a bullet directly under a paragraph closes that paragraph
-        endParagraph(families, paragraph, paragraphStart, section, declaring, bullets, bulletLines);
+        endParagraph(families, paragraph, paragraphStart, section, declaring, bullets);
         bullet.append(stripped);
-        bulletStart = i + 1;
         continue;
       }
       // a non-bullet line ends the bullet run below the current paragraph
-      if (stripped.isEmpty() || heading || i == lines.size()) {
-        endParagraph(families, paragraph, paragraphStart, section, declaring, bullets, bulletLines);
+      if (stripped.isEmpty() || heading) {
+        endParagraph(families, paragraph, paragraphStart, section, declaring, bullets);
         if (heading) {
-          flush(families, declaring, bullets, bulletLines);
-          declaring.clear();
-          bullets.clear();
-          bulletLines.clear();
+          flush(families, declaring, bullets);
           section = stripped.replaceFirst("^#+\\s*", "");
         }
         continue;
@@ -92,16 +88,13 @@ public final class ReadmeFamilies {
       // prose: starts or extends the current paragraph; bullets seen so far close the previous family
       if (paragraph.isEmpty()) {
         if (!bullets.isEmpty()) {
-          flush(families, declaring, bullets, bulletLines);
-          declaring.clear();
-          bullets.clear();
-          bulletLines.clear();
+          flush(families, declaring, bullets);
         }
         paragraphStart = i + 1;
       }
       paragraph.add(stripped);
     }
-    flush(families, declaring, bullets, bulletLines);
+    flush(families, declaring, bullets);
     // bullets that declare a label nobody declared are families of their own
     for (final var note : ReadmeNotes.notes(lines)) {
       for (final var label : labelsIn(note.bullet())) {
@@ -112,41 +105,36 @@ public final class ReadmeFamilies {
   }
 
   /// Closes the paragraph being read: if it declares labels it becomes the paragraph the
-  /// following bullets belong to (after registering the previous one with its bullets).
+  /// following bullets belong to (after registering the previous one with its bullets). An
+  /// empty paragraph declares nothing, so it closes to nothing.
   private static void endParagraph(final Map<String, Family> families, final List<String> paragraph, final int paragraphStart,
-                                   final String section, final List<String> declaring, final List<String> bullets,
-                                   final List<Integer> bulletLines) {
-    if (paragraph.isEmpty()) {
-      return;
-    }
+                                   final String section, final List<String> declaring, final List<String> bullets) {
     final var text = String.join(" ", paragraph);
     final var labels = labelsIn(text);
     if (!labels.isEmpty()) {
-      flush(families, declaring, bullets, bulletLines);
-      declaring.clear();
+      flush(families, declaring, bullets);
       declaring.add(section);
       declaring.add(text);
       declaring.add(Integer.toString(paragraphStart));
       declaring.addAll(labels);
-      bullets.clear();
-      bulletLines.clear();
     }
     paragraph.clear();
   }
 
   /// Registers the paragraph in `declaring` (section, text, start line, labels...) with the
-  /// bullets collected beneath it, once per label, first declaration wins.
-  private static void flush(final Map<String, Family> families, final List<String> declaring, final List<String> bullets,
-                            final List<Integer> bulletLines) {
-    if (declaring.size() < 4) {
-      return;
+  /// bullets collected beneath it, once per label, first declaration wins; both are emptied
+  /// so whatever follows starts a family of its own.
+  private static void flush(final Map<String, Family> families, final List<String> declaring, final List<String> bullets) {
+    if (declaring.size() >= 4) {
+      final var section = declaring.get(0);
+      final var text = declaring.get(1);
+      final int line = Integer.parseInt(declaring.get(2));
+      for (final var label : declaring.subList(3, declaring.size())) {
+        families.putIfAbsent(label, new Family(label, section, text, List.copyOf(bullets), line));
+      }
     }
-    final var section = declaring.get(0);
-    final var text = declaring.get(1);
-    final int line = Integer.parseInt(declaring.get(2));
-    for (final var label : declaring.subList(3, declaring.size())) {
-      families.putIfAbsent(label, new Family(label, section, text, List.copyOf(bullets), line));
-    }
+    declaring.clear();
+    bullets.clear();
   }
 
   /// Every `` `# label` `` mentioned anywhere in `text`.

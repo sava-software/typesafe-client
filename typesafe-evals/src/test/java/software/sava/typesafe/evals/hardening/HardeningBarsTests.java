@@ -129,6 +129,51 @@ final class HardeningBarsTests {
   }
 
   @Test
+  void everyBarIsInclusiveAtItsOwnThreshold() {
+    // separation exactly at the bar: 7 of 10 swapped arms beat every real arm, 3 tie with them
+    final var atSeparation = new java.util.ArrayList<HardeningBars.Pair>();
+    for (int i = 0; i < 10; i++) {
+      atSeparation.add(pair("s" + i, 0.1, i < 7 ? 0.9 : 0.1, 100, false, false));
+    }
+    assertEquals(0.85, HardeningBars.auroc(atSeparation), "70 wins and 30 ties of 100 comparisons");
+    var verdict = HardeningBars.verdict(atSeparation, Map.of());
+    assertTrue(verdict.checks().get(1).pass(), "AUROC exactly at SEPARATION_BAR separates");
+    assertEquals("value bar pending", verdict.decision());
+
+    // lift exactly at the bar: AUROC 0.95 over a word baseline of 0.85
+    final var atLift = new java.util.ArrayList<HardeningBars.Pair>();
+    for (int i = 0; i < 10; i++) {
+      atLift.add(pair("l" + i, 0.1, i < 9 ? 0.9 : 0.1, 100, true, i >= 7));
+    }
+    assertEquals(0.95, HardeningBars.auroc(atLift));
+    assertEquals(0.85, HardeningBars.baselineAuroc(atLift), "the word baseline calls 7 of 10 swapped arms 'does not apply'");
+    verdict = HardeningBars.verdict(atLift, Map.of());
+    assertEquals(0.1, verdict.checks().get(2).value(), "the reported lift is the difference, rounded");
+    assertTrue(verdict.checks().get(2).pass(), "a lift exactly at LIFT_BAR clears it");
+    assertEquals("value bar pending", verdict.decision());
+
+    // correlation exactly at the ceiling: P(does_not_apply) 0.4 0.3 0.6 0.5 0.7 against lengths 100..500
+    final var atCeiling = List.of(
+        pair("c1", 0.4, 0.4, 100, false, false),
+        pair("c2", 0.3, 0.3, 200, false, false),
+        pair("c3", 0.6, 0.6, 300, false, false),
+        pair("c4", 0.5, 0.5, 400, false, false),
+        pair("c5", 0.7, 0.7, 500, false, false)
+    );
+    verdict = HardeningBars.verdict(atCeiling, Map.of());
+    assertEquals(0.8, HardeningBars.round(verdict.lengthCorrelation()), "r lands on CORRELATION_CEILING");
+    assertTrue(verdict.checks().get(0).pass(), "|r| exactly at the ceiling is not a proxy");
+    assertEquals("kill: separation", verdict.decision(), "arms that score alike never separate, but that is not the proxy rule");
+  }
+
+  @Test
+  void equalScoresAreRankedById() {
+    final var ties = List.of(pair("b", 0.5, 0.5, 100, false, false), pair("a", 0.5, 0.5, 100, false, false));
+    assertEquals(List.of("a", "b"), HardeningBars.ranked(ties).stream().map(p -> p.row().id()).toList(),
+        "equal P(does_not_apply) is broken by row id, not by input order");
+  }
+
+  @Test
   void topIsCappedAtThirty() {
     final var many = new java.util.ArrayList<HardeningBars.Pair>();
     for (int i = 0; i < 40; i++) {

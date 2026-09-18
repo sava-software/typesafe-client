@@ -32,6 +32,15 @@ swapped arm, the bars and decision table, and the driver).
   at the same test the plain-block case already decides. `FileMembers.parameterTypes` lost an
   early return for an empty parameter list, which the general path subsumes because an empty
   list splits into one empty part whose only token is the empty string.
+  `hardening` first landed at 335 killed with 95 survivors and 13 uncovered mutants and
+  reached 389/389 killed with none accepted: the triage removed dead bookkeeping in the README
+  family parser (an unread bullet-line list, call-site clears that `flush` now owns, an empty
+  paragraph guard the join subsumed, a loop bound rewritten over a padded copy so its mutant
+  fails fast instead of looping), sentinel-free `lastIndexOf` substrings in `BaselineRow`, an
+  unconditional `Path.resolve` of the module path, a `split` in place of a `$` index, and an
+  unused status-count helper. It also found one real defect: the declaration spanning a row's
+  `# line` hint was sorted last instead of first, so a member with more than two overloads
+  could hide the relevant body from the state; the corpus rows affected were re-scored.
   `JevRunner` lost a semaphore (a synchronous
   throw leaked a permit and a removed release deadlocked into a watchdog timeout) for
   flush-when-full chunks with one failure path through `thenCompose`. `Metrics.pearson`

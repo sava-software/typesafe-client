@@ -115,6 +115,38 @@ public final class JevRunner {
     return new Totals(outcomes.size(), succeeded, input, output, client.hits(), client.misses());
   }
 
+  /// Removes recordings whose request no longer occurs in `requests` (a corpus change
+  /// superseded their states) and returns how many keys were removed. Only a key's three
+  /// files are touched; the default-model file and anything without a key prefix stay.
+  public int prune(final SequencedMap<String, SystemOneRequest> requests) {
+    final var live = new java.util.HashSet<String>();
+    for (final var request : requests.values()) {
+      live.add(RecordingTypeSafeClient.key(request.withDefaultModel(client.defaultModel()).body()));
+    }
+    final var directory = client.directory();
+    if (!java.nio.file.Files.isDirectory(directory)) {
+      return 0;
+    }
+    final var removed = new java.util.HashSet<String>();
+    try (final var files = java.nio.file.Files.list(directory)) {
+      for (final var file : files.toList()) {
+        final var name = file.getFileName().toString();
+        final int dot = name.indexOf('.');
+        if (dot <= 0) {
+          continue; // no key prefix: the model file, notes, or a dotfile
+        }
+        final var key = name.substring(0, dot);
+        if (!live.contains(key)) {
+          java.nio.file.Files.delete(file);
+          removed.add(key);
+        }
+      }
+    } catch (final java.io.IOException e) {
+      throw new java.io.UncheckedIOException("failed to prune " + directory, e);
+    }
+    return removed.size();
+  }
+
   /// The outcomes that failed, keyed by id, for the report's "not scored" section.
   public static Map<String, Throwable> failures(final List<Outcome> outcomes) {
     final var failures = new LinkedHashMap<String, Throwable>();

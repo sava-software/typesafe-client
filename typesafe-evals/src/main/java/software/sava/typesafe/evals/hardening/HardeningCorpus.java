@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
@@ -26,6 +25,7 @@ public final class HardeningCorpus {
 
   private static final Pattern BACKTICKED = Pattern.compile("`([^`]+)`");
   private static final Pattern IDENTIFIER = Pattern.compile("[A-Za-z_][\\w$]*(?:\\.[A-Za-z_][\\w$]*)*");
+  private static final Pattern DOLLAR = Pattern.compile("\\$");
 
   /// One `config/pitest` directory and the module that owns it.
   public record Module(String modulePath, Path configDir, Path sourceRoot) {
@@ -60,7 +60,8 @@ public final class HardeningCorpus {
         continue;
       }
       final var modulePath = dir.endsWith("/config/pitest") ? dir.substring(0, dir.length() - "/config/pitest".length()) : "";
-      final var moduleRoot = modulePath.isEmpty() ? checkout : checkout.resolve(modulePath);
+      // an empty path resolves to the checkout itself: a `config/pitest` at the repository root
+      final var moduleRoot = checkout.resolve(modulePath);
       modules.add(new Module(modulePath, configDir, moduleRoot.resolve("src/main/java")));
     }
     return modules;
@@ -93,11 +94,8 @@ public final class HardeningCorpus {
     }
     for (final var csv : csvs) {
       for (final var row : BaselineRow.read(csv)) {
-        final var label = row.label();
-        if (label == null) {
-          continue;
-        }
-        final var family = families.family(label);
+        // an untriaged row has no label, and no family is filed under null
+        final var family = families.family(row.label());
         if (family == null) {
           continue;
         }
@@ -130,7 +128,7 @@ public final class HardeningCorpus {
     // a declaration that spans the row's line hint is shown first
     final var ordered = new ArrayList<>(members);
     if (row.lineHint() != null) {
-      ordered.sort((a, b) -> Boolean.compare(!spans(b, row.lineHint()), !spans(a, row.lineHint())));
+      ordered.sort((a, b) -> Boolean.compare(spans(b, row.lineHint()), spans(a, row.lineHint())));
     }
     final var source = new StringBuilder();
     int shown = 0;
@@ -209,9 +207,8 @@ public final class HardeningCorpus {
   static List<TypeIndex.Member> members(final TypeIndex index, final TypeIndex.TypeDecl type, final String method) {
     var name = method;
     if (name.startsWith("lambda$")) {
-      final var rest = name.substring("lambda$".length());
-      final int dollar = rest.indexOf('$');
-      name = dollar < 0 ? rest : rest.substring(0, dollar);
+      // `lambda$owner$N`, or `lambda$owner` when there is no index
+      name = DOLLAR.split(name.substring("lambda$".length()), 2)[0];
       if (name.equals("static")) {
         name = "<clinit>";
       } else if (name.equals("new")) {
@@ -230,14 +227,15 @@ public final class HardeningCorpus {
     return index.members(type, name);
   }
 
-  /// Backticked identifier-like spans of the paragraph, excluding labels, mutator names,
-  /// file names, and the row's own class and method (identical across arms, but pointless).
+  /// Backticked identifier-like spans of the paragraph, excluding mutator names, file names,
+  /// and the row's own class and method (identical across arms, but pointless). A `` `# x` ``
+  /// label is not identifier-like, so the identifier match already drops it.
   static List<String> identifiers(final String paragraph, final BaselineRow row) {
     final var out = new LinkedHashMap<String, Boolean>();
     final var matcher = BACKTICKED.matcher(paragraph);
     while (matcher.find()) {
       final var span = matcher.group(1).strip();
-      if (span.startsWith("#") || span.endsWith("Mutator") || span.contains(".csv") || span.contains(".md")
+      if (span.endsWith("Mutator") || span.contains(".csv") || span.contains(".md")
           || !IDENTIFIER.matcher(span).matches() || span.contains("$")) {
         continue;
       }
@@ -248,13 +246,5 @@ public final class HardeningCorpus {
       out.putIfAbsent(last, Boolean.TRUE);
     }
     return List.copyOf(out.keySet());
-  }
-
-  public Map<String, Integer> statusCounts(final List<HardeningRow> rows) {
-    final var counts = new TreeMap<String, Integer>();
-    for (final var row : rows) {
-      counts.merge(row.memberStatus(), 1, Integer::sum);
-    }
-    return counts;
   }
 }

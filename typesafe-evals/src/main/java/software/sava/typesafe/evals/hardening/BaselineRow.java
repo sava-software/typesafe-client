@@ -27,14 +27,13 @@ public record BaselineRow(String suite,
 
   public String simpleClassName() {
     final var binary = binaryClassName();
-    final int dollar = binary.lastIndexOf('$');
-    return dollar < 0 ? binary : binary.substring(dollar + 1);
+    // no `$` leaves lastIndexOf at -1, so the substring starts at 0: the whole name
+    return binary.substring(binary.lastIndexOf('$') + 1);
   }
 
   /// `Outer$Inner` without the package.
   public String binaryClassName() {
-    final int dot = className.lastIndexOf('.');
-    return dot < 0 ? className : className.substring(dot + 1);
+    return className.substring(className.lastIndexOf('.') + 1);
   }
 
   public boolean untriaged() {

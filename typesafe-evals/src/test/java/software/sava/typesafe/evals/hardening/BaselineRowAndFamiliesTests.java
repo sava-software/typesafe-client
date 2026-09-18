@@ -50,6 +50,19 @@ final class BaselineRowAndFamiliesTests {
   }
 
   @Test
+  void theStatusCellEndsAtTheFirstHashAndEmptyLabelsAreDropped() {
+    final var noStatus = BaselineRow.parse("s", "C,m,X,# label # line 4");
+    assertEquals("", noStatus.status(), "a fourth cell that opens with the hash leaves no status");
+    assertEquals(List.of("label"), noStatus.labels(), "the labels are still read");
+    assertEquals(4, noStatus.lineHint());
+    final var tight = BaselineRow.parse("s", "C,m,X,SURVIVED# label");
+    assertEquals("SURVIVED", tight.status(), "the hash needs no space before it");
+    assertEquals(List.of("label"), tight.labels(), "and none after it either");
+    final var empty = BaselineRow.parse("s", "C,m,X,SURVIVED # # label ##");
+    assertEquals(List.of("label"), empty.labels(), "a hash with nothing between it and the next is not a label");
+  }
+
+  @Test
   void filesAreReadBySuiteName(@TempDir final Path dir) throws Exception {
     final var file = dir.resolve("core-accepted.csv");
     Files.writeString(file, "!sava-hardening-baseline-schema,1\nA,m,MathMutator,SURVIVED # x # line 1\n\nB,n,MathMutator,SURVIVED # untriaged\n");
@@ -140,6 +153,46 @@ final class BaselineRowAndFamiliesTests {
     assertEquals(List.of("- `E.f`: two's bullet after a blank line."), families.family("two").bullets());
     assertEquals("Heading", families.family("two").section());
     assertEquals("", families.family("one").section());
+  }
+
+  @Test
+  void continuationsNeedAnOpenBulletAndAnythingElseClosesOne() {
+    final var families = ReadmeFamilies.parse(List.of(
+        "## Section",
+        "  Indented prose declares `# one`.",
+        "* `A.b`: a star bullet.",
+        "  - `A.c`: an indented bullet of its own.",
+        "  ## Indented heading",
+        "Declares `# two`."));
+    assertEquals(List.of("one", "two"), families.labels());
+    final var one = families.family("one");
+    assertEquals("Section", one.section());
+    assertEquals("Indented prose declares `# one`.", one.paragraph(),
+        "an indented line with no bullet above it is prose, not a continuation");
+    assertEquals(2, one.anchorLine());
+    assertEquals(List.of("* `A.b`: a star bullet.", "- `A.c`: an indented bullet of its own."), one.bullets(),
+        "`* ` opens a bullet too, and an indented bullet is its own bullet");
+    final var two = families.family("two");
+    assertEquals("Indented heading", two.section(), "a heading closes the bullet above it wherever it is indented to");
+    assertEquals(6, two.anchorLine());
+    assertEquals(List.of(), two.bullets());
+  }
+
+  @Test
+  void aFamilyIsRegisteredWhenTheNextOneIsDeclaredAndAnUnlabeledParagraphKeepsItsBullets() {
+    final var families = ReadmeFamilies.parse(List.of(
+        "Declares `# a`.",
+        "",
+        "Declares `# b`.",
+        "",
+        "An unlabeled paragraph in between.",
+        "- `C.d`: still b's bullet."));
+    assertEquals(List.of("a", "b"), families.labels(), "a paragraph is registered when the next one declares a label");
+    assertEquals(1, families.family("a").anchorLine());
+    assertEquals(List.of(), families.family("a").bullets(), "nothing follows a before b is declared");
+    assertEquals(3, families.family("b").anchorLine());
+    assertEquals(List.of("- `C.d`: still b's bullet."), families.family("b").bullets(),
+        "an unlabeled paragraph declares no family, so the bullets below it still close b");
   }
 
   @Test
