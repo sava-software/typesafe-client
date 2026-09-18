@@ -1,0 +1,386 @@
+batch_id	candidate	member	positive	member_changed	p_affected
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	0	Transaction.sign(Signer)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	1	Transaction.sign(int, Signer)	false	false	0.060
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	2	Transaction.sign(Collection<Signer>)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	3	Transaction.sign(SequencedCollection<Signer>)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	4	Transaction.numAccounts()	false	false	0.080
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	5	Transaction.exceedsAccountLimit()	false	false	0.240
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	6	Transaction.exceedsInstructionLimit()	false	true	0.240
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	7	Transaction.exceedsSignatureLimit()	false	false	0.130
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	8	Transaction.setPriorityFeeLamports(long)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	9	Transaction.setComputeUnitLimit(int)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	10	Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long)	false	false	0.080
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	11	Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long, int)	false	false	0.080
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	12	Transaction.setAccountDataSizeLimit(int)	false	false	0.070
+sava#00348f3#sava-core/src/main/java/software/sava/core/tx/Transaction.java	13	Transaction.setHeapSize(int)	false	false	0.070
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.110
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.100
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.130
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.slotSub	false	false	0.140
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.connection	false	false	0.240
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.280
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.380
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.260
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.160
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.160
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.220
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.260
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator, int)	false	false	0.110
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.110
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.410
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.connectionFor(WebSocket)	false	false	0.430
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.pacingMillis()	false	false	0.120
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.deferredBuild(long, AttemptListener)	false	true	0.360
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.connect()	false	false	0.310
+sava#05a4294#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.checkCycle(long)	false	false	0.270
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.090
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.080
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.110
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.slotSub	false	false	0.100
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.lock	false	false	0.130
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.connection	false	false	0.180
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.150
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.120
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.inFlightBuild	false	false	0.120
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.140
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.120
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.120
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.110
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.210
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.retainedOrdinalEntries()	false	false	0.340
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator, int)	false	false	0.120
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.140
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.110
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.connectionFor(WebSocket)	false	false	0.190
+sava#0d4f07a#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.pacingMillis()	false	false	0.100
+sava#0d68f02#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java	0	Rent.ACCOUNT_STORAGE_OVERHEAD	false	false	0.090
+sava#0d68f02#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java	1	Rent.minimumBalance(long)	true	true	0.550
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.140
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.130
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.160
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.slotSub	false	false	0.250
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.connection	false	false	0.330
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.290
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.280
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.360
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.170
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.170
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.150
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator, int)	false	false	0.160
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.140
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.140
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.connectionFor(WebSocket)	false	false	0.290
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.pacingMillis()	false	false	0.150
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.deferredBuild(long, AttemptListener)	false	false	0.420
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.connect()	false	false	0.380
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.checkCycle(long)	false	false	0.450
+sava#0f6e808#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.adopt(WebSocket, long)	false	false	0.280
+sava#2c70f78#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java	0	SolanaAccounts.MAIN_NET	false	false	0.070
+sava#2c70f78#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java	1	SolanaAccounts.stakeConfig()	false	true	0.410
+sava#2c70f78#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java	2	SolanaAccounts.zKTokenProofProgram()	false	false	0.080
+sava#2c70f78#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java	3	SolanaAccounts.feesSysVar()	false	false	0.080
+sava#2c70f78#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java	4	SolanaAccounts.recentBlockhashesSysVar()	false	false	0.080
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	0	Transaction.sign(Signer, byte[])	false	true	0.480
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	1	Transaction.signInOrder(SequencedCollection<Signer>, byte[], int, int, int)	false	true	0.220
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	2	Transaction.signInOrder(SequencedCollection<Signer>, byte[])	false	true	0.220
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	3	Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>, byte[])	false	false	0.180
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	4	Transaction.sign(Signer)	false	false	0.130
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	5	Transaction.sign(int, Signer)	false	false	0.140
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	6	Transaction.sign(Collection<Signer>)	false	false	0.170
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	7	Transaction.sign(SequencedCollection<Signer>)	false	false	0.370
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	8	Transaction.signInOrder(SequencedCollection<Signer>)	false	false	0.420
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	9	Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>)	false	false	0.190
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	10	Transaction.signInOrder(byte[], SequencedCollection<Signer>)	false	false	0.160
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	11	Transaction.signInOrder(String, SequencedCollection<Signer>)	false	false	0.170
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	12	Transaction.signInOrderAndBase64Encode(byte[], SequencedCollection<Signer>)	false	false	0.210
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	13	Transaction.signInOrderAndBase64Encode(String, SequencedCollection<Signer>)	false	false	0.200
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	14	Transaction.signByKey(Collection<Signer>)	false	false	0.160
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	15	Transaction.signByKeyAndBase64Encode(Collection<Signer>)	false	false	0.150
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	16	Transaction.signByKey(byte[], Collection<Signer>)	false	false	0.110
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	17	Transaction.signByKey(String, Collection<Signer>)	false	false	0.130
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	18	Transaction.signByKeyAndBase64Encode(byte[], Collection<Signer>)	false	false	0.150
+sava#442addf#sava-core/src/main/java/software/sava/core/tx/Transaction.java	19	Transaction.signByKeyAndBase64Encode(String, Collection<Signer>)	false	false	0.130
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.150
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.140
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.140
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.slotSub	false	false	0.170
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.lock	false	false	0.290
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.connection	false	false	0.350
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.350
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.230
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.inFlightBuild	false	false	0.300
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.310
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.340
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.340
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.retainedRegistrations()	false	true	0.340
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.190
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.retainedOrdinalEntries()	false	false	0.190
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator, int)	false	false	0.110
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.110
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.110
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.connectionFor(WebSocket)	false	false	0.490
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.pacingMillis()	false	false	0.140
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	0	SolanaRpcWebsocket.lastMessageReceivedTimestamp()	true	true	0.380
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	1	SolanaRpcWebsocket.exceptionSubscribe(Consumer<RuntimeException>)	false	false	0.080
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	2	SolanaRpcWebsocket.signatureSubscribe(Commitment, boolean, String, Consumer<Subscription<TxResult>>, Consumer<TxResult>)	false	false	0.090
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	3	SolanaRpcWebsocket.subscribe(String, String, String, String, String, Function<JsonIterator, T>, Consumer<T>)	false	false	0.100
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	4	SolanaRpcWebsocket.unsubscribe(String, String)	false	false	0.090
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	5	SolanaRpcWebsocket.close()	false	false	0.120
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	6	SolanaRpcWebsocket$Builder.maxMessageLength(int)	false	false	0.610
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	7	SolanaRpcWebsocket$Builder.connectTimeout(long)	true	true	0.680
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	8	SolanaRpcWebsocket$Builder.keepAliveDelay(long)	false	false	0.610
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	9	SolanaRpcWebsocket$Builder.subscriptionResendDelay(long)	false	false	0.550
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	10	SolanaRpcWebsocket$Builder.onClose(OnClose)	false	false	0.110
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java	11	SolanaRpcWebsocket$Builder.onError(BiConsumer<SolanaRpcWebsocket, Throwable>)	false	false	0.090
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Subscription.java	0	Subscription.NEVER	false	false	0.080
+sava#52dce85#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Subscription.java	1	Subscription.notificationMethod()	true	true	0.470
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	0	Transaction.sign(Signer, byte[])	false	false	0.080
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	1	Transaction.signInOrder(SequencedCollection<Signer>, byte[], int, int, int)	false	false	0.100
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	2	Transaction.signInOrder(SequencedCollection<Signer>, byte[])	false	false	0.140
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	3	Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>, byte[])	false	false	0.100
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	4	Transaction.sign(Signer)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	5	Transaction.sign(int, Signer)	false	false	0.110
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	6	Transaction.sign(Collection<Signer>)	false	false	0.120
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	7	Transaction.sign(SequencedCollection<Signer>)	false	false	0.110
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	8	Transaction.signInOrder(SequencedCollection<Signer>)	false	true	0.160
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	9	Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>)	false	false	0.110
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	10	Transaction.signInOrder(byte[], SequencedCollection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	11	Transaction.signInOrder(String, SequencedCollection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	12	Transaction.signInOrderAndBase64Encode(byte[], SequencedCollection<Signer>)	false	false	0.100
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	13	Transaction.signInOrderAndBase64Encode(String, SequencedCollection<Signer>)	false	false	0.100
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	14	Transaction.signByKey(Collection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	15	Transaction.signByKeyAndBase64Encode(Collection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	16	Transaction.signByKey(byte[], Collection<Signer>)	false	false	0.080
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	17	Transaction.signByKey(String, Collection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	18	Transaction.signByKeyAndBase64Encode(byte[], Collection<Signer>)	false	false	0.090
+sava#57bd947#sava-core/src/main/java/software/sava/core/tx/Transaction.java	19	Transaction.signByKeyAndBase64Encode(String, Collection<Signer>)	false	false	0.080
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	0	TransactionSkeleton.deserializeSkeleton(byte[])	false	false	0.090
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	1	TransactionSkeleton.parseInstructions(AccountMeta[])	false	false	0.100
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	2	TransactionSkeleton.parseInstructionsWithoutAccounts()	false	false	0.080
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	3	TransactionSkeleton.parseInstructionsWithoutTableAccounts()	false	false	0.100
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	4	TransactionSkeleton.filterInstructions(AccountMeta[], Discriminator)	false	false	0.090
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	5	TransactionSkeleton.createTransaction(List<Instruction>)	false	false	0.090
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	6	TransactionSkeleton.createTransaction(Instruction[])	false	false	0.090
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	7	TransactionSkeleton.createTransaction(AccountMeta[])	false	false	0.120
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	8	TransactionSkeleton.createTransaction()	false	false	0.110
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	9	TransactionSkeleton.createTransaction(Instruction[], AddressLookupTable)	false	false	0.100
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	10	TransactionSkeleton.createTransaction(AccountMeta[], AddressLookupTable)	false	false	0.120
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	11	TransactionSkeleton.createTransaction(AddressLookupTable)	false	false	0.140
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	12	TransactionSkeleton.createTransaction(AccountMeta[], LookupTableAccountMeta[])	false	false	0.420
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	13	TransactionSkeleton.createTransaction(LookupTableAccountMeta[])	true	true	0.180
+sava#5aa18c5#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	14	TransactionSkeleton.createTransaction(List<Instruction>, LookupTableAccountMeta[])	false	false	0.140
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.120
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.100
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.130
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.slotSub	false	false	0.130
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.lock	false	false	0.160
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.connection	false	false	0.150
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.130
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.130
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.inFlightBuild	false	false	0.130
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.120
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.110
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.110
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.280
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.320
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator, int)	false	false	0.080
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.100
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.370
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.connectionFor(WebSocket)	false	false	0.280
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.pacingMillis()	false	false	0.110
+sava#6bdbfb1#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.deferredBuild(long, AttemptListener)	false	false	0.100
+sava#6e70c7d#sava-core/src/main/java/software/sava/core/tx/TxBuilderImpl.java	0	TxBuilderImpl.createTransaction()	false	true	0.290
+sava#7f336b4#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java	0	SolanaRpcClient.getMultipleAccounts(SequencedCollection<PublicKey>, BiFunction<PublicKey, byte[], T>)	false	true	0.120
+sava#7f336b4#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java	1	SolanaRpcClient.getTransaction(String, String)	false	false	0.080
+sava#82987fe#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java	0	TransactionRecord.priorityFeeLamportsToComputeUnitPrice(long, int)	false	true	0.410
+sava#82987fe#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java	1	TransactionRecord.setComputeBudgetValues(byte, byte[], byte, byte[])	false	false	0.070
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	0	PublicKey.MAX_SEEDS	false	false	0.070
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	1	PublicKey.verifySignature(java.security.PublicKey, String, byte[])	false	false	0.080
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	2	PublicKey.verifySignature(byte[], int, String, byte[])	false	false	0.080
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	3	PublicKey.verifySignature(byte[], String, byte[])	false	false	0.100
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	4	PublicKey.verifySignature(byte[], String, String)	false	false	0.080
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	5	PublicKey.createPubKey(byte[])	false	false	0.110
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	6	PublicKey.fromBase58Encoded(byte[], int, int)	false	false	0.080
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	7	PublicKey.findProgramAddress(List<byte[]>, PublicKey)	false	false	0.110
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	8	PublicKey.createOffCurveAccountWithAsciiSeed(PublicKey, String, PublicKey)	false	false	0.140
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	9	PublicKey.createWithSeed(PublicKey, String, PublicKey)	true	true	0.150
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	10	PublicKey.toByteArray()	false	false	0.070
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	11	PublicKey.verifySignature(String, byte[])	false	false	0.090
+sava#8fc443d#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	12	PublicKey.verifySignature(String, String)	false	false	0.090
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	0	PublicKey.MAX_SEEDS	false	false	0.130
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	1	PublicKey.verifySignature(java.security.PublicKey, String, byte[])	false	false	0.070
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	2	PublicKey.verifySignature(byte[], int, String, byte[])	false	false	0.070
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	3	PublicKey.verifySignature(byte[], String, byte[])	false	false	0.080
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	4	PublicKey.verifySignature(byte[], String, String)	false	false	0.070
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	5	PublicKey.createPubKey(byte[])	false	false	0.080
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	6	PublicKey.fromBase58Encoded(byte[], int, int)	false	false	0.110
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	7	PublicKey.findProgramAddress(List<byte[]>, PublicKey)	false	false	0.530
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	8	PublicKey.createOffCurveAccountWithAsciiSeed(PublicKey, String, PublicKey)	true	true	0.340
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	9	PublicKey.createWithSeed(PublicKey, String, PublicKey)	false	false	0.120
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	10	PublicKey.toByteArray()	false	false	0.080
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	11	PublicKey.verifySignature(String, byte[])	false	false	0.070
+sava#91bc814#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java	12	PublicKey.verifySignature(String, String)	false	false	0.080
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	0	TransactionSkeleton.deserializeSkeleton(byte[])	true	true	0.340
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	1	TransactionSkeleton.priorityFeeLamports()	false	false	0.140
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	2	TransactionSkeleton.parseInstructions(AccountMeta[])	false	false	0.090
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	3	TransactionSkeleton.parseInstructionsWithoutAccounts()	false	false	0.100
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	4	TransactionSkeleton.parseInstructionsWithoutTableAccounts()	false	false	0.100
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	5	TransactionSkeleton.filterInstructions(AccountMeta[], Discriminator)	false	false	0.120
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	6	TransactionSkeleton.createTransaction(List<Instruction>)	false	false	0.170
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	7	TransactionSkeleton.createTransaction(Instruction[])	false	false	0.310
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	8	TransactionSkeleton.createTransaction(AccountMeta[])	false	false	0.140
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	9	TransactionSkeleton.createTransaction()	false	false	0.160
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	10	TransactionSkeleton.prototypeTransaction()	false	false	0.250
+sava#a44220f#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	11	TransactionSkeleton.prototypeTransaction(Instruction[])	true	true	0.200
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.080
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.110
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.keyedProgramSubs	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.slotSub	false	false	0.110
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.lock	false	false	0.120
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.connection	false	false	0.140
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.120
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.closeWatchdogExecutor	false	false	0.110
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.inFlightBuild	false	false	0.110
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.120
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.builderInUse	false	false	0.110
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.120
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.retainedExceptionSubscribers()	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.retainedOrdinalEntries()	false	false	0.090
+sava#b24a296#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.executorServiceShutdown()	false	false	0.090
+sava#b3a2a1c#sava-core/src/main/java/software/sava/core/tx/TxBuilder.java	0	TxBuilder.buildV1()	false	true	0.200
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	false	false	0.110
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	1	SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	false	false	0.090
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	2	SolanaJsonRpcWebsocket.pacingOrigin	false	false	0.110
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	3	SolanaJsonRpcWebsocket.keyedProgramSubs	false	false	0.100
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	4	SolanaJsonRpcWebsocket.slotSub	false	false	0.120
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	5	SolanaJsonRpcWebsocket.lock	false	false	0.130
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	6	SolanaJsonRpcWebsocket.connection	false	false	0.130
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	7	SolanaJsonRpcWebsocket.lastConnectAttempt	false	false	0.150
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	8	SolanaJsonRpcWebsocket.inFlightConnect	false	false	0.130
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	9	SolanaJsonRpcWebsocket.inFlightBuild	false	false	0.150
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	10	SolanaJsonRpcWebsocket.scheduledConnect	false	false	0.160
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	11	SolanaJsonRpcWebsocket.builderInUse	false	false	0.150
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	12	SolanaJsonRpcWebsocket.connectGeneration	false	false	0.130
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	13	SolanaJsonRpcWebsocket.checkSignalled	false	false	0.110
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	14	SolanaJsonRpcWebsocket.retainedRegistrations()	false	false	0.130
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	15	SolanaJsonRpcWebsocket.retainedCancellationTombstones()	false	false	0.150
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	16	SolanaJsonRpcWebsocket.retainedOrdinalEntries()	false	false	0.170
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	17	SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator)	false	false	0.110
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	18	SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	false	false	0.090
+sava#b4c0afe#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	19	SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	false	false	0.090
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	0	Transaction.sign(Signer, byte[])	false	false	0.080
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	1	Transaction.sign(Signer)	false	false	0.110
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	2	Transaction.sign(int, Signer)	false	false	0.150
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	3	Transaction.sign(Collection<Signer>)	false	false	0.130
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	4	Transaction.sign(SequencedCollection<Signer>)	false	false	0.150
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	5	Transaction.numAccounts()	true	true	0.290
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	6	Transaction.exceedsAccountLimit()	false	false	0.130
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	7	Transaction.exceedsInstructionLimit()	false	false	0.300
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	8	Transaction.exceedsSignatureLimit()	true	true	0.290
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	9	Transaction.setPriorityFeeLamports(long)	true	true	0.940
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	10	Transaction.setComputeUnitLimit(int)	true	true	0.900
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	11	Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long)	true	true	0.880
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	12	Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long, int)	true	true	0.790
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	13	Transaction.setAccountDataSizeLimit(int)	true	true	0.860
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/Transaction.java	14	Transaction.setHeapSize(int)	true	true	0.880
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	0	TransactionSkeleton.deserializeSkeleton(byte[])	false	false	0.080
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	1	TransactionSkeleton.priorityFeeLamports()	true	true	0.320
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	2	TransactionSkeleton.heapSize()	true	true	0.320
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	3	TransactionSkeleton.parseInstructions(AccountMeta[])	false	false	0.090
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	4	TransactionSkeleton.parseInstructionsWithoutAccounts()	false	false	0.090
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	5	TransactionSkeleton.parseInstructionsWithoutTableAccounts()	false	false	0.110
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	6	TransactionSkeleton.filterInstructions(AccountMeta[], Discriminator)	false	false	0.110
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	7	TransactionSkeleton.createTransaction(List<Instruction>)	false	false	0.090
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	8	TransactionSkeleton.createTransaction(Instruction[])	false	false	0.100
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	9	TransactionSkeleton.createTransaction(AccountMeta[])	false	false	0.110
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	10	TransactionSkeleton.createTransaction()	false	false	0.140
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	11	TransactionSkeleton.prototypeTransaction()	false	false	0.150
+sava#dabfe20#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java	12	TransactionSkeleton.prototypeTransaction(Instruction[])	false	false	0.180
+sava#dd4baa5#rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java	0	SolanaJsonRpcWebsocket.transactionSubscribe(Commitment, boolean, boolean, Collection<PublicKey>, Collection<PublicKey>, Collection<PublicKey>, TransactionDetails, boolean, Consumer<TxResult>)	true	true	0.220
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	0	V1TransactionSkeleton.KNOWN_CONFIG_MASK_BITS	false	false	0.070
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	1	V1TransactionSkeleton.configValueOffset(byte[], int)	false	false	0.070
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	2	V1TransactionSkeleton.messageEnd(byte[])	false	false	0.070
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	3	V1TransactionSkeleton.requireSignatureBlockOffset(byte[])	false	false	0.080
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	4	V1TransactionSkeleton.requireIncludedInstructionAccount(AccountMeta[], int)	true	true	0.520
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	5	V1TransactionSkeleton.prototypeTransaction(Instruction[])	false	false	0.110
+sava#f91ad69#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java	6	V1TransactionSkeleton.signaturesOffset()	false	false	0.080
+json-iterator#2f07ba7#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java	0	BaseJsonIterator.skipLiteral(String, String, String)	false	true	0.260
+json-iterator#2f07ba7#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java	1	BaseJsonIterator.parseFieldEquals(String)	false	false	0.080
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	0	JsonIterator.readFully(InputStream)	false	false	0.100
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	1	JsonIterator.reset(InputStream)	false	false	0.110
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	2	JsonIterator.supportsMarkReset()	false	false	0.100
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	3	JsonIterator.readCollection(C, Function<JsonIterator, T>)	false	false	0.090
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	4	JsonIterator.readList(Function<JsonIterator, T>)	false	false	0.200
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	5	JsonIterator.readMap(M, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	true	true	0.180
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	6	JsonIterator.readMap(M, Function<JsonIterator, V>, Function<V, K>)	false	false	0.120
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	7	JsonIterator.readNull()	false	false	0.080
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	8	JsonIterator.notNull()	false	false	0.080
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	9	JsonIterator.readDateTime()	false	false	0.110
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	10	JsonIterator.applyChars(CharBufferFunction<R>)	false	false	0.090
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	11	JsonIterator.testObject(FieldMatcher, FieldIndexPredicate)	false	false	0.080
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	12	JsonIterator.testObject(C, FieldMatcher, ContextFieldIndexMaskedPredicate<C>)	false	false	0.100
+json-iterator#8fc0f60#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	13	JsonIterator.matchString(FieldMatcher)	false	false	0.090
+json-iterator#d6e00fa#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java	0	BytesJsonIterator.widenToCharBuf(int)	false	true	0.180
+json-iterator#d6e00fa#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java	1	BytesJsonIterator.parseEscapedBase64String()	false	false	0.140
+json-iterator#d6e00fa#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java	2	BytesJsonIterator.parseFieldNameSlow()	false	false	0.120
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	0	JsonIterator.readFully(InputStream)	false	false	0.090
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	1	JsonIterator.reset(InputStream)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	2	JsonIterator.readCollection(C, Function<JsonIterator, T>)	false	false	0.090
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	3	JsonIterator.readList(Function<JsonIterator, T>)	false	false	0.090
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	4	JsonIterator.readIntArray()	false	true	0.140
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	5	JsonIterator.readLongArray()	false	true	0.130
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	6	JsonIterator.readByteArray()	false	true	0.160
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	7	JsonIterator.readByteArray(byte[])	false	false	0.110
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	8	JsonIterator.readMap(M, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	false	false	0.090
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	9	JsonIterator.readMap(M, Function<JsonIterator, V>, Function<V, K>)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	10	JsonIterator.readNull()	false	false	0.070
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	11	JsonIterator.notNull()	false	false	0.070
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	12	JsonIterator.readOrNull(Function<JsonIterator, T>)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	13	JsonIterator.readOrNull(ValueType, Function<JsonIterator, T>)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	14	JsonIterator.readDateTime()	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	15	JsonIterator.applyChars(CharBufferFunction<R>)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	16	JsonIterator.testObject(FieldMatcher, FieldIndexPredicate)	false	false	0.070
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	17	JsonIterator.testObject(C, FieldMatcher, ContextFieldIndexMaskedPredicate<C>)	false	false	0.080
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	18	JsonIterator.parseObject(P)	false	false	0.070
+json-iterator#db15a1b#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	19	JsonIterator.parseObject(FieldMatcher, P)	false	false	0.080
+json-iterator#eb87b90#systems.comodal.json_iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	0	JsonIterator.readNull()	false	true	0.190
+json-iterator#eb87b90#systems.comodal.json_iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java	1	JsonIterator.applyChars(CharBufferFunction<R>)	false	true	0.190
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java	0	EpochInfoServiceImpl.MAX_PERFORMANCE_SAMPLES	false	false	0.080
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java	1	EpochInfoServiceImpl.epochLogMessage(Epoch, Epoch, long)	false	false	0.080
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java	2	EpochInfoServiceImpl.newCycle(Epoch, long)	false	false	0.100
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java	3	EpochInfoServiceImpl.checkCycle(Cycle, boolean)	false	true	0.410
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java	4	EpochInfoServiceImpl.start()	false	true	0.440
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	0	SlotPerformanceStats.MIN_TARGET_MILLIS_PER_SLOT	false	false	0.070
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	1	SlotPerformanceStats.DEFAULT_MIN_MILLIS_PER_SLOT	false	false	0.090
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	2	SlotPerformanceStats.DEFAULT_MAX_MILLIS_PER_SLOT	false	false	0.100
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	3	SlotPerformanceStats.calculateStats(List<PerfSample>)	false	false	0.110
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	4	SlotPerformanceStats.calculateStats(List<PerfSample>, int)	false	false	0.470
+ravina#5578c86#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java	5	SlotPerformanceStats.calculateStats(List<PerfSample>, int, int)	false	true	0.460
+ravina#e88e05b#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java	0	TxMonitorService.createService(ChainItemFormatter, RpcCaller, EpochInfoService, WebSocketManager, Duration, Duration, TxPublisher, Duration, int)	false	true	0.250
+ravina#e88e05b#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java	1	TxMonitorService.createService(ChainItemFormatter, RpcCaller, EpochInfoService, WebSocketManager, TxMonitorConfig, TxPublisher)	false	false	0.110
+http-servers#430e6d0#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java	0	SvmExactSettler.<init>(SolanaAccounts, Signer, SolanaRpcClient)	false	false	0.070
+http-servers#430e6d0#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java	1	SvmExactSettler.settle(PaymentPayload, PaymentRequirements)	false	true	0.460
+http-servers#430e6d0#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java	2	SvmExactSettler$TransactionSubmitter.send(String)	false	false	0.100
+http-servers#430e6d0#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java	3	SvmExactSettler$TransactionSubmitter.confirm(String)	false	false	0.080
+http-servers#696ce3c#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactVerifier.java	0	SvmExactVerifier.verify(PaymentPayload, PaymentRequirements)	false	false	0.060
+http-servers#696ce3c#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactVerifier.java	1	SvmExactVerifier.verify(PaymentRequirements, byte[])	false	true	0.330
+incident-client#00a96ee#incident-webhook/src/main/java/software/sava/incident/webhook/BaseWebhookIncidentClientFactory.java	0	BaseWebhookIncidentClientFactory.format(WebhookConfig)	false	true	0.120
+incident-client#00a96ee#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java	0	WebhookFormats.SLACK_TEXT	false	false	0.070
+incident-client#00a96ee#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java	1	WebhookFormats.slackText(IncidentAlert)	false	false	0.100
+incident-client#00a96ee#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java	2	WebhookFormats.renderPlainText(IncidentAlert)	true	true	0.080
+incident-client#0c778ee#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java	0	JsonUtil.escapeJson(String)	true	true	0.170
+incident-client#0c778ee#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java	1	JsonUtil.escapeJsonRemoveNewLines(String)	true	true	0.220
+incident-client#61c84ba#incident-core/src/main/java/software/sava/incident/core/api/IncidentClients.java	0	IncidentClients.loadFactory(String)	false	true	0.610
+glam-sdk-java#9278933#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java	0	AccountFetcherImpl.lock	false	false	0.250
+glam-sdk-java#9278933#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java	1	AccountFetcherImpl.failCurrentBatches(RuntimeException)	false	true	0.440
+glam-sdk-java#9278933#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java	2	AccountFetcherImpl.dispatch(AccountConsumer, List<AccountInfo<byte[]>>, Map<PublicKey, AccountInfo<byte[]>>)	false	false	0.140
+glam-sdk-java#bb830ff#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java	0	BatchSqlExecutorImpl.IDLE_TICK_FLOOR_NANOS	false	false	0.070
+glam-sdk-java#bb830ff#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java	1	BatchSqlExecutorImpl.idleTickNanos	false	false	0.080
+glam-sdk-java#bb830ff#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java	2	BatchSqlExecutorImpl.lock	false	false	0.100
+glam-sdk-java#bb830ff#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java	3	BatchSqlExecutorImpl.batchComplete	false	false	0.140
+glam-sdk-java#bb830ff#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java	4	BatchSqlExecutorImpl.run()	false	true	0.430

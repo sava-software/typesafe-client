@@ -8,14 +8,16 @@ import software.sava.typesafe.evals.text.Jaccard;
 import software.sava.typesafe.evals.text.PathScrubber;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-/// Experiment D's rows: every historical change to a documented member, labeled by whether
-/// the same commit also changed the comment (CO_EDIT) or left it alone (BODY_ONLY).
+/// Experiment D's rows: historical changes to documented members, labeled by whether the
+/// same commit also changed the comment as shown (CO_EDIT) or left the comment byte-identical
+/// (BODY_ONLY); one row per member, its most recent qualifying change.
 public final class DriftCorpus {
 
   public static final String CO_EDIT = "CO_EDIT";
@@ -29,9 +31,13 @@ public final class DriftCorpus {
 
   /// One change to one documented member.
   ///
-  /// @param klass     CO_EDIT or BODY_ONLY
-  /// @param diffSize  changed lines in the member diff
-  /// @param overlap   fraction of the comment's identifier-like tokens that occur in the changed lines
+  /// @param klass          CO_EDIT or BODY_ONLY
+  /// @param diffSize       changed lines (removed plus added)
+  /// @param overlap        fraction of the comment's identifier-like tokens that occur in the changed lines
+  /// @param linesBefore    member lines before the change
+  /// @param linesAfter     member lines after the change
+  /// @param abstractToggle the member gained or lost a body (a `;` head on one side, braces on the other)
+  /// @param diffText       a unified-style rendering for the labeling sheet, never sent
   public record Row(String id,
                     String repo,
                     String commit,
@@ -44,23 +50,27 @@ public final class DriftCorpus {
                     int commentChars,
                     int diffSize,
                     double overlap,
+                    int linesBefore,
+                    int linesAfter,
+                    boolean abstractToggle,
+                    String diffText,
                     DriftQuestions.State state) {
   }
 
-  /// Why an event was left out, for the summary.
+  /// Why events were left out, for the summary.
   public record Excluded(String reason, int count) {
   }
 
-  public record Result(List<Row> rows, List<Excluded> excluded) {
+  public record Result(List<Row> rows, List<Excluded> excluded, int beforeDedupe) {
   }
 
   private DriftCorpus() {
   }
 
-  /// Rows from a repository's events; the miner has already restricted them to documented
-  /// members of main, non-generated sources.
+  /// Rows from a repository's events (the miner already restricts them to documented members
+  /// of main, non-generated sources), then one row per member: the latest in commit order.
   public static Result rows(final String repo, final List<HistoryMiner.Event> events) {
-    final var rows = new ArrayList<Row>();
+    final var candidates = new ArrayList<Row>();
     int noComment = 0;
     int whitespace = 0;
     int shortComment = 0;
@@ -92,26 +102,43 @@ public final class DriftCorpus {
       } else if (event.newComment() == null) {
         removed++;
         continue;
-      } else if (Jaccard.similarity(event.oldComment(), event.newComment()) >= RETOUCH_JACCARD) {
-        retouch++;
-        continue;
       } else {
+        final var shownNew = DocCorpus.shown(event.newComment(), List.of(name));
+        if (DocCorpus.normalize(shownNew).equals(DocCorpus.normalize(comment)) || Jaccard.similarity(comment, shownNew) >= RETOUCH_JACCARD) {
+          retouch++;
+          continue;
+        }
         klass = CO_EDIT;
       }
-      rows.add(row(repo, event, klass, comment));
+      candidates.add(row(repo, event, klass, comment));
+    }
+    // events arrive in commit order, so the last row per member is its most recent change
+    final var latest = new LinkedHashMap<String, Row>();
+    for (final var row : candidates) {
+      latest.put(row.path() + '#' + row.key(), row);
     }
     final var excluded = List.of(
         new Excluded("comment-only event", commentOnly),
         new Excluded("no comment before the change", noComment),
         new Excluded("whitespace-only body change", whitespace),
         new Excluded("comment shorter than " + MIN_COMMENT_CHARS + " as shown", shortComment),
-        new Excluded("comment retouched (jaccard >= " + RETOUCH_JACCARD + ")", retouch),
-        new Excluded("comment removed", removed));
-    return new Result(rows, excluded);
+        new Excluded("comment retouched (shown text equal or jaccard >= " + RETOUCH_JACCARD + ")", retouch),
+        new Excluded("comment removed", removed),
+        new Excluded("earlier change of the same member", candidates.size() - latest.size()));
+    return new Result(List.copyOf(latest.values()), excluded, candidates.size());
   }
 
   static Row row(final String repo, final HistoryMiner.Event event, final String klass, final String comment) {
     final var diff = LineDiff.of(event.oldBody(), event.newBody(), LINE_CAP);
+    final var removedLines = new ArrayList<String>();
+    final var addedLines = new ArrayList<String>();
+    for (final var op : LineDiff.ops(event.oldBody().split("\n", -1), event.newBody().split("\n", -1))) {
+      if (op.startsWith("-")) {
+        removedLines.add(op.substring(1));
+      } else if (op.startsWith("+")) {
+        addedLines.add(op.substring(1));
+      }
+    }
     final var newLines = event.newBody().split("\n", -1);
     final int shownNew = Math.min(newLines.length, LINE_CAP);
     final var newSource = new StringBuilder();
@@ -124,32 +151,48 @@ public final class DriftCorpus {
     if (shownNew < newLines.length) {
       newSource.append("\n// … ").append(newLines.length - shownNew).append(" more lines not shown");
     }
-    final var extent = JsonContent.object()
-        .put("member_kind", event.kind())
-        .put("old_lines", (long) event.oldBody().split("\n", -1).length)
-        .put("new_lines", (long) newLines.length)
-        .put("new_lines_shown", (long) shownNew)
-        .put("diff_lines_shown", (long) diff.linesShown())
-        .put("diff_lines_total", (long) diff.linesTotal())
-        .build();
-    final var state = new DriftQuestions.State(comment, diff.text(), newSource.toString(), extent, PathScrubber.scrub(event.path()));
+    final var extent = JsonContent.object().put("member_kind", event.kind()).build();
+    final var state = new DriftQuestions.State(comment, cap(removedLines), cap(addedLines), newSource.toString(), extent,
+        PathScrubber.scrub(event.path()));
     final var id = repo + '#' + event.commit().substring(0, Math.min(7, event.commit().length())) + '#' + event.path() + '#' + event.key();
+    final int linesBefore = event.oldBody().split("\n", -1).length;
     return new Row(id, repo, event.commit(), event.path(), event.key(), event.kind(), klass, event.oldComment(), event.newComment(),
-        comment.length(), diff.changed(), overlap(comment, diff.text()), state);
+        comment.length(), removedLines.size() + addedLines.size(), overlap(comment, removedLines, addedLines), linesBefore, newLines.length,
+        abstractToggle(event.oldBody(), event.newBody()), diff.text(), state);
+  }
+
+  /// At most LINE_CAP lines, the cap stated as a final entry.
+  static List<String> cap(final List<String> lines) {
+    if (lines.size() <= LINE_CAP) {
+      return List.copyOf(lines);
+    }
+    final var out = new ArrayList<>(lines.subList(0, LINE_CAP));
+    out.add("// … " + (lines.size() - LINE_CAP) + " more lines not shown");
+    return List.copyOf(out);
+  }
+
+  /// A declaration that ends in `;` on one side and carries a braced body on the other.
+  static boolean abstractToggle(final String oldBody, final String newBody) {
+    return bodiless(oldBody) != bodiless(newBody);
+  }
+
+  static boolean bodiless(final String body) {
+    return !body.contains("{") && body.strip().endsWith(";");
   }
 
   /// The fraction of the comment's identifier-like tokens (backticked, CamelCase, snake_case,
-  /// CONSTANT_CASE) that occur, case-insensitively, in the diff's changed lines; 0 with none.
-  static double overlap(final String comment, final String diff) {
+  /// CONSTANT_CASE) that occur, case-insensitively, in the changed lines; 0 with none.
+  static double overlap(final String comment, final List<String> removedLines, final List<String> addedLines) {
     final var names = identifiers(comment);
     if (names.isEmpty()) {
       return 0.0;
     }
     final var changed = new StringBuilder();
-    for (final var line : diff.split("\n", -1)) {
-      if (line.startsWith("-") || line.startsWith("+")) {
-        changed.append(line, 1, line.length()).append('\n');
-      }
+    for (final var line : removedLines) {
+      changed.append(line).append('\n');
+    }
+    for (final var line : addedLines) {
+      changed.append(line).append('\n');
     }
     final var haystack = changed.toString().toLowerCase(Locale.ROOT);
     int hits = 0;

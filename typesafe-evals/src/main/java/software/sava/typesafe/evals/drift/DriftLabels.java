@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/// Labels for Experiment D's two sheets: `row_id` and `label` columns, blank labels skipped.
+/// Labels for Experiment D's blind sheet: `row_id` and `label` columns with the question's
+/// four options, blank labels skipped.
 public record DriftLabels(Map<String, String> byKey) {
 
-  public static final Set<String> TOP_LABELS = Set.of("needed_update", "no_update_needed", "cannot_tell");
-  public static final Set<String> NOISE_LABELS = Set.of("related", "unrelated");
+  public static final Set<String> LABELS = Set.of(DriftQuestions.CONTRADICTED, DriftQuestions.NEEDS_ADDITION, DriftQuestions.UNAFFECTED,
+      DriftQuestions.NOT_CHECKABLE);
 
-  public static DriftLabels read(final Path file, final Set<String> allowed) {
+  public static DriftLabels read(final Path file) {
     final List<String> lines;
     try {
       lines = Files.readAllLines(file, StandardCharsets.UTF_8);
@@ -42,8 +43,8 @@ public record DriftLabels(Map<String, String> byKey) {
       if (label.isEmpty()) {
         continue;
       }
-      if (!allowed.contains(label)) {
-        throw new IllegalArgumentException(file + " line " + (i + 1) + ": label '" + label + "' is not one of " + allowed);
+      if (!LABELS.contains(label)) {
+        throw new IllegalArgumentException(file + " line " + (i + 1) + ": label '" + label + "' is not one of " + LABELS);
       }
       out.put(cells[keyIndex].strip(), label);
     }
