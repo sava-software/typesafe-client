@@ -195,11 +195,10 @@ public final class DocExperiment {
     final var out = new HashSet<String>();
     // walk in commit order: the latest body-only event decides
     final var latest = new LinkedHashMap<String, Boolean>();
+    // a member that is not documented at HEAD needs no skip of its own: its head comment is
+    // null, which no event's comment equals, so it can never end up a candidate
     for (final var event : events) {
       final var k = event.path() + '#' + event.key();
-      if (!headComment.containsKey(k)) {
-        continue;
-      }
       if (event.bodyChanged() && !event.commentChanged() && event.newComment() != null) {
         latest.put(k, event.newComment().equals(headComment.get(k)));
       } else if (event.commentChanged()) {
@@ -217,9 +216,7 @@ public final class DocExperiment {
   /// Up to STALE_CANDIDATE_CAP stale candidates in id order, then random documented members
   /// to `size` (seeded, so the sample is reproducible).
   static List<DocCorpus.Row> sample(final List<DocCorpus.Row> rows, final Set<String> staleKeys, final int size) {
-    if (size <= 0) {
-      return List.of();
-    }
+    // a size of zero or less needs no early return: both caps below are then already full
     final var picked = new ArrayList<DocCorpus.Row>();
     final var rest = new ArrayList<DocCorpus.Row>();
     for (final var row : rows) {

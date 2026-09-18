@@ -87,6 +87,24 @@ final class DocCorpusTests {
         "tiny (short), tagOnly (empty once the tag goes), NEXT (no initializer), toString (inheritDoc), and nothing (no body) are out");
   }
 
+  private static FileMembers.Snapshot method(final String type, final String name, final String comment) {
+    return new FileMembers.Snapshot(new FileMembers.Key(type, name, ""), "method", "int " + name + "()",
+        comment == null ? null : new DocComment(1, 1, "markdown", comment), "int " + name + "() {\n  return 1;\n}", 2, 4);
+  }
+
+  @Test
+  void theCommentLengthBarIsInclusiveAndInheritedCommentsNeverCount() {
+    assertEquals(DocCorpus.MIN_COMMENT_CHARS, "Adds the values and returns their total.".length(),
+        "the first fixture sits exactly on the bar, the second one character below it");
+    assertTrue(DocCorpus.documented(method("T", "tally", "Adds the values and returns their total.")),
+        "a shown comment of exactly MIN_COMMENT_CHARS is long enough");
+    assertFalse(DocCorpus.documented(method("T", "tally", "Adds both values and returns the total.")),
+        "one character short is not");
+    assertFalse(DocCorpus.documented(method("T", "tally", "{@inheritDoc} plus prose long enough to clear the bar on its own.")),
+        "an inherited comment is the supertype's claim, however much prose follows it");
+    assertFalse(DocCorpus.documented(method("T", "tally", null)), "a member with no comment is not documented");
+  }
+
   @Test
   void siblingsSkipOverloadsAndIdenticalCommentsAndFallBackToTheFile() {
     final var docs = documented();
@@ -107,6 +125,15 @@ final class DocCorpusTests {
     final var lone = new FileMembers.Snapshot(new FileMembers.Key("Lone", "go", ""), "method", "void go()",
         new DocComment(5, 5, "markdown", "Goes somewhere else, documented at some length here."), "void go() {\n}", 6, 7);
     assertEquals(other, DocCorpus.sibling(List.of(lone, other), lone), "no same-type sibling, so the other type's member is used");
+    final var self = method("T", "alpha", "Returns the first value, documented at some length here.");
+    final var outsider = method("U", "beta", "Returns the second value, documented at some length here.");
+    final var sameType = method("T", "gamma", "Returns the third value, documented at some length here.");
+    assertEquals(sameType, DocCorpus.sibling(List.of(self, outsider, sameType), self),
+        "a candidate in the same type wins over one already found elsewhere in the file");
+    final var another = method("V", "delta", "Returns the fourth value, documented at some length here.");
+    assertEquals(outsider, DocCorpus.sibling(List.of(self, outsider, another), self),
+        "with no same-type candidate the first one found elsewhere is kept");
+    assertEquals(outsider, DocCorpus.sibling(List.of(outsider, self), self), "the scan wraps back to the members before self");
   }
 
   @Test
@@ -121,6 +148,9 @@ final class DocCorpusTests {
     assertEquals("Uses size here.", DocCorpus.shown("Uses {@link Widget#size} here.", List.of("sum")), "a qualified link keeps only its member name");
     assertEquals("a\n\nb", DocCorpus.shown("a\n\n\n\nb", List.of()), "blank-line runs collapse");
     assertEquals("sizeOf stays, <METHOD> goes", DocCorpus.shown("sizeOf stays, size goes", List.of("size")), "whole-word masking");
+    assertEquals("Reads the size.", DocCorpus.shown("Reads the size.", List.of("")), "an empty name masks nothing");
+    assertEquals("<METHOD>s are counted.", DocCorpus.shown("[#size]s are counted.", List.of("size")),
+        "a link to a masked name becomes the mask, even where whole-word masking could not reach it afterwards");
     assertEquals("Prose before.", DocCorpus.shown("Prose before.\n@throws X when\n  it fails\n@since 1\nMore prose.", List.of()),
         "every block tag goes with everything after it up to the next tag or the end");
     assertEquals("Widget", DocCorpus.memberName(docs.get(4)), "a constructor is named after its type");
@@ -143,6 +173,8 @@ final class DocCorpusTests {
     assertEquals(List.of("wrap", "signer"), DocCorpus.nameWords("wrapThisSigner"), "'this' is a stop word");
     assertNull(DocCorpus.phrasePattern("size"));
     assertNotNull(DocCorpus.phrasePattern("lookupTableCache"));
+    assertNotNull(DocCorpus.phrasePattern("lookupTable"), "two usable words are enough for a prose mask");
+    assertEquals("The <METHOD> is stale.", DocCorpus.shown("The lookup table is stale.", List.of("lookupTable")));
     assertEquals(1.0, DocCorpus.nameEcho("the lookup tables are cached", "lookupTableCache"), "every name word appears as a prefix");
     assertEquals(1.0 / 3.0, DocCorpus.nameEcho("the cache", "lookupTableCache"), 1e-12);
     assertEquals(0.0, DocCorpus.nameEcho("nothing here", "lookupTableCache"));
@@ -172,6 +204,10 @@ final class DocCorpusTests {
     assertEquals(1.0, DocCorpus.baseline("Uses `Missing` only.", lookup, lookupSource), "an identifier the source lacks");
     final var none = DocCorpus.facts("plain words only here", size, source);
     assertEquals(0.0, none.mismatch(), "no identifiers: nothing mismatches");
+    final var awkward = DocCorpus.facts("Uses `foo.` and `3rd` and `count` here.", size, source);
+    assertEquals(List.of(), awkward.missing(),
+        "a backticked span with nothing after its dot, and one that starts with a digit, are not identifiers");
+    assertEquals(0.0, awkward.mismatch(), "only `count` is an identifier here, and the source has it");
   }
 
   @Test
@@ -208,6 +244,8 @@ final class DocCorpusTests {
     });
     final var corpus = new DocCorpus("repo", git);
     assertEquals(List.of("mod/src/main/java/p/Gen.java", "mod/src/main/java/p/Widget.java"), corpus.files(), "tests and /gen/ paths are not corpus files");
+    assertEquals(List.of(), new DocCorpus("repo", new GitRepo(Path.of("/nowhere"), (c, d) -> "\n   \nREADME.md\n")).files(),
+        "blank lines and non-Java paths are not corpus files");
     final var rows = corpus.rows();
     assertEquals(5, rows.size(), "six documented members, but the two constructors share a shown comment: one row; Gen.java's header excludes it");
     final var sum = rows.getFirst();

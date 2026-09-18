@@ -32,6 +32,13 @@ swapped arm, the bars and decision table, and the driver).
   at the same test the plain-block case already decides. `FileMembers.parameterTypes` lost an
   early return for an empty parameter list, which the general path subsumes because an empty
   list splits into one empty part whose only token is the empty string.
+  The `docs` suite grew Experiment C1's corpus, question, bars, and driver and landed at 623
+  killed with 71 survivors, 2 uncovered, and one minion death; it reached 684/684 killed (four
+  loop-guard timeouts detected, none accepted) after dead guards came out: a blank-path test the
+  suffix test subsumes, a mask check the identifier-start test subsumes, a modular sibling walk
+  replaced by an explicit candidate list that never visits the member itself, a head-comment
+  lookup guard a later null comparison subsumes, a non-positive sample-size return the loop
+  bounds already give, and an empty-side bootstrap guard `Metrics.auroc` already answers.
   `hardening` first landed at 335 killed with 95 survivors and 13 uncovered mutants and
   reached 389/389 killed with none accepted: the triage removed dead bookkeeping in the README
   family parser (an unread bullet-line list, call-site clears that `flush` now owns, an empty

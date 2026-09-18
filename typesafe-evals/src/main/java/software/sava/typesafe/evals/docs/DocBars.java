@@ -243,11 +243,10 @@ public final class DocBars {
     return v;
   }
 
-  /// Unpaired percentile bootstrap: positives and negatives resampled independently.
+  /// Unpaired percentile bootstrap: positives and negatives resampled independently. A side
+  /// with nothing in it needs no case of its own: every resample is then a NaN AUROC, so both
+  /// percentiles of the sorted samples are NaN too.
   static double[] bootstrap(final List<Double> pos, final List<Double> neg) {
-    if (pos.isEmpty() || neg.isEmpty()) {
-      return new double[]{Double.NaN, Double.NaN};
-    }
     final var random = new java.util.Random(SEED);
     final var samples = new double[RESAMPLES];
     final var p = new ArrayList<Double>(pos.size());

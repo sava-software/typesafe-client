@@ -74,8 +74,9 @@ public final class DocCorpus {
   public List<String> files() {
     final var files = new ArrayList<String>();
     for (final var line : git.run("ls-files", "--", "*.java").lines().toList()) {
+      // no blank-path guard: MAIN_SOURCES already requires a `.java` suffix
       final var path = line.strip();
-      if (!path.isEmpty() && HistoryMiner.MAIN_SOURCES.test(path)) {
+      if (HistoryMiner.MAIN_SOURCES.test(path)) {
         files.add(path);
       }
     }
@@ -142,9 +143,11 @@ public final class DocCorpus {
   static FileMembers.Snapshot sibling(final List<FileMembers.Snapshot> documented, final FileMembers.Snapshot self) {
     final var own = normalize(shown(self.commentText(), List.of(memberName(self))));
     final int start = documented.indexOf(self);
+    // the members after self, then those before it: self is never its own candidate
+    final var candidates = new ArrayList<>(documented.subList(start + 1, documented.size()));
+    candidates.addAll(documented.subList(0, start));
     FileMembers.Snapshot elsewhere = null;
-    for (int step = 1; step < documented.size(); step++) {
-      final var candidate = documented.get((start + step) % documented.size());
+    for (final var candidate : candidates) {
       if (!candidate.kind().equals(self.kind()) || memberName(candidate).equals(memberName(self))) {
         continue;
       }
@@ -319,7 +322,8 @@ public final class DocCorpus {
     while (backticked.find()) {
       final var span = backticked.group(1).strip();
       final var last = span.substring(span.lastIndexOf('.') + 1).replaceAll("\\(.*$", "");
-      if (!last.isEmpty() && Character.isJavaIdentifierStart(last.charAt(0)) && !last.equals(MASK)) {
+      // MASK needs no case of its own: it starts with '<', which is not an identifier start
+      if (!last.isEmpty() && Character.isJavaIdentifierStart(last.charAt(0))) {
         names.add(last);
       }
     }
