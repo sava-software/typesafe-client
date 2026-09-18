@@ -29,11 +29,26 @@ Member status: {MISSING_MEMBER=1, MISSING_TYPE=8, MOVED_MEMBER=3, REMOVED_MEMBER
 
 ## Jev
 
-Requests 110 (110 answered), input tokens 161028, cost $0.0068; recording hits 0, misses 110.
+Requests 110 (110 answered), input tokens 161028, cost $0.0068; recording hits 110, misses 0.
 
 ## Bars against hand labels
 
-No labeled and scored rows yet.
+109 labeled rows. Control arm: flagged 33, true positives 6 of 10 rot rows (recall 0.600, precision 0.182).
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| recall of rot within the top 30% by P(absent) | 1.000 | >= 0.900 | yes |
+| rot rows in the top 30% with no control flag | 4 | >= 3 | yes |
+| rot rows answered construct_present at confidence >= 0.8 | 0 | 0 | yes |
+| present rows in rung-0 modules answered construct_absent | 1 | <= 1 | yes |
+| **keep** | **true** | all | |
+
+```
+gold \ predicted	construct_present	construct_absent	cannot_resolve
+construct_present	74	12	0
+construct_absent	0	10	0
+cannot_resolve	4	7	2
+```
 
 ## Bars against PROVISIONAL survey gold hints (44 hints; not a substitute for labels)
 

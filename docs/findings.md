@@ -59,11 +59,21 @@ Side findings from that round, each a deterministic fix with no model:
 | Finding dedupe before refuters | Keep | In one sava workflow, 30 of 78 refuter agents re-verified two defects. Exact file:line over-merges and over-splits; 72% of same-line pairs sit in a Jaccard band holding both duplicates and distinct defects. All 463 findings across 12 finder schemas carry a summary-like field, so no schema change is needed. |
 | Cross-round convergence / stop signal | Reject | The one multi-round trajectory is in a private repository; public PRs top out at 3 comments; HARDENING already assigns the stop judgment to a human. |
 | Dependabot release-note screening | Reject | The one bump that cost real work had a one-line PR body with no notes; the crisp prose positives cost one line each. No label exists that is not circular. |
-| Description-versus-code consistency (added after A and B ran) | Pre-registered as Experiment C after a second adversarial review | Generalises A to doc comments (C1) and to the hardening evidence itself (C2). C1 had no label source on this fleet; C2 ran, cleared its separation bar by 0.005, and waits on the human value bar. See below. |
+| Description-versus-code consistency (added after A and B ran) | Pre-registered as Experiment C after a second adversarial review | Generalises A to doc comments (C1) and to the hardening evidence itself (C2). C1 had no label source on this fleet; C2 ran, cleared its separation bar by 0.005, and the value bar confirmed 8 mis-filed rows in its top 30. See below. |
+
+## How the sheets were labeled
+
+The three labeling sheets were filled on 2026-09-18 by independent readers that never saw a
+Jev answer: for each batch of about fifteen rows, two Claude Opus agents labeled blind from
+the recorded request states alone (never a response file, a `jev.tsv`, or a report), and a
+third decided every disagreement. Agreement before adjudication: 105 of 109 rot rows, 172 of
+178 dedupe pairs, 30 of 30 hardening rows. These are model-made labels, not human ones; each
+`labels.tsv` carries the reader's one-line reason beside the label, any row can be
+overwritten by hand, and `--mode replay --labels <file>` re-renders the bars at no cost.
 
 ## Experiment A: acceptance-note rot detector
 
-_Status: scored; awaiting hand labels. Harness: `typesafe-evals` (`software.sava.typesafe.evals.rot`),
+_Status: scored and labeled; all four bars pass, keep. Harness: `typesafe-evals` (`software.sava.typesafe.evals.rot`),
 run with `./gradlew :typesafe-evals:rot -PevalArgs="..."`. Outputs in `typesafe-evals/experiments/rot/`;
 every API exchange recorded under `typesafe-evals/recordings/rot/`._
 
@@ -125,13 +135,26 @@ shown. If kept it needs rewording to "depends on source code not shown". The `co
 fired above 0.5 on three rows only, all moved or missing members, which the control arm already
 flags.
 
-**Next.** Label `labeling-sheet.tsv` (110 rows: `label` absent/present/cannot, by the
-construct definition above, before looking at `jev.tsv`), then
-`--mode replay --labels <file>` re-renders the bars from the recordings at no cost.
+**Against the blind labels (109 rows: 10 absent, 86 present, 13 cannot).**
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| recall of rot within the top 30% by P(absent) | 1.000 | >= 0.90 | yes |
+| rot rows in the top 30% with no control flag | 4 | >= 3 | yes |
+| rot rows answered present at confidence >= 0.8 | 0 | 0 | yes |
+| present rows in unchanged (rung-0) modules answered absent | 1 | <= 1 | yes |
+
+All ten rotted notes sit in the top 30% and none is answered "present" with confidence. The
+deterministic control arm alone finds 6 of the 10 at precision 0.18. The cost of the ranking
+is 12 present rows answered absent (out of 86) and 11 of the 13 "cannot" rows answered one
+way or the other: Jev rarely uses `cannot_resolve` (2 of 110), so a reviewer reading the
+list top-down should expect roughly one false alarm per real catch near the top. Verdict:
+keep; the natural product is a `pitestAcceptanceRotReport` task in sava-build that prints
+every note ranked by P(absent) beside the deterministic flags, never a gate.
 
 ## Experiment B: finding dedupe between finder and refuter phases
 
-_Status: scored; awaiting hand labels. Harness: `typesafe-evals` (`software.sava.typesafe.evals.dedupe`),
+_Status: scored and labeled; the pre-registered rule fails two bars, the post-hoc rule holds. Harness: `typesafe-evals` (`software.sava.typesafe.evals.dedupe`),
 run with `./gradlew :typesafe-evals:dedupe -PevalArgs="..."`. Outputs in `typesafe-evals/experiments/dedupe/`;
 every API exchange recorded under `typesafe-evals/recordings/dedupe/`._
 
@@ -160,12 +183,32 @@ post-hoc rule also grouped three findings at line 438 and two at 443 that read a
 same defect each. It is reported beside the pre-registered bars, not in them; the labels
 decide whether it holds up (merge safety on gold-0 pairs is computed for it too).
 
-**Next.** Label `labeling-sheet.tsv` (178 rows: `label` 0/1/2, `needed_source` y/n),
-then `--mode replay --labels <file>` re-renders the bars from the recordings at no cost.
+**Against the blind labels (178 pairs: 17 different, 51 narrowed, 110 restated; the readers
+needed the source for 4).**
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| merge safety: gold-different pairs merged at confidence >= 0.8 | 0 | 0 | yes |
+| suppression: recall on gold-restated at confidence >= 0.8 | 0.40 | >= 0.70 | no |
+| precision at recall >= 0.7 | 0.899 | >= 0.95 | no |
+| lift over exact-line precision (0.653) | 0.246 | >= 0.20 | yes |
+| lift over Jaccard precision (0.683) | 0.216 | >= 0.15 | yes |
+| middle recall (narrowed labeled as narrowed) | 0.608 | >= 0.50 | yes |
+| correlation with Jaccard | 0.586 | <= 0.80 | yes |
+
+The pre-registered rule fails where Experiment B's first run said it would: Jev separates
+"different" from "same" sharply (15 of 17 different pairs at level 0, none merged) but
+splits "same" between "narrowed" and "restated" (28 of 110 restated pairs land on level 1),
+so a rule keyed to level 2 suppresses too little. The post-hoc "same underlying defect" rule
+(P(different) <= 0.2, narrowed or restated both count as same) groups 134 pairs at precision
+1.000 and recall 0.832 with no different-defect pair grouped. It was written down before the
+labels existed and is reported beside the bars, not in them. Verdict: the two-way question
+is the product; a three-level score was the wrong instrument. A dedupe stage between finder
+and refuter phases should ask "same defect or different" and route the groups to a human.
 
 ## Experiment C: description-versus-code consistency
 
-_Status: C2 run; its pre-registered table lands on the human value bar. C1 not run (no label
+_Status: C2 run and labeled; the decision table lands on keep. C1 not run (no label
 source). Pre-registration: the plan file's Experiment C section, written after an adversarial
 review (six lenses, adjudication, two refuters per high finding, 27 agents; seven findings
 stood). Harness: `software.sava.typesafe.evals.hardening` (`./gradlew :typesafe-evals:hardening`)
@@ -210,19 +253,24 @@ because the bar sits between them.
 | P(does_not_apply) correlates with paragraph length | r = -0.082 | abs(r) <= 0.8 | yes |
 | separation AUROC, SWAPPED over REAL (bootstrap 95% 0.836 to 0.874) | 0.855 | >= 0.85 | yes |
 | lift over the mutator-word baseline (0.617) | 0.238 | >= 0.10 | yes |
-| problems confirmed among the top 30 REAL rows | pending | >= 5 | |
-| **decision** | **value bar pending** | | |
+| problems confirmed among the top 30 REAL rows (30 read) | 8 | >= 5 | yes |
+| rows at P >= 0.8 confirmed fine (reported, not a kill) | 22 | reported | |
+| **decision** | **keep** | | |
 
 The separation bar is cleared by 0.005 with the interval straddling it: a pass, but a fragile
-one, and it should be read together with the split below. The decision now rests on the
-human value bar: `labeling-sheet.tsv` holds the 30 REAL rows with the highest
-P(does_not_apply), in id order and without scores (labels mis-filed / rotted / fine). The
-ranking is led by `KeyedFlatFileImpl.deleteEntry` in glam-sdk-java/services (four rows at
-P 0.99 to 1.00), `ScoredTable.scoreTables` and `ScoredTableMeta.scoreTables` in
-ravina-solana, and the `SolanaJsonRpcWebsocket` rows in sava-rpc whose labels record
-provenance; 17 of the 30 come from glam-sdk-java/services and 9 from sava-rpc. Five or more
-confirmed problems keep the candidate and propose `baselineNotesReport` in sava-build's
-plugin as a ranked review list; fewer records "no problem found at the top" and stops.
+one, and it should be read together with the split below. The value bar holds: of the 30
+REAL rows with the highest P(does_not_apply), the blind readers confirmed 8 as mis-filed
+(both readers agreed on all 30). The eight are concrete: four `KeyedFlatFileImpl.deleteEntry`
+rows (boundary, equality, and primitive-return mutants) filed under a paragraph that argues
+only that durability calls are unobservable; two `GlobalConfigCacheImpl.run` rows whose
+paragraph argues about null-state rechecks while the operator mutates the loop's timing
+guard; and the `scoreTables` rows in both `ScoredTable` and `ScoredTableMeta`, where the
+shared paragraph does not address the `remainingAccounts.size() < 2` break it is filed
+against. The other 22 rows at the top are fine, most of them provenance paragraphs that
+argue nothing, so the ranked list's top runs at about one real mis-filing per three rows.
+Verdict: keep; propose `baselineNotesReport` in sava-build's plugin as a ranked review list
+beside the existing label-presence check, and pre-register the reasoning-versus-provenance
+split for the next run.
 
 **Post-hoc, reported beside the bars and not in them.** 95 rows are `cannot_tell` in both
 arms (the paragraph records history rather than reasoning, so no description applies);

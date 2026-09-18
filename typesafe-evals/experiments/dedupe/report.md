@@ -53,6 +53,41 @@ Recording hits 540, misses 0; model jev-latest. Requests 540 (540 answered), inp
 - singletons: 7
 - refuter budget: 26 findings -> 12 groups
 
-## Bars
+## Bars (prose arm, 178 labeled pairs, gold histogram {2=110, 0=17, 1=51})
 
-No labels yet: fill `labeling-sheet.tsv` (label 0/1/2 per pair, needed_source y/n) and rerun with `--labels`.
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| merge safety (gold-0 pairs merged at >= 0.8) | 0 | 0 | yes |
+| suppression (recall on gold 2 at >= 0.8) | 0.400 | >= 0.700 | NO |
+| jev precision at recall >= 0.7 (t=0.5) | 0.899 | >= 0.950 | NO |
+| jev precision minus exact-line precision (0.653) | 0.246 | >= 0.200 | yes |
+| jev precision minus jaccard precision (0.683 at t=0.25) | 0.216 | >= 0.150 | yes |
+| middle recall (gold 1 as 1) | 0.608 | >= 0.500 | yes |
+| pearson(P(same), jaccard) | 0.586 | <= 0.800 | yes |
+| **keep** | **false** | all | |
+
+```
+gold \ predicted	0	1	2
+0	15	2	0
+1	7	31	13
+2	1	28	81
+```
+
+### Post-hoc same-defect rule (P(different) <= 0.2, gold 1 or 2 counts as same)
+
+| grouped | precision | recall | gold-0 pairs grouped |
+| --- | --- | --- | --- |
+| 134 | 1.000 | 0.832 | 0 |
+
+## Bars (ablation arm, 178 labeled pairs)
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| merge safety (gold-0 pairs merged at >= 0.8) | 0 | 0 | yes |
+| suppression (recall on gold 2 at >= 0.8) | 0.373 | >= 0.700 | NO |
+| jev precision at recall >= 0.7 (t=0.5) | 0.915 | >= 0.950 | NO |
+| jev precision minus exact-line precision (0.653) | 0.263 | >= 0.200 | yes |
+| jev precision minus jaccard precision (0.683 at t=0.25) | 0.233 | >= 0.150 | yes |
+| middle recall (gold 1 as 1) | 0.627 | >= 0.500 | yes |
+| pearson(P(same), jaccard) | 0.589 | <= 0.800 | yes |
+| **keep** | **false** | all | |

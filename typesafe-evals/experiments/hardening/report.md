@@ -42,9 +42,9 @@ AUROC 0.855 (bootstrap 95% 0.836 to 0.874), mutator-word baseline 0.617.
 | P(does_not_apply) correlates with paragraph length | -0.082 | |r| <= 0.8 | yes |
 | separation AUROC, SWAPPED over REAL | 0.855 | >= 0.85 | yes |
 | lift over the mutator-word baseline | 0.238 | >= 0.1 | yes |
-| problems confirmed among the top 30 REAL rows (0 read) | 0.000 | >= 5 | NO |
-| rows at P >= 0.8 confirmed fine (reported, not a kill) | 0.000 | reported | yes |
-| **decision** | **value bar pending** | | |
+| problems confirmed among the top 30 REAL rows (30 read) | 8.000 | >= 5 | yes |
+| rows at P >= 0.8 confirmed fine (reported, not a kill) | 22.000 | reported | yes |
+| **decision** | **keep** | | |
 
 Choices, REAL arm: {applies=363, cannot_tell=103, does_not_apply=178}; SWAPPED arm: {applies=27, cannot_tell=100, does_not_apply=517}.
 
