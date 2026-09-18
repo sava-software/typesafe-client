@@ -32,11 +32,13 @@ public final class HistoryMiner {
                       String newBody) {
   }
 
-  /// Main sources only: no tests, no generated code, no build output.
+  /// Main sources only: no tests, no generated code (`/generated/` or `/gen/` path segments;
+  /// callers also check for a `@generated` header), no build output.
   public static final Predicate<String> MAIN_SOURCES = path ->
       path.endsWith(".java")
           && !path.contains("/src/test/")
           && !path.contains("/generated/")
+          && !path.contains("/gen/")
           && !path.contains("/build/")
           && !path.endsWith("module-info.java")
           && !path.endsWith("package-info.java");

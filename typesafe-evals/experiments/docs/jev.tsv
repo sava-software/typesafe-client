@@ -1,0 +1,835 @@
+row_id	arm	choice	p_consistent	p_contradicted	p_not_checkable	confidence	baseline
+glam-sdk-java#sdk/src/main/java/systems/glam/sdk/GlamAccountClientImpl.java#GlamAccountClientImpl.adaptPermissions(GlamAccounts, PublicKey, int, long)	real	consistent	0.920	0.020	0.060	0.880	1.000
+glam-sdk-java#sdk/src/main/java/systems/glam/sdk/idl/programs/glam/jupiter/GlamJupiterProgramClient.java#GlamJupiterProgramClient.fixCPICallerRights(List<AccountMeta>)	real	consistent	0.870	0.040	0.090	0.800	1.000
+glam-sdk-java#sdk/src/main/java/systems/glam/sdk/lut/VaultTableBuilder.java#VaultTableBuilder.fetchAccountsNeeded(SolanaRpcClient)	real	not_checkable	0.080	0.010	0.910	0.860	0.333
+glam-sdk-java#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutor.java#BatchSqlExecutor.create(Class<T>, DataSource, String, int, StatementPreparer<T>, Duration, Backoff, LoopHeartbeat)	real	not_checkable	0.020	0.000	0.980	0.970	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java#BatchSqlExecutorImpl.IDLE_TICK_FLOOR_NANOS	real	not_checkable	0.200	0.000	0.800	0.700	0.500
+glam-sdk-java#services/src/main/java/systems/glam/services/db/sql/BatchSqlExecutorImpl.java#BatchSqlExecutorImpl.run()	real	consistent	0.970	0.030	0.000	0.960	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/io/FileUtils.java#FileUtils.MAX_ACCOUNT_DATA_LENGTH	real	consistent	0.790	0.020	0.190	0.680	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/mints/StakePoolCache.java#StakePoolCache.initCache(ExecutorService, Path, StakePoolAccounts, MarinadeAccounts, Duration, RpcCaller, LoopHeartbeat)	real	not_checkable	0.040	0.140	0.820	0.730	0.500
+glam-sdk-java#services/src/main/java/systems/glam/services/mints/StakePoolCacheImpl.java#StakePoolCacheImpl.run()	real	consistent	0.730	0.250	0.020	0.600	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcher.java#AccountFetcher.createFetcher(Duration, boolean, RpcCaller, Set<PublicKey>, LoopHeartbeat)	real	not_checkable	0.040	0.000	0.960	0.940	0.500
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.IDLE_TICK_FLOOR_NANOS	real	not_checkable	0.310	0.010	0.680	0.520	0.500
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.clearBatch()	real	not_checkable	0.270	0.020	0.710	0.560	0.500
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.clearBatch()	swapped	not_checkable	0.040	0.290	0.670	0.500	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.currentBatchSize()	real	not_checkable	0.020	0.060	0.920	0.880	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.currentBatchSize()	swapped	not_checkable	0.410	0.050	0.540	0.300	0.667
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.delay(Duration, long)	real	consistent	0.890	0.100	0.010	0.830	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.delay(Duration, long)	swapped	not_checkable	0.010	0.140	0.850	0.780	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.dispatch(AccountConsumer, List<AccountInfo<byte[]>>, Map<PublicKey, AccountInfo<byte[]>>)	real	consistent	0.890	0.010	0.100	0.840	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.dispatch(AccountConsumer, List<AccountInfo<byte[]>>, Map<PublicKey, AccountInfo<byte[]>>)	swapped	not_checkable	0.040	0.170	0.790	0.680	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.failCurrentBatches(RuntimeException)	real	consistent	0.930	0.050	0.020	0.900	0.333
+glam-sdk-java#services/src/main/java/systems/glam/services/rpc/AccountFetcherImpl.java#AccountFetcherImpl.failCurrentBatches(RuntimeException)	swapped	not_checkable	0.110	0.060	0.830	0.740	0.667
+glam-sdk-java#services/src/main/java/systems/glam/services/state/GlobalConfigCache.java#GlobalConfigCache.initCache(Path, PublicKey, PublicKey, SolanaAccounts, MintCache, RpcCaller, AccountFetcher, Duration, LoopHeartbeat)	real	not_checkable	0.040	0.020	0.940	0.910	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/state/GlobalConfigCacheImpl.java#GlobalConfigCacheImpl.run()	real	consistent	0.640	0.310	0.050	0.450	1.000
+glam-sdk-java#services/src/main/java/systems/glam/services/state/MinGlamStateAccount.java#MinGlamStateAccount.checkCount(int, byte[], int)	real	consistent	0.450	0.190	0.360	0.190	1.000
+http-servers#http-servers-core/src/main/java/software/sava/http_servers/core/handlers/HandlerUtil.java#HandlerUtil.parseRawParam(String, int, String)	real	consistent	0.980	0.020	0.000	0.960	0.500
+http-servers#http-servers-jdk/src/main/java/software/sava/http_servers/jdk/JdkController.java#JdkController.answerWithoutBody(HttpExchange, int)	real	consistent	0.750	0.170	0.080	0.630	0.611
+http-servers#http-servers-jetty/src/main/java/software/sava/http_servers/jetty/JettyServerBuilder.java#JettyServerBuilder.leasedThreads(QueuedThreadPool, ServerConnector)	real	consistent	0.560	0.150	0.290	0.340	0.667
+http-servers#http-servers-jetty/src/main/java/software/sava/http_servers/jetty/JettyServerBuilder.java#JettyServerBuilder.leasedThreads(QueuedThreadPool, ServerConnector)	swapped	not_checkable	0.440	0.030	0.530	0.290	0.500
+http-servers#http-servers-jetty/src/main/java/software/sava/http_servers/jetty/JettyServerBuilder.java#JettyServerBuilder.maxThreads(int, int)	real	consistent	0.730	0.230	0.040	0.600	0.000
+http-servers#http-servers-jetty/src/main/java/software/sava/http_servers/jetty/JettyServerBuilder.java#JettyServerBuilder.maxThreads(int, int)	swapped	consistent	0.430	0.410	0.160	0.140	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyController.java#NettyController.clientLeft(Throwable)	real	consistent	0.910	0.070	0.020	0.870	0.909
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyController.java#NettyController.clientLeft(Throwable)	swapped	not_checkable	0.000	0.020	0.980	0.960	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyController.java#NettyController.invoke(ChannelHandlerContext, NettyRequest, NettyHandler)	real	not_checkable	0.010	0.060	0.930	0.890	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyController.java#NettyController.invoke(ChannelHandlerContext, NettyRequest, NettyHandler)	swapped	consistent	0.710	0.160	0.130	0.570	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequest.java#NettyRequest.malformed()	real	consistent	0.520	0.030	0.450	0.280	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.admit(ChannelHandlerContext, HttpRequest)	real	consistent	0.780	0.180	0.040	0.680	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.admit(ChannelHandlerContext, HttpRequest)	swapped	not_checkable	0.340	0.030	0.630	0.440	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.answer(ChannelHandlerContext, Refusal)	real	consistent	0.590	0.260	0.150	0.380	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.answer(ChannelHandlerContext, Refusal)	swapped	contradicted	0.350	0.390	0.260	0.080	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.begin(HttpRequest)	real	contradicted	0.050	0.940	0.010	0.900	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.begin(HttpRequest)	swapped	not_checkable	0.250	0.090	0.660	0.500	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.checkIdle(ChannelHandlerContext)	real	consistent	0.750	0.170	0.080	0.610	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.checkIdle(ChannelHandlerContext)	swapped	contradicted	0.010	0.590	0.400	0.380	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.paused()	real	consistent	0.660	0.060	0.280	0.490	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.paused()	swapped	not_checkable	0.010	0.050	0.940	0.910	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.refusal(HttpRequest)	real	contradicted	0.340	0.650	0.010	0.480	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.refusal(HttpRequest)	swapped	contradicted	0.290	0.440	0.270	0.170	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.scheduleIdleCheck(ChannelHandlerContext, long)	real	consistent	0.940	0.030	0.030	0.900	0.333
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyRequestGate.java#NettyRequestGate.scheduleIdleCheck(ChannelHandlerContext, long)	swapped	not_checkable	0.410	0.080	0.510	0.270	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.<init>(int, int, Duration)	real	consistent	0.820	0.160	0.020	0.720	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_IDLE_TIMEOUT	real	consistent	0.870	0.020	0.110	0.820	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_IDLE_TIMEOUT	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_IO_THREADS	real	not_checkable	0.420	0.020	0.560	0.340	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_IO_THREADS	swapped	not_checkable	0.010	0.060	0.930	0.900	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_MAX_CONTENT_LENGTH	real	consistent	0.750	0.050	0.200	0.640	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/NettyServerBuilder.java#NettyServerBuilder.DEFAULT_MAX_CONTENT_LENGTH	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.closeAfter(FullHttpResponse)	real	consistent	0.710	0.120	0.170	0.570	0.750
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.closeAfter(FullHttpResponse)	swapped	not_checkable	0.010	0.230	0.760	0.650	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.emptyResponse(HttpResponseStatus)	real	consistent	0.860	0.050	0.090	0.800	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.emptyResponse(HttpResponseStatus)	swapped	contradicted	0.040	0.610	0.350	0.410	0.750
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.response(HttpResponse, String)	real	not_checkable	0.070	0.020	0.910	0.860	1.000
+http-servers#http-servers-netty/src/main/java/software/sava/http_servers/netty/ResponseUtil.java#ResponseUtil.response(HttpResponse, String)	swapped	not_checkable	0.020	0.360	0.620	0.440	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/PaymentPayload.java#PaymentPayload.fromBase64Header(String)	real	consistent	0.970	0.020	0.010	0.960	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/PaymentPayload.java#PaymentPayload.fromBase64Header(String)	swapped	consistent	0.580	0.400	0.020	0.360	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/PaymentPayload.java#PaymentPayload.parse(JsonIterator)	real	consistent	0.890	0.070	0.040	0.830	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/PaymentPayload.java#PaymentPayload.parse(JsonIterator)	swapped	contradicted	0.040	0.800	0.160	0.700	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SettlementCache.java#SettlementCache.DEFAULT_RETENTION	real	consistent	0.570	0.080	0.350	0.370	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SettlementResponse.java#SettlementResponse.failure(String, String, String, PublicKey)	real	consistent	0.930	0.040	0.020	0.900	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java#SvmExactSettler.<init>(SolanaAccounts, Signer, SolanaRpcClient)	real	consistent	0.980	0.010	0.010	0.970	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactSettler.java#SvmExactSettler.settle(PaymentPayload, PaymentRequirements)	real	consistent	1.000	0.000	0.000	0.990	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactVerifier.java#SvmExactVerifier.verify(PaymentPayload, PaymentRequirements)	real	consistent	0.920	0.030	0.050	0.880	0.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/SvmExactVerifier.java#SvmExactVerifier.verify(PaymentRequirements, byte[])	real	consistent	0.980	0.000	0.020	0.960	0.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.COMPUTE_BUDGET_SET_LIMIT	real	consistent	0.690	0.020	0.290	0.550	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.COMPUTE_BUDGET_SET_LIMIT	swapped	contradicted	0.090	0.690	0.220	0.550	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.COMPUTE_BUDGET_SET_PRICE	real	consistent	0.740	0.010	0.250	0.610	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.COMPUTE_BUDGET_SET_PRICE	swapped	not_checkable	0.140	0.320	0.540	0.310	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.LIGHTHOUSE_PROGRAM	real	not_checkable	0.010	0.170	0.820	0.740	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.LIGHTHOUSE_PROGRAM	swapped	not_checkable	0.010	0.220	0.770	0.660	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MAX_COMPUTE_UNIT_PRICE_MICRO_LAMPORTS	real	consistent	0.590	0.120	0.290	0.380	0.800
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MAX_COMPUTE_UNIT_PRICE_MICRO_LAMPORTS	swapped	contradicted	0.010	0.740	0.250	0.600	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MAX_MEMO_BYTES	real	consistent	0.820	0.010	0.170	0.730	0.500
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MAX_MEMO_BYTES	swapped	not_checkable	0.010	0.400	0.590	0.390	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MEMO_PROGRAM_V2	real	not_checkable	0.210	0.050	0.740	0.600	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.MEMO_PROGRAM_V2	swapped	contradicted	0.010	0.530	0.460	0.290	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.PAYMENT_HEADER	real	not_checkable	0.450	0.020	0.530	0.300	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.PAYMENT_HEADER	swapped	not_checkable	0.200	0.030	0.770	0.670	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.PAYMENT_RESPONSE_HEADER	real	not_checkable	0.420	0.020	0.560	0.330	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.PAYMENT_RESPONSE_HEADER	swapped	not_checkable	0.010	0.190	0.800	0.690	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.SOLANA_MAINNET	real	consistent	0.800	0.130	0.070	0.700	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.SOLANA_MAINNET	swapped	not_checkable	0.010	0.180	0.810	0.710	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.SOLANA_NETWORK_PREFIX	real	consistent	0.900	0.040	0.060	0.860	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.SOLANA_NETWORK_PREFIX	swapped	contradicted	0.180	0.680	0.140	0.520	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.X402_VERSION	real	consistent	0.950	0.000	0.050	0.920	0.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402.java#X402.X402_VERSION	swapped	not_checkable	0.010	0.180	0.810	0.720	1.000
+http-servers#http-servers-sava/src/main/java/software/sava/http_servers/sava/x402/X402Gate.java#X402Gate.<init>(QueryHandler, PaymentRequirements, Resource, SvmExactSettler)	real	consistent	0.470	0.230	0.300	0.210	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.ABORT_PACE_MIN_MILLIS	real	not_checkable	0.300	0.010	0.690	0.530	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.ABORT_PACE_MIN_MILLIS	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.CYCLE	real	contradicted	0.030	0.830	0.140	0.750	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.CYCLE	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.abortMidBody()	real	consistent	0.860	0.100	0.040	0.800	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.abortMidBody()	swapped	not_checkable	0.340	0.260	0.400	0.100	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.absoluteForm()	real	consistent	0.630	0.050	0.320	0.440	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.absoluteForm()	swapped	not_checkable	0.030	0.270	0.700	0.550	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.afterwards(Socket, InputStream, Backend.Closes, Case, String)	real	consistent	0.370	0.280	0.350	0.060	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.afterwards(Socket, InputStream, Backend.Closes, Case, String)	swapped	not_checkable	0.000	0.110	0.890	0.830	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.answered(Case, Backend.Expectation, RawHttp.Response)	real	consistent	0.910	0.040	0.050	0.860	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.answered(Case, Backend.Expectation, RawHttp.Response)	swapped	not_checkable	0.080	0.160	0.760	0.640	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.attempted(Stats, Case)	real	not_checkable	0.130	0.040	0.830	0.760	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.attempted(Stats, Case)	swapped	not_checkable	0.310	0.140	0.550	0.330	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectContinueOverCap()	real	consistent	0.950	0.040	0.010	0.920	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectContinueOverCap()	swapped	not_checkable	0.060	0.110	0.830	0.760	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectKept(Socket, InputStream, Case, String)	real	consistent	0.940	0.040	0.020	0.910	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectKept(Socket, InputStream, Case, String)	swapped	consistent	0.600	0.120	0.280	0.400	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectUnsupported()	real	consistent	0.960	0.020	0.020	0.940	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.expectUnsupported()	swapped	contradicted	0.350	0.570	0.080	0.340	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.http10()	real	consistent	0.600	0.170	0.230	0.400	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.http10()	swapped	contradicted	0.030	0.550	0.420	0.330	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.malformedLine()	real	consistent	0.730	0.170	0.100	0.590	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.malformedLine()	swapped	not_checkable	0.030	0.290	0.680	0.510	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.noHost()	real	not_checkable	0.300	0.110	0.590	0.380	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.noHost()	swapped	not_checkable	0.420	0.030	0.550	0.320	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.oversized()	real	consistent	0.790	0.090	0.120	0.680	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.oversized()	swapped	not_checkable	0.020	0.130	0.850	0.780	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.unexercised(Stats)	real	consistent	0.730	0.070	0.200	0.580	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Abuser.java#Abuser.unexercised(Stats)	swapped	not_checkable	0.010	0.270	0.720	0.580	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.absoluteForm()	real	not_checkable	0.090	0.020	0.890	0.830	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.absoluteForm()	swapped	not_checkable	0.010	0.000	0.990	0.990	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.bodyCap()	real	not_checkable	0.180	0.010	0.810	0.730	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.bodyCap()	swapped	not_checkable	0.010	0.000	0.990	0.990	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.http10()	real	not_checkable	0.140	0.030	0.830	0.740	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.http10()	swapped	not_checkable	0.050	0.020	0.930	0.900	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.idleAfterAccept()	real	not_checkable	0.180	0.020	0.800	0.700	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.idleAfterAccept()	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.idleTimeoutMillis()	real	not_checkable	0.280	0.050	0.670	0.520	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.idleTimeoutMillis()	swapped	not_checkable	0.030	0.000	0.970	0.960	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.malformed()	real	not_checkable	0.020	0.030	0.950	0.930	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.malformed()	swapped	not_checkable	0.070	0.060	0.870	0.820	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.noHost()	real	not_checkable	0.150	0.010	0.840	0.760	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.noHost()	swapped	not_checkable	0.020	0.030	0.950	0.930	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.of(String)	real	consistent	0.990	0.010	0.000	0.980	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.of(String)	swapped	not_checkable	0.040	0.050	0.910	0.870	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.pipelineCloseStrict()	real	not_checkable	0.260	0.100	0.640	0.460	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.pipelineCloseStrict()	swapped	contradicted	0.010	0.870	0.120	0.800	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.strictExpect()	real	not_checkable	0.210	0.080	0.710	0.570	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.strictExpect()	swapped	consistent	0.680	0.030	0.290	0.530	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.unsupportedExpect()	real	not_checkable	0.070	0.030	0.900	0.860	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Backend.java#Backend.unsupportedExpect()	swapped	not_checkable	0.040	0.080	0.880	0.820	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/ClientWorker.java#ClientWorker.echo()	real	consistent	0.850	0.040	0.110	0.770	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport$Pass.nmtTypes	real	consistent	0.430	0.160	0.410	0.150	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport$Pass.nmtTypes	swapped	not_checkable	0.010	0.010	0.980	0.970	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.DOMINANT_SHARE	real	consistent	0.760	0.030	0.210	0.640	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.DOMINANT_SHARE	swapped	not_checkable	0.000	0.090	0.910	0.850	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.className(RecordedClass)	real	consistent	0.970	0.030	0.000	0.950	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.className(RecordedClass)	swapped	not_checkable	0.020	0.370	0.610	0.420	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.referrerPath(RecordedObject)	real	consistent	0.940	0.050	0.010	0.910	0.667
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.referrerPath(RecordedObject)	swapped	not_checkable	0.060	0.020	0.920	0.880	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.value(RecordedObject, String)	real	not_checkable	0.240	0.220	0.540	0.320	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/JfrReport.java#JfrReport.value(RecordedObject, String)	swapped	not_checkable	0.310	0.030	0.660	0.500	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/LatencyHistogram.java#LatencyHistogram.percentileMillis(double)	real	consistent	0.960	0.040	0.000	0.940	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Pipeliner.java#Pipeliner.closeIndex(int)	real	contradicted	0.490	0.490	0.020	0.240	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.awaitClose(InputStream)	real	consistent	0.710	0.080	0.210	0.560	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.awaitClose(InputStream)	swapped	not_checkable	0.040	0.160	0.800	0.700	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.closeOutcome(InputStream)	real	consistent	0.560	0.280	0.160	0.340	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.closeOutcome(InputStream)	swapped	contradicted	0.120	0.870	0.010	0.800	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.connect(String, int, int)	real	consistent	0.570	0.060	0.370	0.350	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.connect(String, int, int)	swapped	not_checkable	0.020	0.040	0.940	0.910	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.isReset(IOException)	real	consistent	0.700	0.050	0.250	0.550	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.isReset(IOException)	swapped	not_checkable	0.020	0.280	0.700	0.550	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.readResponse(InputStream)	real	consistent	0.750	0.230	0.020	0.630	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/RawHttp.java#RawHttp.readResponse(InputStream)	swapped	contradicted	0.340	0.540	0.120	0.310	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakBytes.java#SoakBytes.big(int)	real	consistent	0.860	0.100	0.040	0.780	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakBytes.java#SoakBytes.big(int)	swapped	contradicted	0.020	0.800	0.180	0.700	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakBytes.java#SoakBytes.firstMismatch(byte[])	real	consistent	0.810	0.190	0.000	0.720	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakBytes.java#SoakBytes.firstMismatch(byte[])	swapped	contradicted	0.030	0.960	0.010	0.930	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakLoad.java#SoakLoad.FLOOR_RPS_PER_CONNECTION	real	consistent	0.520	0.010	0.470	0.280	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakLoad.java#SoakLoad.start(String, Stats, Runnable)	real	consistent	0.980	0.020	0.000	0.960	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.awaitListening(String, int)	real	consistent	0.680	0.040	0.280	0.520	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.awaitListening(String, int)	swapped	contradicted	0.020	0.540	0.440	0.300	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.openFileDescriptors()	real	consistent	0.530	0.220	0.250	0.290	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.openFileDescriptors()	swapped	not_checkable	0.020	0.430	0.550	0.330	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.register(HttpServerBuilder)	real	consistent	0.950	0.040	0.010	0.930	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.register(HttpServerBuilder)	swapped	not_checkable	0.010	0.000	0.990	0.980	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.sample(LogCounters, JfrCounters)	real	consistent	0.720	0.270	0.010	0.580	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.sample(LogCounters, JfrCounters)	swapped	not_checkable	0.060	0.120	0.820	0.730	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.start(String, String, int, Executor)	real	consistent	0.980	0.010	0.010	0.960	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/SoakServer.java#SoakServer.start(String, String, int, Executor)	swapped	not_checkable	0.020	0.010	0.970	0.960	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.appendDetails(StringBuilder)	real	not_checkable	0.270	0.320	0.410	0.110	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.appendDetails(StringBuilder)	swapped	not_checkable	0.010	0.110	0.880	0.820	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.casePassed()	real	contradicted	0.360	0.400	0.240	0.100	0.500
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.casePassed()	swapped	contradicted	0.020	0.830	0.150	0.740	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.counterSum(Predicate<String>)	real	consistent	0.990	0.010	0.000	0.980	0.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.counterSum(Predicate<String>)	swapped	not_checkable	0.270	0.030	0.700	0.560	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.latency(String, long, boolean)	real	consistent	0.790	0.200	0.010	0.680	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.latency(String, long, boolean)	swapped	contradicted	0.020	0.730	0.250	0.600	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.ok()	real	not_checkable	0.080	0.170	0.750	0.630	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.ok()	swapped	consistent	0.460	0.370	0.170	0.190	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.report()	real	not_checkable	0.460	0.040	0.500	0.240	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.report()	swapped	contradicted	0.060	0.830	0.110	0.750	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.request(int)	real	consistent	0.590	0.150	0.260	0.380	1.000
+http-servers#http-servers-soak/src/main/java/software/sava/http_servers/soak/Stats.java#Stats.request(int)	swapped	not_checkable	0.090	0.020	0.890	0.840	1.000
+incident-client#incident-core/src/main/java/software/sava/incident/core/api/IncidentClients.java#IncidentClients.loadFactory(String)	real	not_checkable	0.020	0.110	0.870	0.800	1.000
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java#JsonUtil.escapeJson(String)	real	consistent	0.920	0.020	0.060	0.880	0.667
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java#JsonUtil.escapeJson(String)	swapped	not_checkable	0.030	0.030	0.940	0.920	1.000
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java#JsonUtil.escapeJsonRemoveNewLines(String)	real	consistent	0.980	0.010	0.010	0.980	0.500
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/JsonUtil.java#JsonUtil.escapeJsonRemoveNewLines(String)	swapped	consistent	0.500	0.470	0.030	0.260	0.667
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/Rfc3339.java#Rfc3339.FORMATTER	real	consistent	0.960	0.010	0.030	0.950	1.000
+incident-client#incident-core/src/main/java/software/sava/incident/core/json/Rfc3339.java#Rfc3339.format(ZonedDateTime)	real	not_checkable	0.470	0.010	0.520	0.280	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$Builder.build()	real	consistent	0.980	0.010	0.010	0.970	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$Builder.build()	swapped	not_checkable	0.010	0.120	0.870	0.790	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$Builder.customFieldValues(Map<String, String>)	real	consistent	0.820	0.120	0.060	0.730	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$Builder.customFieldValues(Map<String, String>)	swapped	not_checkable	0.010	0.030	0.960	0.940	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$CustomFieldEntry.<init>(String, String)	real	consistent	0.950	0.000	0.050	0.920	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$CustomFieldEntry.<init>(String, String)	swapped	contradicted	0.050	0.700	0.250	0.540	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$IncidentRoleAssignment.<init>(String, String)	real	consistent	0.920	0.000	0.080	0.870	0.667
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequest.java#CreateIncidentRequest$IncidentRoleAssignment.<init>(String, String)	swapped	consistent	0.890	0.010	0.100	0.850	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.customFieldEntryJson(CustomFieldEntry)	real	consistent	0.750	0.200	0.050	0.620	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.customFieldEntryJson(CustomFieldEntry)	swapped	contradicted	0.390	0.530	0.080	0.290	0.750
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.customFieldValueJson(CustomFieldValue)	real	consistent	0.940	0.060	0.000	0.900	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.customFieldValueJson(CustomFieldValue)	swapped	contradicted	0.050	0.720	0.230	0.570	0.750
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.incidentTimestampValueJson(IncidentTimestampValue)	real	consistent	0.960	0.030	0.010	0.950	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentRequestRecord.java#CreateIncidentRequestRecord.incidentTimestampValueJson(IncidentTimestampValue)	swapped	not_checkable	0.070	0.200	0.730	0.590	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/CreateIncidentResponseRecord.java#CreateIncidentResponseRecord$Parser.parseIdName(JsonIterator)	real	contradicted	0.260	0.490	0.250	0.230	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/IncidentIoClient.java#IncidentIoClient.incidentClientBuilder()	real	consistent	0.640	0.300	0.060	0.450	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/IncidentIoIncidentClient.java#IncidentIoIncidentClient$Builder.incidentTimestampId(String)	real	consistent	0.910	0.020	0.070	0.870	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/IncidentIoIncidentClient.java#IncidentIoIncidentClient$Builder.incidentTimestampId(String)	swapped	not_checkable	0.010	0.020	0.970	0.950	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/IncidentIoIncidentClient.java#IncidentIoIncidentClient.summaryOf(IncidentAlert)	real	consistent	0.970	0.010	0.020	0.950	0.571
+incident-client#incident-io/src/main/java/software/sava/incident/io/IncidentIoIncidentClient.java#IncidentIoIncidentClient.summaryOf(IncidentAlert)	swapped	not_checkable	0.010	0.160	0.830	0.750	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig$Parser.strictMatcher(E[], String)	real	consistent	0.980	0.010	0.010	0.970	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig$Parser.strictMatcher(E[], String)	swapped	contradicted	0.010	0.740	0.250	0.610	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig.createIncidentClientBuilder(IncidentIoClient)	real	consistent	0.850	0.140	0.010	0.780	0.250
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig.createIncidentClientBuilder(IncidentIoClient)	swapped	not_checkable	0.170	0.300	0.530	0.290	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig.incidentTimestampId()	real	consistent	0.660	0.090	0.250	0.500	0.500
+incident-client#incident-io/src/main/java/software/sava/incident/io/config/IncidentIoConfig.java#IncidentIoConfig.incidentTimestampId()	swapped	contradicted	0.100	0.610	0.290	0.410	1.000
+incident-client#incident-io/src/main/java/software/sava/incident/io/exceptions/IncidentIoRequestException.java#IncidentIoRequestException.errorCode()	real	contradicted	0.020	0.500	0.480	0.260	1.000
+incident-client#incident-pagerduty/src/main/java/software/sava/incident/pagerduty/event/client/PagerDutyEventClient.java#PagerDutyEventClient.asIncidentClient()	real	consistent	0.800	0.150	0.050	0.700	0.000
+incident-client#incident-pagerduty/src/main/java/software/sava/incident/pagerduty/event/client/PagerDutyIncidentClient.java#PagerDutyIncidentClient.UNKNOWN_SOURCE	real	not_checkable	0.460	0.010	0.530	0.300	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/TelegramTextFormat.java#TelegramTextFormat.MAX_TEXT_LENGTH	real	consistent	0.610	0.100	0.290	0.420	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookClient.java#WebhookClient$Builder.header(String, String)	real	contradicted	0.220	0.660	0.120	0.490	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookClient.java#WebhookClient$Builder.header(String, String)	swapped	not_checkable	0.020	0.100	0.880	0.820	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookClient.java#WebhookClient.incidentClient(WebhookFormat)	real	consistent	0.780	0.100	0.120	0.670	0.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookClient.java#WebhookClient.incidentClient(WebhookFormat)	swapped	not_checkable	0.010	0.310	0.680	0.510	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java#WebhookFormats.renderPlainText(IncidentAlert)	real	consistent	0.980	0.010	0.010	0.970	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java#WebhookFormats.renderPlainText(IncidentAlert)	swapped	contradicted	0.030	0.940	0.030	0.910	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java#WebhookFormats.slackText(IncidentAlert)	real	consistent	0.900	0.070	0.030	0.850	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookFormats.java#WebhookFormats.slackText(IncidentAlert)	swapped	consistent	0.560	0.380	0.060	0.340	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/WebhookIncidentClient.java#WebhookIncidentClient.DELIVERED	real	not_checkable	0.020	0.070	0.910	0.860	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.createConfig()	real	consistent	0.920	0.060	0.020	0.880	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.createConfig()	swapped	not_checkable	0.100	0.160	0.740	0.610	0.500
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.parseConfig(Properties)	real	consistent	0.780	0.160	0.060	0.670	0.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.parseConfig(Properties)	swapped	not_checkable	0.110	0.220	0.670	0.510	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.prefix()	real	not_checkable	0.140	0.220	0.640	0.470	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig$Parser.prefix()	swapped	contradicted	0.060	0.740	0.200	0.610	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig.chatId()	real	consistent	0.520	0.030	0.450	0.280	0.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig.chatId()	swapped	not_checkable	0.070	0.140	0.790	0.680	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig.headers()	real	contradicted	0.110	0.510	0.380	0.260	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/config/WebhookConfig.java#WebhookConfig.headers()	swapped	not_checkable	0.010	0.180	0.810	0.710	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/exceptions/WebhookRequestException.java#WebhookRequestException.body()	real	contradicted	0.330	0.440	0.230	0.170	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/exceptions/WebhookRequestException.java#WebhookRequestException.body()	swapped	contradicted	0.010	0.690	0.300	0.530	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/exceptions/WebhookRequestException.java#WebhookRequestException.errorCode()	real	not_checkable	0.220	0.160	0.620	0.430	1.000
+incident-client#incident-webhook/src/main/java/software/sava/incident/webhook/exceptions/WebhookRequestException.java#WebhookRequestException.errorCode()	swapped	contradicted	0.050	0.510	0.440	0.260	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.LOW_POOL	real	consistent	0.670	0.220	0.110	0.510	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.LOW_POOL	swapped	not_checkable	0.030	0.390	0.580	0.370	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.MIXED_POOL	real	consistent	0.790	0.120	0.090	0.700	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.MIXED_POOL	swapped	consistent	0.620	0.310	0.070	0.430	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.SPECIAL	real	consistent	0.800	0.060	0.140	0.700	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.SPECIAL	swapped	not_checkable	0.100	0.110	0.790	0.700	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.ascii(int, int, int)	real	consistent	0.890	0.070	0.040	0.840	0.333
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.ascii(int, int, int)	swapped	not_checkable	0.020	0.050	0.930	0.910	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.chars()	real	consistent	0.900	0.020	0.080	0.860	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.chars()	swapped	consistent	0.590	0.280	0.130	0.380	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsBranchless()	real	consistent	0.780	0.050	0.170	0.670	0.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsBranchless()	swapped	consistent	0.690	0.190	0.120	0.530	0.750
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsNoGuards()	real	consistent	0.630	0.270	0.100	0.440	0.857
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsNoGuards()	swapped	not_checkable	0.330	0.070	0.600	0.400	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsNoTable()	real	consistent	0.850	0.070	0.080	0.770	0.750
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.charsNoTable()	swapped	consistent	0.870	0.080	0.050	0.790	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runs()	real	consistent	0.870	0.070	0.060	0.810	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runs()	swapped	contradicted	0.220	0.740	0.040	0.610	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runsClean()	real	consistent	0.650	0.050	0.300	0.480	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runsClean()	swapped	contradicted	0.080	0.730	0.190	0.580	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runsTable()	real	consistent	0.760	0.200	0.040	0.640	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.runsTable()	swapped	not_checkable	0.070	0.350	0.580	0.370	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.specialBranchless(char)	real	consistent	0.880	0.080	0.040	0.820	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/EscapeBench.java#EscapeBench.specialBranchless(char)	swapped	not_checkable	0.010	0.050	0.940	0.910	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/MigrationBench.java#MigrationBench.CHARS_META_PARSER	real	not_checkable	0.180	0.140	0.680	0.530	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/SourceBench.java#SourceBench.string_toChars()	real	consistent	0.970	0.010	0.020	0.950	0.667
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/SourceBench.java#SourceBench.string_toChars()	swapped	not_checkable	0.050	0.050	0.900	0.850	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/SourceBench.java#SourceBench.walk(JsonIterator)	real	not_checkable	0.450	0.070	0.480	0.210	1.000
+json-iterator#jmh/src/jmh/java/systems/comodal/jsoniter/jmh/SourceBench.java#SourceBench.walk(JsonIterator)	swapped	not_checkable	0.010	0.040	0.950	0.940	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.ERROR_CONTEXT_RADIUS	real	not_checkable	0.320	0.070	0.610	0.410	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.contextWindow(int)	real	consistent	1.000	0.000	0.000	0.990	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.contextWindow(int)	swapped	consistent	0.890	0.080	0.030	0.820	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.intDigit(int)	real	consistent	0.480	0.470	0.050	0.220	0.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.intDigit(int)	swapped	not_checkable	0.010	0.400	0.590	0.390	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.reportError(String, String)	real	consistent	0.710	0.100	0.190	0.560	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.reportError(String, String)	swapped	not_checkable	0.030	0.150	0.820	0.730	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.skipLiteral(String, String, String)	real	consistent	0.860	0.110	0.030	0.790	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BaseJsonIterator.java#BaseJsonIterator.skipLiteral(String, String, String)	swapped	not_checkable	0.010	0.470	0.520	0.280	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.doubleReusableCharBuffer()	real	consistent	0.680	0.280	0.040	0.520	0.800
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.doubleReusableCharBuffer()	swapped	contradicted	0.020	0.900	0.080	0.850	0.750
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.isContinuation(int)	real	consistent	0.630	0.040	0.330	0.450	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.isContinuation(int)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.parseEscapedBase64String()	real	consistent	0.890	0.040	0.070	0.830	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.parseEscapedBase64String()	swapped	not_checkable	0.020	0.390	0.590	0.390	0.750
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.parseFieldNameSlow()	real	consistent	0.920	0.070	0.010	0.880	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.parseFieldNameSlow()	swapped	not_checkable	0.020	0.190	0.790	0.680	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.widenToCharBuf(int)	real	consistent	0.950	0.050	0.000	0.920	0.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/BytesJsonIterator.java#BytesJsonIterator.widenToCharBuf(int)	swapped	not_checkable	0.360	0.260	0.380	0.070	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.computeFloat(boolean, long, long)	real	consistent	0.500	0.420	0.080	0.240	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.computeFloat(boolean, long, long)	swapped	contradicted	0.010	0.840	0.150	0.750	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.parse(char[], int, int)	real	not_checkable	0.090	0.030	0.880	0.820	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.parse(char[], int, int)	swapped	not_checkable	0.080	0.200	0.720	0.570	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.parseFloat(char[], int, int)	real	contradicted	0.220	0.430	0.350	0.150	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/DoubleParser.java#DoubleParser.parseFloat(char[], int, int)	swapped	not_checkable	0.190	0.100	0.710	0.570	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcher(E[])	real	not_checkable	0.440	0.030	0.530	0.300	0.800
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcher(E[])	swapped	not_checkable	0.060	0.210	0.730	0.600	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcher(E[], Function<E, String>)	real	consistent	0.610	0.090	0.300	0.430	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcher(E[], Function<E, String>)	swapped	not_checkable	0.150	0.180	0.670	0.490	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcherIgnoreCase(E[])	real	not_checkable	0.470	0.010	0.520	0.280	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcherIgnoreCase(E[])	swapped	not_checkable	0.000	0.020	0.980	0.960	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcherIgnoreCase(E[], Function<E, String>)	real	consistent	0.980	0.000	0.020	0.970	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.enumMatcherIgnoreCase(E[], Function<E, String>)	swapped	not_checkable	0.020	0.210	0.770	0.650	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.equals(byte[], char[], int, int)	real	consistent	0.700	0.160	0.140	0.540	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.equals(byte[], char[], int, int)	swapped	contradicted	0.030	0.950	0.020	0.930	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.hash(byte[], int, int)	real	consistent	0.770	0.140	0.090	0.660	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.hash(byte[], int, int)	swapped	not_checkable	0.050	0.180	0.770	0.660	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.match(byte[], int, int)	real	consistent	0.980	0.010	0.010	0.980	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.match(byte[], int, int)	swapped	consistent	0.410	0.220	0.370	0.110	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.match(char[], int, int)	real	consistent	0.690	0.260	0.050	0.530	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.match(char[], int, int)	swapped	consistent	0.620	0.120	0.260	0.430	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.of(FieldMatcher, String...)	real	consistent	0.860	0.060	0.080	0.780	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/FieldMatcher.java#FieldMatcher.of(FieldMatcher, String...)	swapped	contradicted	0.010	0.680	0.310	0.510	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/InstantParser.java#InstantParser.DAYS_0000_TO_1970	real	consistent	0.800	0.130	0.070	0.690	0.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JIUtil.java#JIUtil.escapeJson(String)	real	consistent	0.930	0.060	0.010	0.890	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JIUtil.java#JIUtil.escapeJson(String)	swapped	contradicted	0.320	0.370	0.310	0.060	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JIUtil.java#JIUtil.needsEscape(char)	real	consistent	0.880	0.050	0.070	0.820	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JIUtil.java#JIUtil.needsEscape(char)	swapped	consistent	0.730	0.050	0.220	0.600	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.context()	real	consistent	0.570	0.040	0.390	0.350	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.context()	swapped	not_checkable	0.410	0.070	0.520	0.280	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.offset()	real	consistent	0.590	0.050	0.360	0.380	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.offset()	swapped	not_checkable	0.190	0.110	0.700	0.560	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.op()	real	not_checkable	0.400	0.070	0.530	0.290	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonException.java#JsonException.op()	swapped	not_checkable	0.070	0.440	0.490	0.240	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.notNull()	real	consistent	0.620	0.080	0.300	0.430	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.notNull()	swapped	contradicted	0.150	0.760	0.090	0.640	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(FieldMatcher, P)	real	not_checkable	0.220	0.200	0.580	0.380	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(FieldMatcher, P)	swapped	contradicted	0.010	0.570	0.420	0.350	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(P)	real	consistent	0.710	0.240	0.050	0.560	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(P)	swapped	contradicted	0.010	0.650	0.340	0.480	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(P, Function<P, R>)	real	consistent	0.530	0.210	0.260	0.290	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.parseObject(P, Function<P, R>)	swapped	not_checkable	0.010	0.380	0.610	0.420	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readBooleanOr(boolean)	real	consistent	0.910	0.080	0.010	0.850	0.250
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readBooleanOr(boolean)	swapped	not_checkable	0.040	0.250	0.710	0.570	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray()	real	not_checkable	0.100	0.090	0.810	0.720	0.833
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray()	swapped	not_checkable	0.010	0.090	0.900	0.850	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray(byte[])	real	contradicted	0.150	0.840	0.010	0.750	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray(byte[])	swapped	not_checkable	0.020	0.140	0.840	0.770	0.889
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray(int)	real	consistent	0.880	0.120	0.000	0.810	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readByteArray(int)	swapped	not_checkable	0.020	0.140	0.840	0.760	0.889
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readCollection(C, Function<JsonIterator, T>)	real	consistent	0.870	0.080	0.050	0.810	0.571
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readCollection(C, Function<JsonIterator, T>)	swapped	consistent	0.650	0.300	0.050	0.470	0.667
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readFully(InputStream)	real	consistent	0.890	0.100	0.010	0.830	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readFully(InputStream)	swapped	not_checkable	0.000	0.030	0.970	0.940	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readIntArray()	real	not_checkable	0.110	0.060	0.830	0.750	0.750
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readIntArray()	swapped	contradicted	0.040	0.610	0.350	0.420	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readIntArray(int)	real	consistent	0.890	0.110	0.000	0.830	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readIntArray(int)	swapped	contradicted	0.230	0.690	0.080	0.540	0.750
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readList(Function<JsonIterator, T>)	real	consistent	0.620	0.070	0.310	0.430	0.500
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readList(Function<JsonIterator, T>)	swapped	not_checkable	0.020	0.450	0.530	0.290	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readList(int, Function<JsonIterator, T>)	real	consistent	0.960	0.010	0.030	0.940	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readList(int, Function<JsonIterator, T>)	swapped	not_checkable	0.010	0.480	0.510	0.250	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readLongArray()	real	not_checkable	0.410	0.100	0.490	0.230	0.750
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readLongArray()	swapped	contradicted	0.010	0.620	0.370	0.430	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readLongOr(long)	real	consistent	0.930	0.070	0.000	0.890	0.625
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readLongOr(long)	swapped	contradicted	0.020	0.840	0.140	0.770	0.667
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(M, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	real	consistent	0.870	0.070	0.060	0.800	0.667
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(M, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	swapped	not_checkable	0.010	0.220	0.770	0.660	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(M, Function<JsonIterator, V>, Function<V, K>)	real	consistent	0.750	0.240	0.010	0.620	0.600
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(M, Function<JsonIterator, V>, Function<V, K>)	swapped	not_checkable	0.010	0.210	0.780	0.660	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(int, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	real	consistent	0.920	0.020	0.060	0.890	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(int, CharBufferFunction<K>, BiFunction<K, JsonIterator, V>)	swapped	not_checkable	0.000	0.100	0.900	0.840	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(int, Function<JsonIterator, V>, Function<V, K>)	real	consistent	0.860	0.050	0.090	0.800	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readMap(int, Function<JsonIterator, V>, Function<V, K>)	swapped	not_checkable	0.000	0.150	0.850	0.770	1.000
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readOrNull(Function<JsonIterator, T>)	real	consistent	0.820	0.140	0.040	0.730	0.333
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readOrNull(Function<JsonIterator, T>)	swapped	contradicted	0.120	0.700	0.180	0.550	0.857
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readOrNull(ValueType, Function<JsonIterator, T>)	real	consistent	0.960	0.040	0.000	0.930	0.600
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/JsonIterator.java#JsonIterator.readOrNull(ValueType, Function<JsonIterator, T>)	swapped	contradicted	0.230	0.710	0.060	0.560	0.714
+json-iterator#json-iterator/src/main/java/systems/comodal/jsoniter/ValueType.java#ValueType.of(char)	real	contradicted	0.410	0.540	0.050	0.310	1.000
+ravina#ravina-core/src/main/java/software/sava/services/core/NanoClock.java#NanoClock.currentTimeMillis()	real	consistent	0.890	0.060	0.050	0.850	0.667
+ravina#ravina-core/src/main/java/software/sava/services/core/remote/call/BackoffConfig.java#BackoffConfig.delayUnit(TimeUnit)	real	consistent	0.860	0.080	0.060	0.790	0.000
+ravina#ravina-core/src/main/java/software/sava/services/core/request_capacity/CapacityConfig.java#CapacityConfig$Parser.capacityFromDuration(Duration, int, Duration)	real	consistent	0.680	0.300	0.020	0.530	0.250
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoService.java#EpochInfoService.numSamples(Duration)	real	contradicted	0.280	0.690	0.030	0.540	0.333
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.MAX_PERFORMANCE_SAMPLES	real	not_checkable	0.330	0.010	0.660	0.500	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.MAX_PERFORMANCE_SAMPLES	swapped	not_checkable	0.010	0.000	0.990	0.990	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.STALE_EPOCH_FETCH	real	consistent	0.580	0.200	0.220	0.360	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.STALE_EPOCH_FETCH	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.checkCycle(Cycle, boolean)	real	consistent	0.870	0.120	0.010	0.810	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.checkCycle(Cycle, boolean)	swapped	contradicted	0.240	0.580	0.180	0.360	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.epochLogMessage(Epoch, Epoch, long)	real	consistent	0.950	0.010	0.040	0.930	0.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.epochLogMessage(Epoch, Epoch, long)	swapped	not_checkable	0.010	0.390	0.600	0.410	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.newCycle(Epoch, long)	real	contradicted	0.060	0.470	0.470	0.210	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.newCycle(Epoch, long)	swapped	not_checkable	0.060	0.030	0.910	0.860	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.start()	real	consistent	0.600	0.340	0.060	0.390	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/EpochInfoServiceImpl.java#EpochInfoServiceImpl.start()	swapped	contradicted	0.260	0.510	0.230	0.260	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.DEFAULT_MAX_MILLIS_PER_SLOT	real	not_checkable	0.210	0.040	0.750	0.620	0.333
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.DEFAULT_MAX_MILLIS_PER_SLOT	swapped	consistent	0.620	0.060	0.320	0.430	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.DEFAULT_MIN_MILLIS_PER_SLOT	real	consistent	0.900	0.040	0.060	0.850	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.DEFAULT_MIN_MILLIS_PER_SLOT	swapped	not_checkable	0.080	0.180	0.740	0.610	0.333
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.MIN_TARGET_MILLIS_PER_SLOT	real	consistent	0.880	0.010	0.110	0.820	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.MIN_TARGET_MILLIS_PER_SLOT	swapped	not_checkable	0.070	0.050	0.880	0.830	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.calculateStats(List<PerfSample>)	real	consistent	0.690	0.020	0.290	0.540	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.calculateStats(List<PerfSample>, int)	real	consistent	0.870	0.030	0.100	0.810	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/epoch/SlotPerformanceStats.java#SlotPerformanceStats.calculateStats(List<PerfSample>, int, int)	real	consistent	0.990	0.010	0.000	0.980	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.DEFAULT_LOOK_BACK_SLOTS	real	not_checkable	0.180	0.010	0.810	0.720	0.750
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.DEFAULT_LOOK_BACK_SLOTS	swapped	not_checkable	0.060	0.120	0.820	0.730	0.750
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.MAX_LOOK_BACK_SLOTS	real	not_checkable	0.430	0.020	0.550	0.320	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.MAX_LOOK_BACK_SLOTS	swapped	not_checkable	0.010	0.010	0.980	0.970	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.MIN_LOOK_BACK_SLOTS	real	consistent	0.610	0.030	0.360	0.410	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/helius/client/http/request/PriorityFeeRequest.java#PriorityFeeRequest.MIN_LOOK_BACK_SLOTS	swapped	contradicted	0.010	0.800	0.190	0.700	0.667
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/BaseInstructionService.java#BaseInstructionService.LATEST_BLOCK_HASH_CALL_CONTEXT	real	not_checkable	0.070	0.020	0.910	0.870	0.600
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/BaseTxMonitorService.java#BaseTxMonitorService.clampedSkipRate()	real	consistent	0.900	0.080	0.020	0.850	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/BaseTxMonitorService.java#BaseTxMonitorService.clampedSkipRate()	swapped	not_checkable	0.010	0.180	0.810	0.710	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/BaseTxMonitorService.java#BaseTxMonitorService.confirmedBlockHeight()	real	not_checkable	0.440	0.080	0.480	0.230	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/BaseTxMonitorService.java#BaseTxMonitorService.confirmedBlockHeight()	swapped	not_checkable	0.000	0.090	0.910	0.860	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxCommitmentMonitorService.java#TxCommitmentMonitorService.finalizationTimeoutMillis()	real	consistent	0.860	0.100	0.040	0.790	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxExpirationMonitorService.java#TxExpirationMonitorService.SETTLE_BUFFER_BLOCKS	real	not_checkable	0.480	0.000	0.520	0.280	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java#TxMonitorService.createService(ChainItemFormatter, RpcCaller, EpochInfoService, WebSocketManager, Duration, Duration, TxPublisher, Duration, int, NanoClock)	real	not_checkable	0.060	0.100	0.840	0.750	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java#TxMonitorService.createService(ChainItemFormatter, RpcCaller, EpochInfoService, WebSocketManager, Duration, Duration, TxPublisher, Duration, int, NanoClock)	swapped	not_checkable	0.070	0.000	0.930	0.890	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java#TxMonitorService.queueResult(Commitment, Commitment, String, SendTxContext, boolean)	real	not_checkable	0.010	0.020	0.970	0.960	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/transactions/TxMonitorService.java#TxMonitorService.queueResult(Commitment, Commitment, String, SendTxContext, boolean)	swapped	not_checkable	0.010	0.010	0.980	0.980	1.000
+ravina#ravina-solana/src/main/java/software/sava/services/solana/websocket/WebSocketManager.java#WebSocketManager.checkConnection()	real	not_checkable	0.400	0.070	0.530	0.300	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/websocket/WebSocketManagerImpl.java#WebSocketManagerImpl.installConnectAttempt(SolanaRpcWebsocket, CompletableFuture<?>)	real	consistent	0.650	0.190	0.160	0.480	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/websocket/WebSocketManagerImpl.java#WebSocketManagerImpl.installConnectAttempt(SolanaRpcWebsocket, CompletableFuture<?>)	swapped	consistent	0.440	0.390	0.170	0.160	0.778
+ravina#ravina-solana/src/main/java/software/sava/services/solana/websocket/WebSocketManagerImpl.java#WebSocketManagerImpl.markOpen(SolanaRpcWebsocket, CompletableFuture<?>)	real	consistent	0.850	0.120	0.030	0.780	0.500
+ravina#ravina-solana/src/main/java/software/sava/services/solana/websocket/WebSocketManagerImpl.java#WebSocketManagerImpl.markOpen(SolanaRpcWebsocket, CompletableFuture<?>)	swapped	contradicted	0.240	0.700	0.060	0.560	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/AccountWithSeed.java#AccountWithSeed.createAccount(PublicKey, PublicKey, String, PublicKey)	real	consistent	0.590	0.150	0.260	0.380	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.MAX_SEEDS	real	consistent	0.700	0.020	0.280	0.550	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createOffCurveAccountWithAsciiSeed(PublicKey, String, PublicKey)	real	consistent	0.560	0.070	0.370	0.340	0.500
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createOffCurveAccountWithAsciiSeed(PublicKey, String, PublicKey)	swapped	contradicted	0.240	0.560	0.200	0.350	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createPubKey(byte[])	real	consistent	0.830	0.010	0.160	0.740	0.667
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createPubKey(byte[])	swapped	contradicted	0.170	0.780	0.050	0.680	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createWithSeed(PublicKey, String, PublicKey)	real	consistent	0.830	0.120	0.050	0.740	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.createWithSeed(PublicKey, String, PublicKey)	swapped	contradicted	0.010	0.880	0.110	0.830	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.findProgramAddress(List<byte[]>, PublicKey)	real	not_checkable	0.050	0.020	0.930	0.910	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.findProgramAddress(List<byte[]>, PublicKey)	swapped	not_checkable	0.080	0.190	0.730	0.600	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.fromBase58Encoded(byte[], int, int)	real	contradicted	0.030	0.960	0.010	0.940	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.fromBase58Encoded(byte[], int, int)	swapped	not_checkable	0.010	0.280	0.710	0.580	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.verifySignature(java.security.PublicKey, String, byte[])	real	consistent	0.890	0.010	0.100	0.830	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/PublicKey.java#PublicKey.verifySignature(java.security.PublicKey, String, byte[])	swapped	not_checkable	0.010	0.090	0.900	0.850	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/SolanaAccounts.java#SolanaAccounts.MAIN_NET	real	consistent	0.520	0.030	0.450	0.280	0.000
+sava#sava-core/src/main/java/software/sava/core/accounts/meta/AccountMetaReadOnly.java#AccountMetaReadOnly.equals(Object)	real	consistent	0.960	0.030	0.010	0.940	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.ACCOUNT_STORAGE_OVERHEAD	real	contradicted	0.310	0.410	0.280	0.120	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.ACCOUNT_STORAGE_OVERHEAD	swapped	not_checkable	0.020	0.180	0.800	0.710	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.MAX_PERMITTED_DATA_LENGTH	real	consistent	0.940	0.010	0.050	0.910	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.MAX_PERMITTED_DATA_LENGTH	swapped	contradicted	0.060	0.490	0.450	0.240	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.minimumBalance(long)	real	consistent	0.940	0.050	0.010	0.910	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.minimumBalance(long)	swapped	consistent	0.450	0.190	0.360	0.160	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.saturatingUInt64(double)	real	consistent	0.900	0.100	0.000	0.850	0.667
+sava#sava-core/src/main/java/software/sava/core/accounts/sysvar/Rent.java#Rent.saturatingUInt64(double)	swapped	contradicted	0.280	0.390	0.330	0.090	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/COption.java#COption.readTag(byte[], int, String)	real	consistent	0.960	0.040	0.000	0.930	0.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.MULTISIG_BYTES	real	not_checkable	0.120	0.080	0.800	0.710	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.MULTISIG_BYTES	swapped	not_checkable	0.050	0.010	0.930	0.900	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.PADDING_AFTER_MINT	real	consistent	0.540	0.010	0.450	0.320	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.PADDING_AFTER_MINT	swapped	not_checkable	0.020	0.050	0.930	0.900	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.adjustLengthForMultisig(int)	real	consistent	0.900	0.070	0.030	0.840	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.adjustLengthForMultisig(int)	swapped	consistent	0.900	0.080	0.020	0.840	0.333
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.padLengthForMultisig(byte[], int, int)	real	consistent	0.550	0.440	0.010	0.330	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.padLengthForMultisig(byte[], int, int)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.requireAccountType(AccountType, AccountType, boolean)	real	consistent	0.910	0.050	0.040	0.860	0.800
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.requireAccountType(AccountType, AccountType, boolean)	swapped	not_checkable	0.010	0.080	0.910	0.860	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.writeExtensions(Set<TokenExtension>, byte[], int)	real	consistent	0.720	0.240	0.040	0.590	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/Token2022.java#Token2022.writeExtensions(Set<TokenExtension>, byte[], int)	swapped	not_checkable	0.010	0.170	0.820	0.720	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/TokenAccount.java#TokenAccount.parseState(byte)	real	contradicted	0.400	0.560	0.040	0.340	0.500
+sava#sava-core/src/main/java/software/sava/core/accounts/token/extensions/ConfidentialTransferAccount.java#ConfidentialTransferAccount.MAXIMUM_DEPOSIT_TRANSFER_AMOUNT	real	consistent	0.900	0.070	0.030	0.860	0.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/extensions/ConfidentialTransferAccount.java#ConfidentialTransferAccount.MAXIMUM_DEPOSIT_TRANSFER_AMOUNT	swapped	not_checkable	0.160	0.330	0.510	0.260	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/extensions/ConfidentialTransferAccount.java#ConfidentialTransferAccount.PENDING_BALANCE_LO_BIT_LENGTH	real	consistent	0.920	0.010	0.070	0.890	0.000
+sava#sava-core/src/main/java/software/sava/core/accounts/token/extensions/ConfidentialTransferAccount.java#ConfidentialTransferAccount.PENDING_BALANCE_LO_BIT_LENGTH	swapped	not_checkable	0.030	0.400	0.570	0.360	0.667
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/BaseMaskWorker.java#BaseMaskWorker.searchExhausted(long)	real	consistent	0.570	0.020	0.410	0.360	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/Subsequence.java#Subsequence.MAX_LENGTH	real	consistent	0.830	0.030	0.140	0.750	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/Subsequence.java#Subsequence.MAX_LENGTH	swapped	not_checkable	0.010	0.010	0.980	0.970	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/Subsequence.java#Subsequence.MAX_OPTIONS	real	consistent	0.860	0.050	0.090	0.800	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/Subsequence.java#Subsequence.MAX_OPTIONS	swapped	not_checkable	0.100	0.130	0.770	0.650	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/Subsequence.java#Subsequence.charOptionsTable()	real	consistent	0.570	0.020	0.410	0.370	1.000
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/SubsequenceRecord.java#SubsequenceRecord.formatCharOptions(char[][])	real	consistent	0.850	0.150	0.000	0.760	0.667
+sava#sava-core/src/main/java/software/sava/core/accounts/vanity/VanityAddressGenerator.java#VanityAddressGenerator.createGenerator(Path, char[], SecureRandomFactory, PrivateKeyEncoding, KeyFileFormat, KeyDerivation, boolean, ExecutorService, int, Subsequence, Subsequence, long, int)	real	consistent	0.600	0.050	0.350	0.410	1.000
+sava#sava-core/src/main/java/software/sava/core/borsh/Borsh.java#Borsh.getBytes(String)	real	consistent	0.850	0.060	0.090	0.790	1.000
+sava#sava-core/src/main/java/software/sava/core/borsh/Borsh.java#Borsh.getBytes(String)	swapped	not_checkable	0.010	0.120	0.870	0.810	1.000
+sava#sava-core/src/main/java/software/sava/core/borsh/Borsh.java#Borsh.readVectorLength(int, byte[], int)	real	consistent	0.560	0.400	0.040	0.340	0.667
+sava#sava-core/src/main/java/software/sava/core/borsh/Borsh.java#Borsh.readVectorLength(int, byte[], int)	swapped	contradicted	0.010	0.910	0.080	0.880	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.continueMutableEncode(byte[], int, int, int, char[])	real	consistent	0.690	0.210	0.100	0.530	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.continueMutableEncode(byte[], int, int, int, char[])	swapped	not_checkable	0.150	0.230	0.620	0.430	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(byte[], int, int)	real	consistent	0.820	0.160	0.020	0.740	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(byte[], int, int)	swapped	contradicted	0.020	0.750	0.230	0.620	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(byte[], int, int, byte[])	real	consistent	0.530	0.440	0.030	0.290	0.500
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(byte[], int, int, byte[])	swapped	contradicted	0.160	0.740	0.100	0.610	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(char[], int, int, byte[])	real	consistent	0.850	0.140	0.010	0.770	0.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.decode(char[], int, int, byte[])	swapped	contradicted	0.110	0.730	0.160	0.590	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.limbsLength(int)	real	consistent	0.630	0.120	0.250	0.440	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/Base58.java#Base58.limbsLength(int)	swapped	not_checkable	0.030	0.390	0.580	0.370	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.checkField(byte[], int, int)	real	consistent	0.960	0.020	0.020	0.940	0.500
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.checkField(byte[], int, int)	swapped	not_checkable	0.030	0.310	0.660	0.490	0.600
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getInt8LE(byte[], int)	real	consistent	0.920	0.080	0.000	0.880	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getInt8LE(byte[], int)	swapped	not_checkable	0.280	0.250	0.470	0.220	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getIntLE(byte[], int, int)	real	consistent	0.940	0.050	0.010	0.910	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getIntLE(byte[], int, int)	swapped	contradicted	0.430	0.550	0.020	0.320	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt16LE(byte[], int)	real	consistent	0.960	0.030	0.010	0.930	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt16LE(byte[], int)	swapped	contradicted	0.090	0.700	0.210	0.540	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt32LE(byte[], int)	real	consistent	0.950	0.030	0.020	0.930	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt32LE(byte[], int)	swapped	contradicted	0.150	0.600	0.250	0.390	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt64LE(byte[], int)	real	consistent	0.690	0.240	0.070	0.540	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUInt64LE(byte[], int)	swapped	contradicted	0.030	0.540	0.430	0.310	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUIntLE(byte[], int, int)	real	consistent	0.990	0.010	0.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.getUIntLE(byte[], int, int)	swapped	contradicted	0.220	0.720	0.060	0.570	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.putIntLE(byte[], int, BigInteger, int)	real	consistent	0.950	0.050	0.000	0.920	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.putIntLE(byte[], int, BigInteger, int)	swapped	contradicted	0.390	0.600	0.010	0.400	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.putUIntLE(byte[], int, BigInteger, int)	real	consistent	0.960	0.020	0.020	0.940	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.putUIntLE(byte[], int, BigInteger, int)	swapped	contradicted	0.020	0.740	0.240	0.600	1.000
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.toUnsignedBigInteger(long)	real	consistent	0.920	0.060	0.020	0.880	0.500
+sava#sava-core/src/main/java/software/sava/core/encoding/ByteUtil.java#ByteUtil.toUnsignedBigInteger(long)	swapped	contradicted	0.230	0.410	0.360	0.120	1.000
+sava#sava-core/src/main/java/software/sava/core/programs/Discriminator.java#Discriminator.createDiscriminator(byte[])	real	consistent	0.750	0.010	0.240	0.620	0.000
+sava#sava-core/src/main/java/software/sava/core/programs/Discriminator.java#Discriminator.createDiscriminator(byte[])	swapped	not_checkable	0.010	0.040	0.950	0.930	1.000
+sava#sava-core/src/main/java/software/sava/core/programs/Discriminator.java#Discriminator.equals(byte[], int, int)	real	consistent	0.720	0.270	0.010	0.590	1.000
+sava#sava-core/src/main/java/software/sava/core/programs/Discriminator.java#Discriminator.equals(byte[], int, int)	swapped	consistent	0.540	0.060	0.400	0.300	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransaction.java#BaseTransaction.feePayerSignatureOffset(byte[])	real	consistent	0.630	0.300	0.070	0.450	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransaction.java#BaseTransaction.feePayerSignatureOffset(byte[])	swapped	consistent	0.420	0.200	0.380	0.140	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransaction.java#BaseTransaction.requireSignerCount(byte[], int)	real	consistent	0.910	0.070	0.020	0.860	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransaction.java#BaseTransaction.requireSignerCount(byte[], int)	swapped	contradicted	0.050	0.560	0.390	0.350	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransactionSkeleton.java#BaseTransactionSkeleton.invokedProgramAccount(AccountMeta)	real	not_checkable	0.420	0.080	0.500	0.260	0.857
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransactionSkeleton.java#BaseTransactionSkeleton.invokedProgramAccount(AccountMeta)	swapped	not_checkable	0.000	0.010	0.990	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransactionSkeleton.java#BaseTransactionSkeleton.requireAddressesCoverSigners()	real	consistent	0.660	0.240	0.100	0.480	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BaseTransactionSkeleton.java#BaseTransactionSkeleton.requireAddressesCoverSigners()	swapped	not_checkable	0.010	0.010	0.980	0.980	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BuiltinPrograms.java#BuiltinPrograms.BUILTIN_COMPUTE_UNIT_LIMIT	real	contradicted	0.170	0.420	0.410	0.130	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BuiltinPrograms.java#BuiltinPrograms.BUILTIN_COMPUTE_UNIT_LIMIT	swapped	not_checkable	0.070	0.300	0.630	0.450	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BuiltinPrograms.java#BuiltinPrograms.DEFAULT_INSTRUCTION_COMPUTE_UNIT_LIMIT	real	not_checkable	0.050	0.240	0.710	0.560	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BuiltinPrograms.java#BuiltinPrograms.DEFAULT_INSTRUCTION_COMPUTE_UNIT_LIMIT	swapped	contradicted	0.050	0.540	0.410	0.300	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/BuiltinPrograms.java#BuiltinPrograms.defaultComputeUnitLimit(PublicKey)	real	consistent	0.580	0.110	0.310	0.380	0.250
+sava#sava-core/src/main/java/software/sava/core/tx/Instruction.java#Instruction.createInstruction(AccountMeta, List<AccountMeta>, byte[], int, int)	real	not_checkable	0.170	0.010	0.820	0.730	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsAccountLimit()	real	contradicted	0.280	0.400	0.320	0.100	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsAccountLimit()	swapped	not_checkable	0.060	0.260	0.680	0.510	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsInstructionLimit()	real	not_checkable	0.150	0.270	0.580	0.370	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsInstructionLimit()	swapped	not_checkable	0.030	0.410	0.560	0.340	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsSignatureLimit()	real	consistent	0.920	0.060	0.020	0.880	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsSignatureLimit()	swapped	not_checkable	0.010	0.290	0.700	0.540	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsSizeLimit()	real	consistent	0.550	0.080	0.370	0.320	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.exceedsSizeLimit()	swapped	not_checkable	0.020	0.400	0.580	0.380	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.numAccounts()	real	consistent	0.940	0.030	0.030	0.910	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.numAccounts()	swapped	not_checkable	0.250	0.280	0.470	0.200	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.numInstructions()	real	consistent	0.820	0.020	0.160	0.740	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.numInstructions()	swapped	not_checkable	0.070	0.180	0.750	0.630	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setAccountDataSizeLimit(int)	real	consistent	0.830	0.140	0.030	0.740	0.750
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setAccountDataSizeLimit(int)	swapped	consistent	0.720	0.240	0.040	0.580	0.750
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setComputeUnitLimit(int)	real	consistent	0.790	0.170	0.040	0.690	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setComputeUnitLimit(int)	swapped	consistent	0.690	0.090	0.220	0.530	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setHeapSize(int)	real	consistent	0.640	0.320	0.040	0.460	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setHeapSize(int)	swapped	not_checkable	0.000	0.020	0.980	0.970	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamports(long)	real	consistent	0.740	0.210	0.050	0.610	0.750
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamports(long)	swapped	consistent	0.650	0.300	0.050	0.470	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long)	real	consistent	0.830	0.150	0.020	0.750	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long)	swapped	consistent	0.510	0.180	0.310	0.260	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long, int)	real	consistent	0.650	0.320	0.030	0.480	0.833
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long, int)	swapped	consistent	0.480	0.170	0.350	0.220	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.sign(Signer, byte[])	real	consistent	0.750	0.020	0.230	0.610	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.sign(Signer, byte[])	swapped	not_checkable	0.040	0.190	0.770	0.650	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(Collection<Signer>)	real	not_checkable	0.120	0.330	0.550	0.340	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(Collection<Signer>)	swapped	not_checkable	0.030	0.460	0.510	0.260	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(String, Collection<Signer>)	real	consistent	0.780	0.170	0.050	0.660	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(String, Collection<Signer>)	swapped	contradicted	0.140	0.760	0.100	0.640	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(byte[], Collection<Signer>)	real	consistent	0.900	0.060	0.040	0.840	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKey(byte[], Collection<Signer>)	swapped	contradicted	0.130	0.740	0.130	0.620	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(Collection<Signer>)	real	consistent	0.790	0.180	0.030	0.680	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(Collection<Signer>)	swapped	not_checkable	0.030	0.170	0.800	0.700	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(String, Collection<Signer>)	real	consistent	0.460	0.370	0.170	0.200	0.333
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(String, Collection<Signer>)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(byte[], Collection<Signer>)	real	consistent	0.810	0.060	0.130	0.720	0.333
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signByKeyAndBase64Encode(byte[], Collection<Signer>)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>)	real	not_checkable	0.330	0.170	0.500	0.260	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>)	swapped	not_checkable	0.030	0.410	0.560	0.350	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>, byte[])	real	not_checkable	0.140	0.010	0.850	0.780	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>, byte[])	swapped	contradicted	0.050	0.590	0.360	0.390	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>, byte[], int, int, int)	real	consistent	0.840	0.040	0.120	0.770	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(SequencedCollection<Signer>, byte[], int, int, int)	swapped	contradicted	0.060	0.870	0.070	0.800	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(String, SequencedCollection<Signer>)	real	not_checkable	0.060	0.280	0.660	0.490	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(String, SequencedCollection<Signer>)	swapped	contradicted	0.030	0.700	0.270	0.550	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(byte[], SequencedCollection<Signer>)	real	not_checkable	0.050	0.190	0.760	0.650	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrder(byte[], SequencedCollection<Signer>)	swapped	contradicted	0.030	0.670	0.300	0.500	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>, byte[])	real	consistent	0.940	0.050	0.010	0.910	0.250
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(SequencedCollection<Signer>, byte[])	swapped	not_checkable	0.360	0.080	0.560	0.330	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(String, SequencedCollection<Signer>)	real	not_checkable	0.150	0.050	0.800	0.700	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(String, SequencedCollection<Signer>)	swapped	not_checkable	0.050	0.110	0.840	0.760	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(byte[], SequencedCollection<Signer>)	real	not_checkable	0.300	0.050	0.650	0.470	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/Transaction.java#Transaction.signInOrderAndBase64Encode(byte[], SequencedCollection<Signer>)	swapped	not_checkable	0.020	0.080	0.900	0.850	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.effectiveComputeUnitLimit(boolean)	real	consistent	0.900	0.100	0.000	0.840	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.effectiveComputeUnitLimit(boolean)	swapped	contradicted	0.010	0.620	0.370	0.430	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.priorityFeeLamportsToComputeUnitPrice(long, int)	real	consistent	0.930	0.070	0.000	0.890	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.priorityFeeLamportsToComputeUnitPrice(long, int)	swapped	not_checkable	0.000	0.310	0.690	0.530	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.setComputeBudgetValues(byte, byte[], byte, byte[])	real	consistent	0.930	0.060	0.010	0.900	0.333
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionRecord.java#TransactionRecord.setComputeBudgetValues(byte, byte[], byte, byte[])	swapped	not_checkable	0.150	0.190	0.660	0.490	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.computeUnitLimit()	real	consistent	0.880	0.060	0.060	0.830	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.computeUnitLimit()	swapped	consistent	0.650	0.220	0.130	0.460	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction()	real	consistent	0.780	0.030	0.190	0.670	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction()	swapped	contradicted	0.150	0.520	0.330	0.270	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction(AccountMeta[])	real	consistent	0.800	0.020	0.180	0.700	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction(AccountMeta[])	swapped	contradicted	0.130	0.620	0.250	0.430	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction(Instruction[])	real	not_checkable	0.260	0.010	0.730	0.590	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.createTransaction(Instruction[])	swapped	contradicted	0.050	0.640	0.310	0.470	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.deserializeSkeleton(byte[])	real	contradicted	0.360	0.610	0.030	0.420	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.deserializeSkeleton(byte[])	swapped	not_checkable	0.270	0.110	0.620	0.440	0.750
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.heapSize()	real	consistent	0.580	0.280	0.140	0.360	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.heapSize()	swapped	not_checkable	0.100	0.010	0.890	0.830	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.priorityFeeLamports()	real	consistent	0.770	0.180	0.050	0.650	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.priorityFeeLamports()	swapped	consistent	0.880	0.070	0.050	0.830	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.prototypeTransaction()	real	consistent	0.660	0.260	0.080	0.490	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.prototypeTransaction()	swapped	not_checkable	0.060	0.060	0.880	0.820	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.prototypeTransaction(Instruction[])	real	consistent	0.610	0.280	0.110	0.410	0.727
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeleton.java#TransactionSkeleton.prototypeTransaction(Instruction[])	swapped	not_checkable	0.010	0.090	0.900	0.840	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/TransactionSkeletonImpl.java#TransactionSkeletonImpl.instructionAccount(AccountMeta[], int)	real	consistent	0.910	0.040	0.050	0.870	0.600
+sava#sava-core/src/main/java/software/sava/core/tx/TxBuilder.java#TxBuilder.computeUnitPriceToPriorityFeeLamports(long, int)	real	consistent	0.960	0.020	0.020	0.930	0.800
+sava#sava-core/src/main/java/software/sava/core/tx/TxBuilderImpl.java#TxBuilderImpl.createTransaction()	real	consistent	0.990	0.010	0.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1Transaction.java#V1Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long)	real	consistent	0.880	0.080	0.040	0.830	0.857
+sava#sava-core/src/main/java/software/sava/core/tx/V1Transaction.java#V1Transaction.setPriorityFeeLamportsFromComputeUnitPrice(long, int)	real	contradicted	0.020	0.930	0.050	0.900	0.500
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.KNOWN_CONFIG_MASK_BITS	real	not_checkable	0.190	0.030	0.780	0.680	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.configValueOffset(byte[], int)	real	consistent	0.730	0.250	0.020	0.600	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.configValueOffset(byte[], int)	swapped	contradicted	0.040	0.770	0.190	0.660	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.messageEnd(byte[])	real	consistent	0.590	0.400	0.010	0.390	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.messageEnd(byte[])	swapped	consistent	0.680	0.260	0.050	0.530	0.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.prototypeTransaction(Instruction[])	real	not_checkable	0.120	0.250	0.630	0.460	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.prototypeTransaction(Instruction[])	swapped	not_checkable	0.020	0.010	0.970	0.970	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.requireIncludedInstructionAccount(AccountMeta[], int)	real	consistent	0.910	0.060	0.030	0.860	0.667
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.requireIncludedInstructionAccount(AccountMeta[], int)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.requireSignatureBlockOffset(byte[])	real	consistent	0.970	0.020	0.010	0.960	0.250
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.requireSignatureBlockOffset(byte[])	swapped	not_checkable	0.070	0.120	0.810	0.720	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.signaturesOffset()	real	consistent	0.970	0.020	0.010	0.970	1.000
+sava#sava-core/src/main/java/software/sava/core/tx/V1TransactionSkeleton.java#V1TransactionSkeleton.signaturesOffset()	swapped	not_checkable	0.010	0.460	0.530	0.300	0.857
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.AE_CIPHERTEXT_LEN	real	consistent	0.570	0.030	0.400	0.360	0.000
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.AE_CIPHERTEXT_LEN	swapped	not_checkable	0.290	0.240	0.470	0.220	1.000
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.AE_KEY_LEN	real	consistent	0.910	0.050	0.040	0.870	1.000
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.AE_KEY_LEN	swapped	contradicted	0.020	0.660	0.320	0.490	1.000
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.RISTRETTO_POINT_LEN	real	not_checkable	0.090	0.420	0.490	0.240	1.000
+sava#sava-core/src/main/java/software/sava/core/zk/ElGamal.java#ElGamal.RISTRETTO_POINT_LEN	swapped	contradicted	0.030	0.510	0.460	0.270	1.000
+sava#sava-examples/src/main/java/software/sava/examples/SubscribeToLookupTables.java#SubscribeToLookupTables.connect(SolanaRpcWebsocket)	real	contradicted	0.300	0.620	0.080	0.440	1.000
+sava#sava-examples/src/main/java/software/sava/examples/SubscribeToTokenAccounts.java#SubscribeToTokenAccounts.connect(SolanaRpcWebsocket)	real	consistent	0.440	0.330	0.230	0.170	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/PrivateKeyEncoding.java#PrivateKeyEncoding.fromJsonPrivateKey(JsonIterator)	real	consistent	0.710	0.030	0.260	0.570	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/PublicKeyEncoding.java#PublicKeyEncoding.parseObjectFieldBase58Encoded(JsonIterator)	real	not_checkable	0.100	0.230	0.670	0.500	0.600
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/BaseSolanaJsonRpcClient.java#BaseSolanaJsonRpcClient.appendMinContextSlot(StringBuilder, BigInteger)	real	consistent	0.990	0.010	0.000	0.990	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.MAX_DOUBLED_TIMEOUT	real	consistent	0.920	0.040	0.040	0.880	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.MAX_DOUBLED_TIMEOUT	swapped	not_checkable	0.000	0.050	0.950	0.920	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.MIN_GZIP_BUFFER	real	consistent	0.690	0.060	0.250	0.540	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.MIN_GZIP_BUFFER	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.gzipBufferSize(HttpResponse<?>)	real	consistent	0.810	0.180	0.010	0.710	0.889
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.gzipBufferSize(HttpResponse<?>)	swapped	not_checkable	0.050	0.040	0.910	0.870	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.isGzipEncoded(HttpResponse<?>)	real	not_checkable	0.290	0.090	0.620	0.430	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.isGzipEncoded(HttpResponse<?>)	swapped	not_checkable	0.180	0.040	0.780	0.670	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.listsGzip(String)	real	consistent	0.990	0.010	0.000	0.980	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.listsGzip(String)	swapped	not_checkable	0.070	0.020	0.910	0.870	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.readBody(HttpResponse<?>)	real	not_checkable	0.060	0.070	0.870	0.800	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.readBody(HttpResponse<?>)	swapped	not_checkable	0.060	0.180	0.760	0.630	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.sendPostRequestNoWrap(URI, HttpResponse.BodyHandler<H>, Function<HttpResponse<H>, R>, Duration, String)	real	not_checkable	0.420	0.150	0.430	0.140	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/JsonHttpClient.java#JsonHttpClient.sendPostRequestNoWrap(URI, HttpResponse.BodyHandler<H>, Function<HttpResponse<H>, R>, Duration, String)	swapped	not_checkable	0.010	0.020	0.970	0.950	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest$Builder.encoding(RpcEncoding)	real	consistent	0.580	0.110	0.310	0.370	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest$Builder.encoding(RpcEncoding)	swapped	not_checkable	0.040	0.330	0.630	0.440	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest$Builder.zstdDecompressor(ZstdDecompressor)	real	consistent	0.730	0.020	0.250	0.590	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest$Builder.zstdDecompressor(ZstdDecompressor)	swapped	not_checkable	0.360	0.210	0.430	0.140	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest.zstdDecompressor()	real	consistent	0.680	0.280	0.040	0.510	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/ProgramAccountsRequest.java#ProgramAccountsRequest.zstdDecompressor()	swapped	not_checkable	0.220	0.150	0.630	0.440	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getAccounts(SequencedCollection<PublicKey>)	real	not_checkable	0.040	0.030	0.930	0.900	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getAccounts(SequencedCollection<PublicKey>)	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getMultipleAccounts(Commitment, SequencedCollection<PublicKey>)	real	not_checkable	0.050	0.040	0.910	0.860	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getMultipleAccounts(Commitment, SequencedCollection<PublicKey>)	swapped	not_checkable	0.060	0.020	0.920	0.870	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getMultipleAccounts(SequencedCollection<PublicKey>)	real	not_checkable	0.020	0.010	0.970	0.960	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.getMultipleAccounts(SequencedCollection<PublicKey>)	swapped	not_checkable	0.060	0.020	0.920	0.880	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(Commitment, String, boolean)	real	not_checkable	0.010	0.030	0.960	0.940	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(Commitment, String, boolean)	swapped	not_checkable	0.010	0.010	0.980	0.980	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(String)	real	consistent	0.500	0.130	0.370	0.250	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(String)	swapped	contradicted	0.060	0.510	0.430	0.270	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(String, boolean)	real	consistent	0.600	0.060	0.340	0.400	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransaction(String, boolean)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransactionSkipPreflight(String)	real	consistent	0.950	0.020	0.030	0.930	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClient.java#SolanaRpcClient.sendTransactionSkipPreflight(String)	swapped	consistent	0.460	0.110	0.430	0.200	0.800
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/client/SolanaRpcClientBuilder.java#SolanaRpcClientBuilder.compressResponses()	real	consistent	0.790	0.110	0.100	0.690	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/request/RpcEncoding.java#RpcEncoding.parseEncoding(JsonIterator)	real	not_checkable	0.030	0.010	0.960	0.940	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/response/BlockTx.java#BlockTx.skeleton()	real	consistent	0.950	0.040	0.010	0.920	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/response/TxReward.java#TxReward.<init>(PublicKey, long, long, RewardType, int)	real	not_checkable	0.280	0.010	0.710	0.560	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/NanoClock.java#NanoClock.currentTimeMillis()	real	consistent	0.890	0.050	0.060	0.840	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.attemptSeqs	real	not_checkable	0.300	0.000	0.700	0.540	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.attemptSeqs	swapped	not_checkable	0.250	0.030	0.720	0.580	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.inFlightUnsubs	real	not_checkable	0.350	0.010	0.640	0.470	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.inFlightUnsubs	swapped	not_checkable	0.200	0.020	0.780	0.680	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.killedSubIds	real	not_checkable	0.300	0.010	0.690	0.540	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.killedSubIds	swapped	not_checkable	0.340	0.010	0.650	0.480	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.lifecycle	real	consistent	0.700	0.070	0.230	0.550	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.lifecycle	swapped	not_checkable	0.020	0.080	0.900	0.850	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.pingProbe	real	consistent	0.500	0.010	0.490	0.250	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.pingProbe	swapped	not_checkable	0.010	0.050	0.940	0.910	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.retiredSubIds	real	not_checkable	0.460	0.010	0.530	0.290	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket$Connection.retiredSubIds	swapped	not_checkable	0.040	0.030	0.930	0.880	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	real	consistent	0.690	0.060	0.250	0.530	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.CLOSE_GRACE_MILLIS	swapped	not_checkable	0.020	0.120	0.860	0.780	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	real	not_checkable	0.460	0.020	0.520	0.280	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.UNANSWERED_ESCALATION_FACTOR	swapped	not_checkable	0.060	0.110	0.830	0.740	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.adopt(WebSocket, long)	real	consistent	0.990	0.010	0.000	0.980	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.adopt(WebSocket, long)	swapped	not_checkable	0.190	0.130	0.680	0.530	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.answerPingDeadlineTransition(PingDeadlineTransition)	real	not_checkable	0.140	0.100	0.760	0.640	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.answerPingDeadlineTransition(PingDeadlineTransition)	swapped	not_checkable	0.030	0.280	0.690	0.540	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.answerPingProbe(Connection)	real	consistent	0.740	0.110	0.150	0.610	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.answerPingProbe(Connection)	swapped	contradicted	0.060	0.540	0.400	0.300	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.buildReservedAttempt(long, CompletableFuture<WebSocket>)	real	contradicted	0.270	0.430	0.300	0.150	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.buildReservedAttempt(long, CompletableFuture<WebSocket>)	swapped	contradicted	0.370	0.500	0.130	0.260	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.checkCycle(long)	real	not_checkable	0.080	0.300	0.620	0.430	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.checkCycle(long)	swapped	not_checkable	0.380	0.170	0.450	0.180	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.claimFailedPing(Connection)	real	consistent	0.430	0.300	0.270	0.140	0.333
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.claimFailedPing(Connection)	swapped	not_checkable	0.210	0.030	0.760	0.650	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.claimPingDeadlineTransition(PingDeadlineTransition)	real	consistent	0.890	0.090	0.020	0.850	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.claimPingDeadlineTransition(PingDeadlineTransition)	swapped	contradicted	0.150	0.670	0.180	0.500	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.connect()	real	consistent	0.540	0.230	0.230	0.300	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.connect()	swapped	not_checkable	0.110	0.380	0.510	0.260	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.connectionFor(WebSocket)	real	consistent	0.680	0.070	0.250	0.520	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.connectionFor(WebSocket)	swapped	not_checkable	0.100	0.070	0.830	0.740	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.consumerThrew(String, RuntimeException)	real	not_checkable	0.360	0.060	0.580	0.370	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.consumerThrew(String, RuntimeException)	swapped	not_checkable	0.190	0.040	0.770	0.650	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverEscalation(Connection, Throwable)	real	consistent	0.680	0.180	0.140	0.530	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverEscalation(Connection, Throwable)	swapped	consistent	0.400	0.270	0.330	0.100	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverRetiredError(Throwable)	real	not_checkable	0.260	0.060	0.680	0.530	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverRetiredError(Throwable)	swapped	not_checkable	0.080	0.010	0.910	0.860	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverRetiredPingFailure(Throwable)	real	consistent	0.790	0.090	0.120	0.690	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.deliverRetiredPingFailure(Throwable)	swapped	not_checkable	0.040	0.300	0.660	0.490	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.dispatchException(RuntimeException)	real	consistent	0.870	0.090	0.040	0.790	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.dispatchException(RuntimeException)	swapped	not_checkable	0.010	0.020	0.970	0.960	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.equivalentRequests(Subscription<?>, Subscription<?>)	real	consistent	0.930	0.030	0.040	0.910	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.equivalentRequests(Subscription<?>, Subscription<?>)	swapped	not_checkable	0.060	0.230	0.710	0.570	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.escalateUnanswered(Connection, long)	real	consistent	0.780	0.130	0.090	0.670	0.750
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.escalateUnanswered(Connection, long)	swapped	contradicted	0.260	0.480	0.260	0.220	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.escalateUnansweredPing(Connection, long)	real	not_checkable	0.290	0.010	0.700	0.550	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.escalateUnansweredPing(Connection, long)	swapped	not_checkable	0.090	0.090	0.820	0.730	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.executorServiceShutdown()	real	not_checkable	0.190	0.050	0.760	0.640	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.executorServiceShutdown()	swapped	not_checkable	0.060	0.430	0.510	0.260	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.flushPendingUnSubscriptions(Connection, long)	real	consistent	0.840	0.050	0.110	0.770	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.flushPendingUnSubscriptions(Connection, long)	swapped	not_checkable	0.010	0.140	0.850	0.770	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.handlePendingSubscriptions(Connection)	real	contradicted	0.230	0.490	0.280	0.230	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.handlePendingSubscriptions(Connection)	swapped	not_checkable	0.010	0.100	0.890	0.840	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.isRequestDefect(long)	real	consistent	0.890	0.030	0.080	0.830	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.isRequestDefect(long)	swapped	not_checkable	0.020	0.270	0.710	0.560	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.ownBuild(CompletableFuture<WebSocket>, long)	real	consistent	0.970	0.030	0.000	0.950	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.ownBuild(CompletableFuture<WebSocket>, long)	swapped	contradicted	0.360	0.440	0.200	0.150	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.pacingMillis()	real	consistent	0.690	0.220	0.090	0.540	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.pacingMillis()	swapped	not_checkable	0.010	0.110	0.880	0.810	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.prepareCheckCycleDelivery(long)	real	consistent	0.690	0.210	0.100	0.530	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.prepareCheckCycleDelivery(long)	swapped	contradicted	0.220	0.520	0.260	0.280	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.preparePingDeadlineTransition()	real	contradicted	0.290	0.530	0.180	0.300	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.preparePingDeadlineTransition()	swapped	not_checkable	0.130	0.220	0.650	0.470	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.queueText(Connection, String)	real	consistent	0.470	0.320	0.210	0.210	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.queueText(Connection, String)	swapped	contradicted	0.020	0.580	0.400	0.370	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator)	real	consistent	0.720	0.200	0.080	0.580	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.readSubscriptionId(JsonIterator)	swapped	not_checkable	0.020	0.070	0.910	0.850	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.recordFailedPing(Connection, PingProbe, Throwable)	real	contradicted	0.480	0.490	0.030	0.230	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.recordFailedPing(Connection, PingProbe, Throwable)	swapped	consistent	0.430	0.280	0.290	0.140	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.releaseBuilderAndTakePending()	real	consistent	0.840	0.090	0.070	0.760	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.releaseBuilderAndTakePending()	swapped	not_checkable	0.240	0.310	0.450	0.180	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.releaseChannelSlot(Subscription<?>)	real	consistent	0.750	0.030	0.220	0.620	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.releaseChannelSlot(Subscription<?>)	swapped	not_checkable	0.010	0.140	0.850	0.780	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.requestFingerprint(String)	real	contradicted	0.200	0.770	0.030	0.660	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.requestFingerprint(String)	swapped	consistent	0.400	0.200	0.400	0.100	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedCancellationTombstones()	real	consistent	0.700	0.090	0.210	0.540	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedCancellationTombstones()	swapped	contradicted	0.180	0.480	0.340	0.220	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedExceptionSubscribers()	real	not_checkable	0.120	0.020	0.860	0.790	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedExceptionSubscribers()	swapped	not_checkable	0.170	0.200	0.630	0.450	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedOrdinalEntries()	real	consistent	0.460	0.360	0.180	0.190	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedOrdinalEntries()	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedRegistrations()	real	consistent	0.840	0.040	0.120	0.770	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retainedRegistrations()	swapped	not_checkable	0.300	0.040	0.660	0.480	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retireConnection(WebSocket)	real	consistent	0.890	0.080	0.030	0.830	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.retireConnection(WebSocket)	swapped	not_checkable	0.250	0.050	0.700	0.550	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.runLoop(long)	real	consistent	0.720	0.170	0.110	0.590	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.runLoop(long)	swapped	not_checkable	0.060	0.430	0.510	0.270	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.scheduleBuild(long, long, CompletableFuture<WebSocket>, CompletableFuture<Void>)	real	contradicted	0.480	0.480	0.040	0.220	0.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.scheduleBuild(long, long, CompletableFuture<WebSocket>, CompletableFuture<Void>)	swapped	consistent	0.570	0.180	0.250	0.350	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.sendSubscription(Connection, Subscription<?>)	real	consistent	0.480	0.410	0.110	0.220	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.sendSubscription(Connection, Subscription<?>)	swapped	consistent	0.420	0.170	0.410	0.140	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.sendUnSubscriptionLockHeld(Connection, String, BigInteger, String)	real	consistent	0.890	0.110	0.000	0.820	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.sendUnSubscriptionLockHeld(Connection, String, BigInteger, String)	swapped	contradicted	0.330	0.460	0.210	0.200	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	real	consistent	0.920	0.030	0.050	0.880	0.750
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.skipToParams(JsonIterator, int)	swapped	not_checkable	0.000	0.000	1.000	0.990	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	real	consistent	0.760	0.220	0.020	0.640	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.staleSingletonId(Connection, Subscription<?>, BigInteger)	swapped	not_checkable	0.010	0.010	0.980	0.970	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.startBuild(long, CompletableFuture<WebSocket>)	real	consistent	0.520	0.250	0.230	0.290	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaJsonRpcWebsocket.java#SolanaJsonRpcWebsocket.startBuild(long, CompletableFuture<WebSocket>)	swapped	consistent	0.560	0.370	0.070	0.330	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.connectTimeout()	real	consistent	0.830	0.010	0.160	0.750	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.connectTimeout()	swapped	not_checkable	0.020	0.020	0.960	0.950	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.connectTimeout(long)	real	contradicted	0.290	0.360	0.350	0.040	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.connectTimeout(long)	swapped	not_checkable	0.020	0.260	0.720	0.580	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.keepAliveDelay()	real	not_checkable	0.170	0.010	0.820	0.720	0.333
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.keepAliveDelay()	swapped	not_checkable	0.350	0.040	0.610	0.410	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.keepAliveDelay(long)	real	contradicted	0.040	0.580	0.380	0.370	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.keepAliveDelay(long)	swapped	contradicted	0.060	0.490	0.450	0.230	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.subscriptionResendDelay()	real	not_checkable	0.440	0.030	0.530	0.290	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.subscriptionResendDelay()	swapped	not_checkable	0.200	0.150	0.650	0.470	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.subscriptionResendDelay(long)	real	contradicted	0.110	0.710	0.180	0.570	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket$Builder.subscriptionResendDelay(long)	swapped	not_checkable	0.020	0.480	0.500	0.250	0.667
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.keyedProgramSubscribe(String, PublicKey, List<Filter>, Consumer<AccountInfo<byte[]>>)	real	not_checkable	0.360	0.010	0.630	0.450	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.keyedProgramSubscribe(String, PublicKey, List<Filter>, Consumer<AccountInfo<byte[]>>)	swapped	contradicted	0.330	0.590	0.080	0.390	0.333
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.keyedProgramUnsubscribe(String)	real	contradicted	0.350	0.390	0.260	0.070	0.333
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.keyedProgramUnsubscribe(String)	swapped	not_checkable	0.020	0.430	0.550	0.320	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.lastMessageReceivedTimestamp()	real	consistent	0.940	0.040	0.020	0.910	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.lastMessageReceivedTimestamp()	swapped	not_checkable	0.000	0.010	0.990	0.980	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.subscribe(String, String, String, String, String, Function<JsonIterator, T>, Consumer<T>)	real	not_checkable	0.220	0.030	0.750	0.640	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocket.java#SolanaRpcWebsocket.subscribe(String, String, String, String, String, Function<JsonIterator, T>, Consumer<T>)	swapped	not_checkable	0.010	0.010	0.980	0.970	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.DEFAULT_CONNECT_TIMEOUT	real	contradicted	0.330	0.500	0.170	0.250	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.DEFAULT_CONNECT_TIMEOUT	swapped	contradicted	0.010	0.670	0.320	0.500	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.DEFAULT_MAX_MESSAGE_LENGTH	real	consistent	0.850	0.090	0.060	0.780	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.DEFAULT_MAX_MESSAGE_LENGTH	swapped	not_checkable	0.000	0.080	0.920	0.880	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.clock(NanoClock)	real	consistent	0.700	0.050	0.250	0.550	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.clock(NanoClock)	swapped	not_checkable	0.030	0.050	0.920	0.880	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.connectTimeout(long)	real	not_checkable	0.470	0.040	0.490	0.240	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.connectTimeout(long)	swapped	not_checkable	0.060	0.180	0.760	0.650	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.executorService(ExecutorService)	real	not_checkable	0.170	0.360	0.470	0.210	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.executorService(ExecutorService)	swapped	consistent	0.400	0.260	0.340	0.100	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.keepAliveDelay	real	consistent	0.610	0.110	0.280	0.420	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.keepAliveDelay	swapped	not_checkable	0.180	0.100	0.720	0.590	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.keepAliveDelay(long)	real	consistent	0.700	0.020	0.280	0.550	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.keepAliveDelay(long)	swapped	not_checkable	0.260	0.280	0.460	0.190	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.scheduler(ScheduledExecutorService)	real	not_checkable	0.290	0.340	0.370	0.040	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.scheduler(ScheduledExecutorService)	swapped	not_checkable	0.010	0.020	0.970	0.950	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.subscriptionResendDelay	real	not_checkable	0.200	0.150	0.650	0.480	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.subscriptionResendDelay	swapped	not_checkable	0.000	0.020	0.980	0.960	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.subscriptionResendDelay(long)	real	consistent	0.570	0.060	0.370	0.350	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/SolanaRpcWebsocketBuilder.java#SolanaRpcWebsocketBuilder.subscriptionResendDelay(long)	swapped	not_checkable	0.040	0.230	0.730	0.600	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Subscription.java#Subscription.NEVER	real	contradicted	0.210	0.560	0.230	0.340	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Subscription.java#Subscription.notificationMethod()	real	consistent	0.950	0.020	0.030	0.930	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.<init>(long, long, long)	real	consistent	0.560	0.020	0.420	0.330	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.<init>(long, long, long, long)	real	consistent	0.570	0.030	0.400	0.360	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.DEFAULT_KEEP_ALIVE_FACTOR	real	not_checkable	0.300	0.000	0.700	0.540	0.500
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.keepAliveFor(long)	real	not_checkable	0.410	0.100	0.490	0.230	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.keepAliveFor(long)	swapped	not_checkable	0.010	0.020	0.970	0.970	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.resendDelayFor(long, long)	real	contradicted	0.440	0.530	0.030	0.300	1.000
+sava#sava-rpc/src/main/java/software/sava/rpc/json/http/ws/Timings.java#Timings.resendDelayFor(long, long)	swapped	not_checkable	0.210	0.100	0.690	0.540	1.000

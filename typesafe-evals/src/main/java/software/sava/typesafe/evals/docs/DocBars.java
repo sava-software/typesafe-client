@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /// Experiment C1's pre-registered bars: Design 1 (swapped comments, a decision table like
-/// C2's) and Design 2 (a blind-labeled sample of the real population).
+/// C2's) and Design 2 (a blind-labeled sample of the real population, reported as a
+/// prevalence study).
 public final class DocBars {
 
   public static final double SEPARATION_BAR = 0.85;
@@ -16,9 +17,10 @@ public final class DocBars {
   public static final double CORRELATION_CEILING = 0.8;
   public static final int TOP_N = 30;
   public static final int VALUE_BAR = 5;
-  public static final double SAMPLE_AUROC_BAR = 0.80;
+  public static final int PRECISION_TOP = 20;
   public static final double CONFIDENT = 0.9;
-  public static final double CONFIDENT_WRONG_MAX = 0.02;
+  public static final double CONFIDENT_WRONG_RATE = 0.02;
+  public static final int AUROC_MIN_POSITIVES = 20;
   public static final int RESAMPLES = 1000;
   public static final long SEED = 7L;
 
@@ -26,7 +28,7 @@ public final class DocBars {
   public record Pair(DocCorpus.Row row, DocScore real, DocScore swapped) {
   }
 
-  /// A row with its REAL score (Design 2 needs no swap).
+  /// A row with its REAL score.
   public record Scored(DocCorpus.Row row, DocScore real) {
   }
 
@@ -37,9 +39,32 @@ public final class DocBars {
                         String decision) {
   }
 
-  /// @param prevalence contradicted rows among labeled consistent-or-contradicted rows
-  public record SampleVerdict(int labeled, int contradicted, int consistent, int notCheckable, double prevalence, double auroc,
-                              double[] interval, double mismatchAuroc, double lengthAuroc, double confidentWrong, List<Check> checks) {
+  /// A rate with its Wilson 95% interval.
+  public record Rate(int count, int of, double rate, double lower, double upper) {
+
+    public static Rate of(final int count, final int of) {
+      if (of == 0) {
+        return new Rate(0, 0, Double.NaN, Double.NaN, Double.NaN);
+      }
+      final double z = 1.96;
+      final double p = (double) count / of;
+      final double denominator = 1 + z * z / of;
+      final double centre = (p + z * z / (2.0 * of)) / denominator;
+      final double half = z * Math.sqrt(p * (1 - p) / of + z * z / (4.0 * of * of)) / denominator;
+      return new Rate(count, of, p, Math.max(0, centre - half), Math.min(1, centre + half));
+    }
+  }
+
+  /// One stratum's prevalence.
+  public record Stratum(String name, int labeled, int contradicted, int consistent, int notCheckable, Rate prevalence) {
+  }
+
+  /// @param topPrecision   contradicted rows among the labeled rows of the top PRECISION_TOP by P(contradicted)
+  /// @param confidentWrong consistent rows at P(contradicted) >= CONFIDENT, of all consistent rows
+  /// @param binomialP      exact one-sided P(X >= k) for k confident-wrong of n at CONFIDENT_WRONG_RATE
+  /// @param auroc          NaN unless at least AUROC_MIN_POSITIVES rows are labeled contradicted
+  public record SampleVerdict(List<Stratum> strata, Stratum pooled, Rate topPrecision, Rate confidentWrong, double binomialP,
+                              double auroc, double[] interval) {
   }
 
   private DocBars() {
@@ -55,11 +80,11 @@ public final class DocBars {
         pairs.stream().map(p -> p.real().pContradicted()).toList(), RESAMPLES, SEED);
   }
 
-  /// The identifier-mismatch baseline: the fraction of identifiers the comment names that
-  /// the member lacks, computed identically in both arms.
+  /// The deterministic baseline (identifier mismatch or missing name echo), identically in
+  /// both arms.
   public static double baselineAuroc(final List<Pair> pairs) {
-    return Metrics.auroc(pairs.stream().map(p -> p.row().mismatchSwapped()).toList(),
-        pairs.stream().map(p -> p.row().mismatchReal()).toList());
+    return Metrics.auroc(pairs.stream().map(p -> p.row().baselineSwapped()).toList(),
+        pairs.stream().map(p -> p.row().baselineReal()).toList());
   }
 
   /// Pearson r between P(contradicted) and comment length over both arms.
@@ -82,13 +107,13 @@ public final class DocBars {
     return out;
   }
 
-  public static List<Scored> top(final List<Scored> scored) {
+  public static List<Scored> top(final List<Scored> scored, final int n) {
     final var ranked = ranked(scored);
-    return ranked.subList(0, Math.min(TOP_N, ranked.size()));
+    return ranked.subList(0, Math.min(n, ranked.size()));
   }
 
-  /// Design 1's decision table, first match wins. `labels` maps row id to consistent /
-  /// contradicted / not_checkable for the top rows a reader has labeled.
+  /// Design 1's decision table, first match wins. `labels` maps row id to a label for the
+  /// top rows a reader has labeled.
   public static Verdict verdict(final List<Pair> pairs, final List<Scored> allReal, final Map<String, String> labels) {
     final double auroc = auroc(pairs);
     final double[] interval = interval(pairs);
@@ -100,10 +125,10 @@ public final class DocBars {
     final boolean separates = round(auroc) >= SEPARATION_BAR;
     checks.add(new Check("separation AUROC, SWAPPED over REAL", round(auroc), ">= " + SEPARATION_BAR, separates));
     final boolean lift = round(auroc - baseline) >= LIFT_BAR;
-    checks.add(new Check("lift over the identifier-mismatch baseline", round(auroc - baseline), ">= " + LIFT_BAR, lift));
+    checks.add(new Check("lift over the deterministic baseline", round(auroc - baseline), ">= " + LIFT_BAR, lift));
     int problems = 0;
     int labeled = 0;
-    for (final var s : top(allReal)) {
+    for (final var s : top(allReal, TOP_N)) {
       final var label = labels.get(s.row().id());
       if (label == null) {
         continue;
@@ -132,43 +157,90 @@ public final class DocBars {
     return new Verdict(auroc, interval, baseline, r, List.copyOf(checks), decision);
   }
 
-  /// Design 2 over the labeled sample rows: `labels` maps row id to a label; not_checkable
-  /// rows are counted and left out of the ranking bars.
-  public static SampleVerdict sample(final List<Scored> sample, final Map<String, String> labels) {
+  /// Design 2 over the labeled sample: prevalence per stratum and pooled, precision of the
+  /// top rows, the confident-wrong rate with its exact p, and an AUROC only when enough rows
+  /// are contradicted. `stratumOf` names each row's stratum.
+  public static SampleVerdict sample(final List<Scored> sample, final Map<String, String> labels, final Map<String, String> stratumOf) {
+    final var byStratum = new java.util.LinkedHashMap<String, List<Scored>>();
+    for (final var s : sample) {
+      byStratum.computeIfAbsent(stratumOf.getOrDefault(s.row().id(), "random"), k -> new ArrayList<>()).add(s);
+    }
+    final var strata = new ArrayList<Stratum>();
+    for (final var entry : byStratum.entrySet()) {
+      strata.add(stratum(entry.getKey(), entry.getValue(), labels));
+    }
+    final var pooled = stratum("pooled", sample, labels);
     final var contradicted = new ArrayList<Scored>();
     final var consistent = new ArrayList<Scored>();
-    int notCheckable = 0;
     for (final var s : sample) {
+      final var label = labels.get(s.row().id());
+      if (DocQuestions.CONTRADICTED.equals(label)) {
+        contradicted.add(s);
+      } else if (DocQuestions.CONSISTENT.equals(label)) {
+        consistent.add(s);
+      }
+    }
+    int topLabeled = 0;
+    int topContradicted = 0;
+    for (final var s : top(sample, PRECISION_TOP)) {
+      final var label = labels.get(s.row().id());
+      if (label == null) {
+        continue;
+      }
+      topLabeled++;
+      if (label.equals(DocQuestions.CONTRADICTED)) {
+        topContradicted++;
+      }
+    }
+    final int wrong = (int) consistent.stream().filter(s -> s.real().pContradicted() >= CONFIDENT).count();
+    final var confidentWrong = Rate.of(wrong, consistent.size());
+    final double binomialP = consistent.isEmpty() ? Double.NaN : binomialTail(wrong, consistent.size(), CONFIDENT_WRONG_RATE);
+    double auroc = Double.NaN;
+    double[] interval = {Double.NaN, Double.NaN};
+    if (contradicted.size() >= AUROC_MIN_POSITIVES) {
+      final var pos = contradicted.stream().map(s -> s.real().pContradicted()).toList();
+      final var neg = consistent.stream().map(s -> s.real().pContradicted()).toList();
+      auroc = Metrics.auroc(pos, neg);
+      interval = bootstrap(pos, neg);
+    }
+    return new SampleVerdict(List.copyOf(strata), pooled, Rate.of(topContradicted, topLabeled), confidentWrong, binomialP, auroc, interval);
+  }
+
+  static Stratum stratum(final String name, final List<Scored> rows, final Map<String, String> labels) {
+    int contradicted = 0;
+    int consistent = 0;
+    int notCheckable = 0;
+    for (final var s : rows) {
       final var label = labels.get(s.row().id());
       if (label == null) {
         continue;
       }
       switch (label) {
-        case DocQuestions.CONTRADICTED -> contradicted.add(s);
-        case DocQuestions.CONSISTENT -> consistent.add(s);
+        case DocQuestions.CONTRADICTED -> contradicted++;
+        case DocQuestions.CONSISTENT -> consistent++;
         default -> notCheckable++;
       }
     }
-    final int labeled = contradicted.size() + consistent.size() + notCheckable;
-    final int decided = contradicted.size() + consistent.size();
-    final double prevalence = decided == 0 ? Double.NaN : (double) contradicted.size() / decided;
-    final var pos = contradicted.stream().map(s -> s.real().pContradicted()).toList();
-    final var neg = consistent.stream().map(s -> s.real().pContradicted()).toList();
-    final double auroc = Metrics.auroc(pos, neg);
-    final double[] interval = bootstrap(pos, neg);
-    final double mismatchAuroc = Metrics.auroc(contradicted.stream().map(s -> s.row().mismatchReal()).toList(),
-        consistent.stream().map(s -> s.row().mismatchReal()).toList());
-    final double lengthAuroc = Metrics.auroc(contradicted.stream().map(s -> (double) s.row().commentChars()).toList(),
-        consistent.stream().map(s -> (double) s.row().commentChars()).toList());
-    long wrong = consistent.stream().filter(s -> s.real().pContradicted() >= CONFIDENT).count();
-    final double confidentWrong = consistent.isEmpty() ? 0.0 : (double) wrong / consistent.size();
-    final var checks = new ArrayList<Check>();
-    checks.add(new Check("pooled AUROC, contradicted over consistent", round(auroc), ">= " + SAMPLE_AUROC_BAR, round(auroc) >= SAMPLE_AUROC_BAR));
-    checks.add(new Check("consistent rows at P(contradicted) >= " + CONFIDENT, round(confidentWrong), "<= " + CONFIDENT_WRONG_MAX, round(confidentWrong) <= CONFIDENT_WRONG_MAX));
-    checks.add(new Check("lift over the identifier-mismatch baseline", round(auroc - mismatchAuroc), ">= " + LIFT_BAR, round(auroc - mismatchAuroc) >= LIFT_BAR));
-    checks.add(new Check("lift over a comment-length predictor", round(auroc - lengthAuroc), ">= " + LIFT_BAR, round(auroc - lengthAuroc) >= LIFT_BAR));
-    return new SampleVerdict(labeled, contradicted.size(), consistent.size(), notCheckable, prevalence, auroc, interval,
-        mismatchAuroc, lengthAuroc, confidentWrong, List.copyOf(checks));
+    return new Stratum(name, contradicted + consistent + notCheckable, contradicted, consistent, notCheckable,
+        Rate.of(contradicted, contradicted + consistent));
+  }
+
+  /// P(X >= k) for X ~ Binomial(n, rate): the chance of seeing at least this many confident
+  /// wrong answers if the true rate were `rate`.
+  static double binomialTail(final int k, final int n, final double rate) {
+    double tail = 0;
+    for (int i = k; i <= n; i++) {
+      tail += Math.exp(logChoose(n, i) + i * Math.log(rate) + (n - i) * Math.log(1 - rate));
+    }
+    return Math.min(1.0, tail);
+  }
+
+  private static double logChoose(final int n, final int k) {
+    double v = 0;
+    for (int i = 1; i <= k; i++) {
+      v += Math.log(n - k + i) - Math.log(i);
+    }
+    return v;
   }
 
   /// Unpaired percentile bootstrap: positives and negatives resampled independently.

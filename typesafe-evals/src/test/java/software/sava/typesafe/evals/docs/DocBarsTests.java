@@ -13,21 +13,20 @@ final class DocBarsTests {
   static DocScore score(final double pContradicted) {
     final double rest = 1.0 - pContradicted;
     final var choice = pContradicted >= rest * 0.8 ? DocQuestions.CONTRADICTED : DocQuestions.CONSISTENT;
-    return new DocScore(choice, rest * 0.8, pContradicted, rest * 0.2, 0.9, 0.1);
+    return new DocScore(choice, rest * 0.8, pContradicted, rest * 0.2, 0.9);
   }
 
-  static DocCorpus.Row row(final String id, final String realComment, final String swappedComment, final double mismatchReal,
-                           final double mismatchSwapped) {
-    final var facts = JsonContent.object().build();
-    final var real = new DocQuestions.State(realComment, "int m() {\n}", facts, "p/C.java");
-    final var swapped = swappedComment == null ? null : new DocQuestions.State(swappedComment, "int m() {\n}", facts, "p/C.java");
+  static DocCorpus.Row row(final String id, final String realComment, final String swappedComment, final double baselineReal,
+                           final double baselineSwapped) {
+    final var extent = JsonContent.object().build();
+    final var real = new DocQuestions.State(realComment, "int m() {\n}", extent, "p/C.java");
+    final var swapped = swappedComment == null ? null : new DocQuestions.State(swappedComment, "int m() {\n}", extent, "p/C.java");
     return new DocCorpus.Row(id, "repo", "p/C.java", new FileMembers.Key("C", "m", ""), "method", realComment, realComment.length(), 2,
-        real, swapped, swappedComment == null ? null : "C.n()", mismatchReal, mismatchSwapped, List.of());
+        real, swapped, swappedComment == null ? null : "C.n()", baselineReal, baselineReal, baselineSwapped, List.of());
   }
 
-  static DocBars.Pair pair(final String id, final double real, final double swapped, final int chars, final double mReal, final double mSwapped) {
-    final var row = row(id, "r".repeat(chars), "s".repeat(chars), mReal, mSwapped);
-    return new DocBars.Pair(row, score(real), score(swapped));
+  static DocBars.Pair pair(final String id, final double real, final double swapped, final int chars, final double bReal, final double bSwapped) {
+    return new DocBars.Pair(row(id, "r".repeat(chars), "s".repeat(chars), bReal, bSwapped), score(real), score(swapped));
   }
 
   @Test
@@ -43,7 +42,8 @@ final class DocBarsTests {
     assertEquals(12.5 / 16.0, DocBars.baselineAuroc(pairs), 1e-12);
     final var scored = pairs.stream().map(p -> new DocBars.Scored(p.row(), p.real())).toList();
     assertEquals(List.of("d", "c", "b", "a"), DocBars.ranked(scored).stream().map(s -> s.row().id()).toList());
-    assertEquals(4, DocBars.top(scored).size());
+    assertEquals(4, DocBars.top(scored, 30).size());
+    assertEquals(2, DocBars.top(scored, 2).size());
     assertEquals(0.0, DocBars.lengthCorrelation(pairs), 1e-12, "equal comment lengths have no variance");
     final var interval = DocBars.interval(pairs);
     assertTrue(interval[0] <= 0.9375 && 0.9375 <= interval[1]);
@@ -55,7 +55,7 @@ final class DocBarsTests {
     final var scored = clean.stream().map(p -> new DocBars.Scored(p.row(), p.real())).toList();
     var verdict = DocBars.verdict(clean, scored, Map.of());
     assertEquals(1.0, verdict.auroc());
-    assertEquals(0.5, verdict.baselineAuroc(), "identical mismatch in both arms: a coin");
+    assertEquals(0.5, verdict.baselineAuroc(), "identical baselines in both arms: a coin");
     assertEquals("value bar pending", verdict.decision());
     assertEquals(4, verdict.checks().size());
     assertEquals("contradicted comments confirmed among the top 30 REAL rows (0 read)", verdict.checks().get(3).name());
@@ -70,14 +70,9 @@ final class DocBarsTests {
     }
     verdict = DocBars.verdict(five, five.stream().map(p -> new DocBars.Scored(p.row(), p.real())).toList(), labels);
     assertEquals("keep", verdict.decision());
-    // no lift: the baseline separates as well
     final var wordy = List.of(pair("a", 0.1, 0.9, 100, 0.0, 1.0), pair("b", 0.2, 0.8, 100, 0.0, 1.0));
-    verdict = DocBars.verdict(wordy, List.of(), Map.of());
-    assertEquals("no lift", verdict.decision());
-    // separation fails
-    verdict = DocBars.verdict(List.of(pair("a", 0.5, 0.5, 100, 0.0, 0.0), pair("b", 0.6, 0.4, 100, 0.0, 0.0)), List.of(), Map.of());
-    assertEquals("kill: separation", verdict.decision());
-    // proxy: P tracks comment length in both arms
+    assertEquals("no lift", DocBars.verdict(wordy, List.of(), Map.of()).decision(), "the baseline separates as well");
+    assertEquals("kill: separation", DocBars.verdict(List.of(pair("a", 0.5, 0.5, 100, 0.0, 0.0), pair("b", 0.6, 0.4, 100, 0.0, 0.0)), List.of(), Map.of()).decision());
     final var proxy = List.of(pair("a", 0.1, 0.15, 10, 0.0, 0.0), pair("b", 0.5, 0.55, 50, 0.0, 0.0), pair("c", 0.9, 0.95, 90, 0.0, 0.0));
     verdict = DocBars.verdict(proxy, List.of(), Map.of());
     assertTrue(verdict.lengthCorrelation() > 0.99);
@@ -86,7 +81,34 @@ final class DocBarsTests {
   }
 
   @Test
-  void design2SampleBars() {
+  void ratesCarryWilsonIntervals() {
+    final var none = DocBars.Rate.of(0, 0);
+    assertEquals(0, none.of());
+    assertTrue(Double.isNaN(none.rate()));
+    final var five = DocBars.Rate.of(5, 150);
+    assertEquals(5.0 / 150, five.rate(), 1e-12);
+    assertEquals(0.0143, five.lower(), 5e-4);
+    assertEquals(0.0757, five.upper(), 5e-4);
+    final var all = DocBars.Rate.of(3, 3);
+    assertEquals(1.0, all.rate());
+    assertEquals(1.0, all.upper(), "clamped at one");
+    assertTrue(all.lower() > 0.4 && all.lower() < 0.5);
+    final var zero = DocBars.Rate.of(0, 10);
+    assertEquals(0.0, zero.lower(), "clamped at zero");
+    assertTrue(zero.upper() > 0.27 && zero.upper() < 0.29);
+  }
+
+  @Test
+  void binomialTailIsExact() {
+    assertEquals(1.0, DocBars.binomialTail(0, 10, 0.02), 1e-12, "at least zero is certain");
+    assertEquals(1 - Math.pow(0.98, 10), DocBars.binomialTail(1, 10, 0.02), 1e-12);
+    assertEquals(Math.pow(0.02, 3), DocBars.binomialTail(3, 3, 0.02), 1e-15);
+    // 6 or more of 120 at 2%: the review's worked example, about 0.034
+    assertEquals(0.034, DocBars.binomialTail(6, 120, 0.02), 2e-3);
+  }
+
+  @Test
+  void design2IsAPrevalenceStudy() {
     final var rows = List.of(
         new DocBars.Scored(row("a", "x".repeat(50), null, 1.0, Double.NaN), score(0.9)),
         new DocBars.Scored(row("b", "x".repeat(60), null, 0.5, Double.NaN), score(0.8)),
@@ -97,32 +119,53 @@ final class DocBarsTests {
         new DocBars.Scored(row("g", "x".repeat(30), null, 0.0, Double.NaN), score(0.5))
     );
     final var labels = Map.of("a", "contradicted", "b", "contradicted", "c", "consistent", "d", "consistent", "e", "consistent", "f", "not_checkable");
-    final var v = DocBars.sample(rows, labels);
-    assertEquals(6, v.labeled(), "g is unlabeled");
-    assertEquals(2, v.contradicted());
-    assertEquals(3, v.consistent());
-    assertEquals(1, v.notCheckable());
-    assertEquals(0.4, v.prevalence(), 1e-12);
-    // contradicted {0.9, 0.8} vs consistent {0.2, 0.1, 0.95}: 4 wins of 6
-    assertEquals(4.0 / 6.0, v.auroc(), 1e-12);
-    assertEquals(1.0, v.mismatchAuroc(), "the mismatch baseline separates these perfectly");
-    // lengths: {50, 60} vs {40, 45, 70}: 50>40,45; 60>40,45 -> 4 of 6
-    assertEquals(4.0 / 6.0, v.lengthAuroc(), 1e-12);
-    assertEquals(1.0 / 3.0, v.confidentWrong(), 1e-12, "e is consistent at 0.95");
-    assertEquals(4, v.checks().size());
-    assertFalse(v.checks().get(0).pass(), "0.667 < 0.80");
-    assertFalse(v.checks().get(1).pass(), "one confident wrong of three consistent");
-    assertFalse(v.checks().get(2).pass(), "no lift over the mismatch baseline");
-    assertFalse(v.checks().get(3).pass(), "equal to the length predictor");
-    assertTrue(v.interval()[0] <= v.auroc() && v.auroc() <= v.interval()[1]);
-    final var empty = DocBars.sample(rows, Map.of());
-    assertEquals(0, empty.labeled());
-    assertTrue(Double.isNaN(empty.prevalence()));
-    assertTrue(Double.isNaN(empty.auroc()));
-    assertTrue(Double.isNaN(empty.interval()[0]));
-    assertEquals(0.0, empty.confidentWrong());
+    final var strata = Map.of("a", "stale-candidate", "b", "stale-candidate", "c", "stale-candidate");
+    final var v = DocBars.sample(rows, labels, strata);
+    assertEquals(List.of("stale-candidate", "random"), v.strata().stream().map(DocBars.Stratum::name).toList(), "unmapped rows are random");
+    final var stale = v.strata().get(0);
+    assertEquals(3, stale.labeled());
+    assertEquals(2, stale.contradicted());
+    assertEquals(1, stale.consistent());
+    assertEquals(2.0 / 3.0, stale.prevalence().rate(), 1e-12);
+    final var random = v.strata().get(1);
+    assertEquals(3, random.labeled(), "d, e, f; g is unlabeled");
+    assertEquals(0, random.contradicted());
+    assertEquals(1, random.notCheckable());
+    assertEquals(0.0, random.prevalence().rate());
+    assertEquals(6, v.pooled().labeled());
+    assertEquals(0.4, v.pooled().prevalence().rate(), 1e-12);
+    // top 20 by P(contradicted) covers every row; labeled: a, b contradicted of 6 labeled
+    assertEquals(2, v.topPrecision().count());
+    assertEquals(6, v.topPrecision().of());
+    assertEquals(1, v.confidentWrong().count(), "e is consistent at 0.95");
+    assertEquals(3, v.confidentWrong().of());
+    assertEquals(DocBars.binomialTail(1, 3, 0.02), v.binomialP(), 1e-12);
+    assertTrue(Double.isNaN(v.auroc()), "two contradicted rows are too few for a ranking statistic");
+    assertTrue(Double.isNaN(v.interval()[0]));
+    final var empty = DocBars.sample(rows, Map.of(), Map.of());
+    assertEquals(0, empty.pooled().labeled());
+    assertTrue(Double.isNaN(empty.pooled().prevalence().rate()));
+    assertEquals(0, empty.confidentWrong().of());
+    assertTrue(Double.isNaN(empty.binomialP()));
+  }
+
+  @Test
+  void design2ReportsAurocOnlyWithEnoughContradictedRows() {
+    final var rows = new java.util.ArrayList<DocBars.Scored>();
+    final var labels = new java.util.HashMap<String, String>();
+    for (int i = 0; i < 20; i++) {
+      rows.add(new DocBars.Scored(row("c" + i, "x", null, 0.0, Double.NaN), score(0.6 + i * 0.01)));
+      labels.put("c" + i, "contradicted");
+    }
+    for (int i = 0; i < 10; i++) {
+      rows.add(new DocBars.Scored(row("k" + i, "x", null, 0.0, Double.NaN), score(0.1 + i * 0.01)));
+      labels.put("k" + i, "consistent");
+    }
+    final var v = DocBars.sample(rows, labels, Map.of());
+    assertEquals(1.0, v.auroc(), "every contradicted row outranks every consistent one");
+    assertArrayEquals(new double[]{1.0, 1.0}, v.interval());
+    assertEquals(20, v.pooled().contradicted());
     assertArrayEquals(new double[]{Double.NaN, Double.NaN}, DocBars.bootstrap(List.of(), List.of(0.5)));
-    assertArrayEquals(new double[]{1.0, 1.0}, DocBars.bootstrap(List.of(0.9, 0.8), List.of(0.1)));
   }
 
   @Test
@@ -132,9 +175,10 @@ final class DocBarsTests {
     assertEquals(0.8, DocBars.CORRELATION_CEILING);
     assertEquals(30, DocBars.TOP_N);
     assertEquals(5, DocBars.VALUE_BAR);
-    assertEquals(0.80, DocBars.SAMPLE_AUROC_BAR);
+    assertEquals(20, DocBars.PRECISION_TOP);
     assertEquals(0.9, DocBars.CONFIDENT);
-    assertEquals(0.02, DocBars.CONFIDENT_WRONG_MAX);
+    assertEquals(0.02, DocBars.CONFIDENT_WRONG_RATE);
+    assertEquals(20, DocBars.AUROC_MIN_POSITIVES);
     assertEquals(0.8499, DocBars.round(0.84994));
     assertEquals(0.85, DocBars.round(0.84996));
   }

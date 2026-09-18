@@ -28,14 +28,14 @@ import java.util.TreeMap;
 /// sample drawn from the "possibly stale at HEAD" members plus random fill.
 ///
 /// Arguments: `--checkouts <dir>` `--repos <name,...>` `--out <dir>` `--recordings <dir>`
-/// `--mode record|replay|corpus` `--concurrency <n>` `--per-repo <n>` `--sample <n>`
+/// `--mode record|replay|corpus` `--concurrency <n>` `--sample <n>`
 /// `--labels-top <sheet>` `--labels-sample <sheet>` `--visibility-cache <file>`
 public final class DocExperiment {
 
   public static final int STALE_CANDIDATE_CAP = 100;
 
   public record Config(Path checkouts, List<String> repos, Path out, Path recordings, String mode, int concurrency,
-                       int perRepo, int sample, Path labelsTop, Path labelsSample, Path visibilityCache) {
+                       int sample, Path labelsTop, Path labelsSample, Path visibilityCache) {
 
     public static Config parse(final String[] args) {
       final var map = new LinkedHashMap<String, String>();
@@ -58,7 +58,6 @@ public final class DocExperiment {
           Path.of(map.getOrDefault("recordings", out.resolve("recordings").toString())),
           map.getOrDefault("mode", "record"),
           Integer.parseInt(map.getOrDefault("concurrency", "4")),
-          Integer.parseInt(map.getOrDefault("per-repo", "300")),
           Integer.parseInt(map.getOrDefault("sample", "0")),
           map.containsKey("labels-top") ? Path.of(map.get("labels-top")) : null,
           map.containsKey("labels-sample") ? Path.of(map.get("labels-sample")) : null,
@@ -108,7 +107,7 @@ public final class DocExperiment {
         skipped++;
         continue;
       }
-      final var repoRows = new DocCorpus(name, checkout, git, config.perRepo()).rows();
+      final var repoRows = new DocCorpus(name, git).rows();
       rows.addAll(repoRows);
       if (config.sample() > 0) {
         staleKeys.addAll(staleCandidates(name, repoRows, new HistoryMiner(git, HistoryMiner.MAIN_SOURCES).mine()));
@@ -167,12 +166,16 @@ public final class DocExperiment {
     }
     final var sampleScored = scored.stream().filter(s -> sampleIds.contains(s.row().id())).toList();
     writeScores(scored, scores, config.out().resolve("jev.tsv"));
-    writeLabelingSheet(DocBars.top(scored).stream().map(DocBars.Scored::row).toList(), config.out().resolve("labeling-sheet-top.tsv"));
+    writeLabelingSheet(DocBars.top(scored, DocBars.TOP_N).stream().map(DocBars.Scored::row).toList(), config.out().resolve("labeling-sheet-top.tsv"));
     writeLabelingSheet(sample, config.out().resolve("labeling-sheet-sample.tsv"));
     final var labelsTop = read(config.labelsTop());
     final var labelsSample = read(config.labelsSample());
     final var verdict = DocBars.verdict(pairs, scored, labelsTop);
-    final var sampleVerdict = labelsSample.isEmpty() ? null : DocBars.sample(sampleScored, labelsSample);
+    final var stratumOf = new LinkedHashMap<String, String>();
+    for (final var row : sample) {
+      stratumOf.put(row.id(), staleKeys.contains(row.repo() + '#' + row.path() + '#' + row.key()) ? "stale-candidate" : "random");
+    }
+    final var sampleVerdict = labelsSample.isEmpty() ? null : DocBars.sample(sampleScored, labelsSample, stratumOf);
     final var summary = new Summary(config.repos().size(), skipped, rows.size(), withSwap, staleCount, sample.size(), jev.totals(outcomes),
         verdict, sampleVerdict);
     writeReport(config.out().resolve("report.md"), summary, rows, pairs, scored, sampleScored);
@@ -240,26 +243,25 @@ public final class DocExperiment {
       sampleIds.add(row.id());
     }
     final var tsv = new Tsv("row_id", "repo", "path", "member", "kind", "comment_chars", "body_lines", "swapped_from", "mismatch_real",
-        "mismatch_swapped", "identifiers_missing", "sample");
+        "baseline_real", "baseline_swapped", "identifiers_missing", "sample");
     for (final var row : rows) {
       final boolean stale = staleKeys.contains(row.repo() + '#' + row.path() + '#' + row.key());
       tsv.row(row.id(), row.repo(), row.path(), row.key().toString(), row.kind(), row.commentChars(), row.bodyLines(), row.swappedFrom(),
-          fmt(row.mismatchReal()), row.hasSwap() ? fmt(row.mismatchSwapped()) : "", String.join(" ", row.identifiersMissing()),
+          fmt(row.mismatchReal()), fmt(row.baselineReal()), row.hasSwap() ? fmt(row.baselineSwapped()) : "", String.join(" ", row.identifiersMissing()),
           sampleIds.contains(row.id()) ? (stale ? "stale-candidate" : "random") : (stale ? "stale-candidate-unsampled" : ""));
     }
     tsv.write(file);
   }
 
   static void writeScores(final List<DocBars.Scored> scored, final Map<String, DocScore> scores, final Path file) {
-    final var tsv = new Tsv("row_id", "arm", "choice", "p_consistent", "p_contradicted", "p_not_checkable", "confidence", "names_missing",
-        "mismatch_baseline");
+    final var tsv = new Tsv("row_id", "arm", "choice", "p_consistent", "p_contradicted", "p_not_checkable", "confidence", "baseline");
     for (final var s : scored) {
       tsv.row(s.row().id(), "real", s.real().choice(), fmt(s.real().pConsistent()), fmt(s.real().pContradicted()),
-          fmt(s.real().pNotCheckable()), fmt(s.real().confidence()), fmt(s.real().namesMissing()), fmt(s.row().mismatchReal()));
+          fmt(s.real().pNotCheckable()), fmt(s.real().confidence()), fmt(s.row().baselineReal()));
       final var swapped = scores.get(s.row().id() + "#swapped");
       if (swapped != null) {
         tsv.row(s.row().id(), "swapped", swapped.choice(), fmt(swapped.pConsistent()), fmt(swapped.pContradicted()),
-            fmt(swapped.pNotCheckable()), fmt(swapped.confidence()), fmt(swapped.namesMissing()), fmt(s.row().mismatchSwapped()));
+            fmt(swapped.pNotCheckable()), fmt(swapped.confidence()), fmt(s.row().baselineSwapped()));
       }
     }
     tsv.write(file);
@@ -324,7 +326,8 @@ public final class DocExperiment {
   static void appendDesign1(final StringBuilder out, final DocBars.Verdict verdict) {
     out.append("## Design 1: swapped comments (pre-registered decision table, first match wins)\n\n");
     out.append("AUROC ").append(fmt(verdict.auroc())).append(" (bootstrap 95% ").append(fmt(verdict.interval()[0])).append(" to ")
-        .append(fmt(verdict.interval()[1])).append("), identifier-mismatch baseline ").append(fmt(verdict.baselineAuroc())).append(".\n\n");
+        .append(fmt(verdict.interval()[1])).append("), deterministic baseline (identifier mismatch or missing name echo) ")
+        .append(fmt(verdict.baselineAuroc())).append(".\n\n");
     out.append("| bar | value | required | pass |\n| --- | --- | --- | --- |\n");
     for (final var check : verdict.checks()) {
       out.append("| ").append(check.name()).append(" | ").append(fmt(check.value())).append(" | ").append(check.required())
@@ -346,30 +349,45 @@ public final class DocExperiment {
   }
 
   static void appendTop(final StringBuilder out, final List<DocBars.Scored> scored) {
-    out.append("## Top REAL rows by P(contradicted)\n\n| row | P(contradicted) | confidence | names_missing | mismatch baseline |\n| --- | --- | --- | --- | --- |\n");
-    for (final var s : DocBars.top(scored)) {
+    out.append("## Top REAL rows by P(contradicted)\n\n| row | P(contradicted) | confidence | baseline |\n| --- | --- | --- | --- |\n");
+    for (final var s : DocBars.top(scored, DocBars.TOP_N)) {
       out.append("| ").append(s.row().id()).append(" | ").append(fmt(s.real().pContradicted())).append(" | ").append(fmt(s.real().confidence()))
-          .append(" | ").append(fmt(s.real().namesMissing())).append(" | ").append(fmt(s.row().mismatchReal())).append(" |\n");
+          .append(" | ").append(fmt(s.row().baselineReal())).append(" |\n");
     }
     out.append('\n');
   }
 
   static void appendDesign2(final StringBuilder out, final DocBars.SampleVerdict verdict, final int sampled) {
-    out.append("## Design 2: the real population (blind-labeled sample)\n\n");
+    out.append("## Design 2: the real population (blind-labeled sample, a prevalence study)\n\n");
     if (verdict == null) {
       out.append(sampled).append(" sampled rows scored; no labels yet (fill `labeling-sheet-sample.tsv` and rerun with `--labels-sample`).\n");
       return;
     }
-    out.append(verdict.labeled()).append(" labeled rows: ").append(verdict.contradicted()).append(" contradicted, ")
-        .append(verdict.consistent()).append(" consistent, ").append(verdict.notCheckable()).append(" not checkable; prevalence of contradicted among decided rows ")
-        .append(fmt(verdict.prevalence())).append(". AUROC ").append(fmt(verdict.auroc())).append(" (bootstrap 95% ").append(fmt(verdict.interval()[0]))
-        .append(" to ").append(fmt(verdict.interval()[1])).append("); identifier-mismatch baseline ").append(fmt(verdict.mismatchAuroc()))
-        .append(", comment-length predictor ").append(fmt(verdict.lengthAuroc())).append(".\n\n");
-    out.append("| bar | value | required | pass |\n| --- | --- | --- | --- |\n");
-    for (final var check : verdict.checks()) {
-      out.append("| ").append(check.name()).append(" | ").append(fmt(check.value())).append(" | ").append(check.required())
-          .append(" | ").append(check.pass() ? "yes" : "NO").append(" |\n");
+    out.append("| stratum | labeled | contradicted | consistent | not checkable | prevalence (Wilson 95%) |\n| --- | --- | --- | --- | --- | --- |\n");
+    for (final var stratum : verdict.strata()) {
+      appendStratum(out, stratum);
     }
-    out.append('\n');
+    appendStratum(out, verdict.pooled());
+    out.append("\nPrecision of the top ").append(DocBars.PRECISION_TOP).append(" REAL rows by P(contradicted): ").append(rate(verdict.topPrecision())).append(".\n");
+    out.append("Consistent rows at P(contradicted) >= ").append(DocBars.CONFIDENT).append(": ").append(rate(verdict.confidentWrong()))
+        .append("; exact one-sided p against a ").append(DocBars.CONFIDENT_WRONG_RATE).append(" rate: ").append(fmt(verdict.binomialP())).append(".\n");
+    if (Double.isNaN(verdict.auroc())) {
+      out.append("AUROC not reported: fewer than ").append(DocBars.AUROC_MIN_POSITIVES).append(" rows are labeled contradicted, so a ranking statistic would be underpowered.\n");
+    } else {
+      out.append("AUROC (contradicted over consistent, no bar) ").append(fmt(verdict.auroc())).append(" (bootstrap 95% ")
+          .append(fmt(verdict.interval()[0])).append(" to ").append(fmt(verdict.interval()[1])).append(").\n");
+    }
+  }
+
+  private static void appendStratum(final StringBuilder out, final DocBars.Stratum stratum) {
+    out.append("| ").append(stratum.name()).append(" | ").append(stratum.labeled()).append(" | ").append(stratum.contradicted()).append(" | ")
+        .append(stratum.consistent()).append(" | ").append(stratum.notCheckable()).append(" | ").append(rate(stratum.prevalence())).append(" |\n");
+  }
+
+  static String rate(final DocBars.Rate rate) {
+    if (rate.of() == 0) {
+      return "n/a";
+    }
+    return rate.count() + " of " + rate.of() + " = " + fmt(rate.rate()) + " (" + fmt(rate.lower()) + " to " + fmt(rate.upper()) + ")";
   }
 }

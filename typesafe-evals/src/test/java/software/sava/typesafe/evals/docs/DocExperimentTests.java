@@ -77,8 +77,8 @@ final class DocExperimentTests {
       final var comment = state.substring(at, state.indexOf("\",\"member_source\""));
       final boolean contradicted = comment.contains("NEXT") && !state.contains("NEXT;\\n");
       final var body = contradicted
-          ? "{\"model\":\"jev-stub\",\"answers\":{\"agreement\":{\"type\":\"choice\",\"choice\":\"contradicted\",\"confidence\":0.9,\"probabilities\":{\"consistent\":0.05,\"contradicted\":0.9,\"not_checkable\":0.05}},\"names_missing\":{\"type\":\"noul\",\"noul\":0.9}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}"
-          : "{\"model\":\"jev-stub\",\"answers\":{\"agreement\":{\"type\":\"choice\",\"choice\":\"consistent\",\"confidence\":0.85,\"probabilities\":{\"consistent\":0.85,\"contradicted\":0.1,\"not_checkable\":0.05}},\"names_missing\":{\"type\":\"noul\",\"noul\":0.1}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}";
+          ? "{\"model\":\"jev-stub\",\"answers\":{\"agreement\":{\"type\":\"choice\",\"choice\":\"contradicted\",\"confidence\":0.9,\"probabilities\":{\"consistent\":0.05,\"contradicted\":0.9,\"not_checkable\":0.05}}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}"
+          : "{\"model\":\"jev-stub\",\"answers\":{\"agreement\":{\"type\":\"choice\",\"choice\":\"consistent\",\"confidence\":0.85,\"probabilities\":{\"consistent\":0.85,\"contradicted\":0.1,\"not_checkable\":0.05}}},\"usage\":{\"input_tokens\":300,\"output_tokens\":5}}";
       return CompletableFuture.completedFuture(SystemOneResponse.parse(body.getBytes(StandardCharsets.UTF_8), "req_stub"));
     }
 
@@ -125,11 +125,11 @@ final class DocExperimentTests {
     assertEquals(2, summary.sampled());
     assertNull(summary.spend());
     final var rows = Files.readAllLines(out.resolve("rows.tsv"));
-    assertEquals("row_id\trepo\tpath\tmember\tkind\tcomment_chars\tbody_lines\tswapped_from\tmismatch_real\tmismatch_swapped\tidentifiers_missing\tsample", rows.getFirst());
+    assertEquals("row_id\trepo\tpath\tmember\tkind\tcomment_chars\tbody_lines\tswapped_from\tmismatch_real\tbaseline_real\tbaseline_swapped\tidentifiers_missing\tsample", rows.getFirst());
     assertEquals(4, rows.size());
     final var size = rows.stream().filter(l -> l.contains("#Widget.size(int)\t")).findFirst().orElseThrow();
     assertTrue(size.endsWith("\tNEXT\tstale-candidate"), "size's comment names NEXT, which its new body lacks: " + size);
-    assertTrue(size.contains("\tWidget.step()\t1.000\t"), "size's swap is step's comment; its own mismatch is 1.0: " + size);
+    assertTrue(size.contains("\tWidget.step()\t1.000\t1.000\t"), "size's swap is step's comment; its own mismatch and baseline are 1.0: " + size);
     assertEquals(1, rows.stream().filter(l -> l.endsWith("\trandom")).count(), "the sample is filled with one random member");
     final var report = Files.readString(out.resolve("report.md"));
     assertTrue(report.contains("| 2 | 1 | 3 | 3 | 1 | 2 |"), report);
@@ -158,7 +158,7 @@ final class DocExperimentTests {
     assertEquals("kill: separation", verdict.decision());
     assertNull(summary.sampleVerdict(), "no sample labels yet");
     final var jev = Files.readAllLines(out.resolve("jev.tsv"));
-    assertEquals("row_id\tarm\tchoice\tp_consistent\tp_contradicted\tp_not_checkable\tconfidence\tnames_missing\tmismatch_baseline", jev.getFirst());
+    assertEquals("row_id\tarm\tchoice\tp_consistent\tp_contradicted\tp_not_checkable\tconfidence\tbaseline", jev.getFirst());
     assertEquals(7, jev.size());
     final var top = Files.readAllLines(out.resolve("labeling-sheet-top.tsv"));
     assertEquals("row_id\tlabel\tnotes\trepo\tmember\tcomment\tmember_source", top.getFirst());
@@ -170,6 +170,7 @@ final class DocExperimentTests {
     assertTrue(report.contains("Requests 6 (6 answered), input tokens 1800, cost $0.0001; recording hits 0, misses 6; 3 rows with both arms scored, 3 REAL rows scored."), report);
     assertTrue(report.contains("## Design 1: swapped comments"), report);
     assertTrue(report.contains("3 sampled rows scored; no labels yet"), report);
+    assertTrue(report.contains("## Design 2: the real population (blind-labeled sample, a prevalence study)"), report);
     assertTrue(report.contains("Choices, REAL arm: {consistent=2, contradicted=1}; SWAPPED arm: {consistent=1, contradicted=2}."), report);
 
     // labels for the sample: size is contradicted, the others consistent; replay needs no key
@@ -194,17 +195,27 @@ final class DocExperimentTests {
     assertEquals(6, replayed.spend().hits());
     final var sv = replayed.sampleVerdict();
     assertNotNull(sv);
-    assertEquals(3, sv.labeled());
-    assertEquals(1, sv.contradicted());
-    assertEquals(2, sv.consistent());
-    assertEquals(1.0 / 3.0, sv.prevalence(), 1e-12, "one contradicted of three decided");
-    assertEquals(1.0, sv.auroc(), "size at 0.9 above both consistent rows at 0.1");
-    assertEquals(1.0, sv.mismatchAuroc(), "size's mismatch 1.0 above the others");
-    assertEquals(0.0, sv.confidentWrong());
+    assertEquals(3, sv.pooled().labeled());
+    assertEquals(1, sv.pooled().contradicted());
+    assertEquals(2, sv.pooled().consistent());
+    assertEquals(1.0 / 3.0, sv.pooled().prevalence().rate(), 1e-12, "one contradicted of three decided");
+    assertEquals(List.of("stale-candidate", "random"), sv.strata().stream().map(DocBars.Stratum::name).toList());
+    assertEquals(1, sv.strata().get(0).contradicted(), "size is the stale candidate and is contradicted");
+    assertEquals(0, sv.strata().get(1).contradicted());
+    assertTrue(Double.isNaN(sv.auroc()), "one contradicted row is far below the twenty a ranking statistic needs");
+    assertEquals(1, sv.topPrecision().count());
+    assertEquals(3, sv.topPrecision().of());
+    assertEquals(0, sv.confidentWrong().count());
+    assertEquals(2, sv.confidentWrong().of());
+    assertEquals(1.0, sv.binomialP(), 1e-12, "zero confident-wrong rows: at least zero is certain");
     assertEquals("kill: separation", replayed.verdict().decision(), "the table stops at separation before it reads the value bar");
     assertEquals(0.0, replayed.verdict().checks().get(3).value(), "three top rows read, none contradicted");
     report = Files.readString(out.resolve("report.md"));
-    assertTrue(report.contains("3 labeled rows: 1 contradicted, 2 consistent, 0 not checkable; prevalence of contradicted among decided rows 0.333."), report);
+    assertTrue(report.contains("| pooled | 3 | 1 | 2 | 0 | 1 of 3 = 0.333 (0.061 to 0.792) |"), report);
+    assertTrue(report.contains("| stale-candidate | 1 | 1 | 0 | 0 | 1 of 1 = 1.000 ("), report);
+    assertTrue(report.contains("Precision of the top 20 REAL rows by P(contradicted): 1 of 3 = 0.333"), report);
+    assertTrue(report.contains("Consistent rows at P(contradicted) >= 0.9: 0 of 2 = 0.000 (0.000 to 0.658); exact one-sided p against a 0.02 rate: 1.000."), report);
+    assertTrue(report.contains("AUROC not reported: fewer than 20 rows are labeled contradicted"), report);
     assertTrue(report.contains("contradicted comments confirmed among the top 30 REAL rows (3 read) | 0.000 | >= 5 | NO |"), report);
   }
 
@@ -230,22 +241,23 @@ final class DocExperimentTests {
 
   private static DocCorpus.Row row(final String id, final String path, final FileMembers.Key key, final String comment) {
     final var state = new DocQuestions.State(comment, "{}", software.sava.typesafe.JsonContent.object().build(), path);
-    return new DocCorpus.Row(id, "repo", path, key, "method", comment, comment.length(), 1, state, null, null, 0.0, Double.NaN, List.of());
+    return new DocCorpus.Row(id, "repo", path, key, "method", comment, comment.length(), 1, state, null, null, 0.0, 0.0, Double.NaN, List.of());
   }
 
   @Test
   void configAndLabels(@TempDir final Path dir) throws Exception {
     assertThrows(IllegalArgumentException.class, () -> DocExperiment.Config.parse(new String[]{}));
     assertThrows(IllegalArgumentException.class, () -> DocExperiment.Config.parse(new String[]{"checkouts", "c", "--repos", "r"}));
-    final var config = DocExperiment.Config.parse(new String[]{"--checkouts", "c", "--repos", "a,b", "--mode", "replay", "--per-repo", "7", "--sample", "9"});
+    final var config = DocExperiment.Config.parse(new String[]{"--checkouts", "c", "--repos", "a,b", "--mode", "replay", "--sample", "9"});
     assertEquals(Path.of("build/experiments/docs"), config.out());
     assertEquals(Path.of("build/experiments/docs/recordings"), config.recordings());
-    assertEquals(7, config.perRepo());
     assertEquals(9, config.sample());
     assertNull(config.labelsTop());
     assertEquals(RecordingTypeSafeClient.Mode.REPLAY_ONLY, DocExperiment.runnerFor(config).client().mode());
     assertEquals("", DocExperiment.fmt(Double.NaN));
     assertEquals("0.500", DocExperiment.fmt(0.5));
+    assertEquals("n/a", DocExperiment.rate(DocBars.Rate.of(0, 0)));
+    assertEquals("1 of 4 = 0.250 (0.046 to 0.699)", DocExperiment.rate(DocBars.Rate.of(1, 4)));
     final var file = dir.resolve("labels.tsv");
     Files.writeString(file, "row_id\tlabel\na\tContradicted\nb\tnot checkable\nc\t\nd\tnot-checkable\n");
     assertEquals(Map.of("a", "contradicted", "b", "not_checkable", "d", "not_checkable"), DocLabels.read(file).byKey());

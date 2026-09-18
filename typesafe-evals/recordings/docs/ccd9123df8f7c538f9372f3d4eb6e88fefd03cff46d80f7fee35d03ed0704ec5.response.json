@@ -1,0 +1,1 @@
+{"model":"jev-1.13.0","answers":{"agreement":{"type":"choice","choice":"not_checkable","confidence":0.96,"probabilities":{"not_checkable":0.98,"consistent":0.0,"contradicted":0.02}}},"usage":{"input_tokens":709,"output_tokens":48}}
