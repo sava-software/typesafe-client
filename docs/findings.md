@@ -59,7 +59,7 @@ Side findings from that round, each a deterministic fix with no model:
 | Finding dedupe before refuters | Keep | In one sava workflow, 30 of 78 refuter agents re-verified two defects. Exact file:line over-merges and over-splits; 72% of same-line pairs sit in a Jaccard band holding both duplicates and distinct defects. All 463 findings across 12 finder schemas carry a summary-like field, so no schema change is needed. |
 | Cross-round convergence / stop signal | Reject | The one multi-round trajectory is in a private repository; public PRs top out at 3 comments; HARDENING already assigns the stop judgment to a human. |
 | Dependabot release-note screening | Reject | The one bump that cost real work had a one-line PR body with no notes; the crisp prose positives cost one line each. No label exists that is not circular. |
-| Description-versus-code consistency (added after A and B ran) | Pre-registered as Experiment C after a second adversarial review | Generalises A to doc comments (C1) and to the hardening evidence itself (C2). C1 had no label source on this fleet; C2 ran, cleared its separation bar by 0.005, and the value bar confirmed 8 mis-filed rows in its top 30. See below. |
+| Description-versus-code consistency (added after A and B ran) | Pre-registered as Experiment C after a second adversarial review | Generalises A to doc comments (C1) and to the hardening evidence itself (C2). C2 ran, cleared its separation bar by 0.005, and the value bar confirmed 8 mis-filed rows in its top 30. C1 ran in a revisited form and was killed: contradicted comments are 2.4% of the fleet and Jev does not rank them. See below. |
 
 ## How the sheets were labeled
 
@@ -215,7 +215,8 @@ stood). Harness: `software.sava.typesafe.evals.hardening` (`./gradlew :typesafe-
 and `software.sava.typesafe.evals.docs` (`./gradlew :typesafe-evals:docsMine`). Outputs in
 `typesafe-evals/experiments/hardening/`; recordings under `typesafe-evals/recordings/hardening/`._
 
-**C1, doc comments versus member bodies: no label source.** The idea was to label stale
+**C1, doc comments versus member bodies: no natural label source; revisited below with a
+constructed design and a blind-labeled sample.** The idea was to label stale
 comments from git history: a body-only edit later reconciled by a comment-only edit of the
 same member. A member-level miner over the six public checkouts (1,066 Java commits) found
 3 such members, plus 38 co-edits whose comment change names identifiers the body change
@@ -288,3 +289,80 @@ answer for text that argues nothing. Cost and speed were as before: eight cents 
 judgments. The leakage controls held: the length proxy is absent and the word baseline is
 beaten by 0.24. And the mutation triage of the harness caught a state-assembly bug that a
 green test suite had not.
+
+## Experiment C1 revisited: doc comments versus member bodies
+
+_Status: Design 1 (swapped comments) run and killed by its separation bar; Design 2 (a
+blind-labeled sample of the real population) run and labeled. Pre-registration: the plan file's
+"C1 revisited" section and its amendments, written after a three-lens review (15 findings, 14
+stood) and before the first request. Harness: `software.sava.typesafe.evals.docs`
+(`./gradlew :typesafe-evals:docsExperiment`). Outputs in `typesafe-evals/experiments/docs/`;
+recordings under `typesafe-evals/recordings/docs/`._
+
+**What the review changed before the run.** Over half the first frame was IDL-generated code
+under `/gen/`; a third of the swapped comments were byte-identical to their real twin after
+masking (overloads sharing a comment, tag-only comments emptied by tag removal); the state
+handed Jev the identifier facts the baseline measures; the criteria did not partition; and the
+name-echo channel (a comment paraphrasing its member's name in prose) leaked the swap at AUROC
+0.75 while the pre-registered baseline saw 0.52. All of it was fixed in the pre-registration
+and the harness: generated sources excluded, swaps restricted to differently named members with
+different shown comments, block tags removed with their continuations, names masked as prose,
+the identifier channel moved out of the state and into a baseline that also carries name echo,
+one partitioning Choice, and Design 2 re-scoped to a prevalence study because a 150-row sample
+cannot carry a ranking bar at this fleet's prevalence.
+
+**Corpus.** 461 documented members across the six public repositories (sava 216, http-servers
+96, json-iterator 66, incident-client 35, ravina 29, glam-sdk-java 19 once its generated
+clients are out), 373 with a swap, one row per distinct shown comment; 37 members whose comment
+predates their last body change (the stale candidates) plus 113 random members form the
+150-row sample.
+
+**Design 1 run.** 834 requests, 677,206 input tokens, $0.028, all answered.
+
+| bar | value | required | pass |
+| --- | --- | --- | --- |
+| P(contradicted) correlates with comment length | r = -0.090 | abs(r) <= 0.8 | yes |
+| separation AUROC, SWAPPED over REAL (bootstrap 95% 0.626 to 0.696) | 0.663 | >= 0.85 | no |
+| lift over the deterministic baseline (0.620) | 0.043 | >= 0.10 | no |
+| **decision** | **kill: separation** | | |
+
+**Why it failed, and what the model actually did.** The design assumed a sibling's comment over
+this member's body would read as "contradicted". Jev read it as "not checkable": in the SWAPPED
+arm 239 of 373 answers are not_checkable, 94 contradicted, 40 consistent; in the REAL arm 259
+consistent, 87 not_checkable, 27 contradicted. That is the literal-reading model behaving as
+documented: a comment about another method makes no claim this body can settle, so it is not
+checkable rather than false. Post-hoc, and not in the bars: scoring the arms by one minus
+P(consistent) separates them at AUROC 0.901, and the swapped arm is less consistent than its
+real twin in 339 of 373 pairs. The instrument was wrong, not the model; a re-run would
+pre-register "does this comment belong to this code" as the question and P(consistent) as the
+score. It was not re-run here, because moving the score after seeing the data is the thing the
+bars exist to prevent.
+
+**Design 2, the real population.** The 150-row sample was labeled blind by two readers per
+row with a third deciding disagreements (agreement 144 of 150; the 30-row top sheet 23 of 23
+on the rows not already in the sample). Contradicted comments are rare in this fleet:
+
+| stratum | labeled | contradicted | consistent | not checkable | prevalence (Wilson 95%) |
+| --- | --- | --- | --- | --- | --- |
+| stale candidates (body changed under an untouched comment) | 37 | 1 | 31 | 5 | 1 of 32 = 3.1% (0.6 to 15.7) |
+| random documented members | 113 | 2 | 90 | 21 | 2 of 92 = 2.2% (0.6 to 7.6) |
+| pooled | 150 | 3 | 121 | 26 | 3 of 124 = 2.4% (0.8 to 6.9) |
+
+The three contradicted comments are real and subtle: `FieldMatcher.hash` says spans of eight
+bytes or more use two word loads while the branch tests `len > Long.BYTES`; `SolanaJsonRpcWebsocket.escalateUnanswered`
+says the connection is aborted here while the member only marks the lifecycle and returns;
+`SolanaJsonRpcWebsocket.staleSingletonId` attributes to the caller a guard the member itself
+holds. Jev ranked them 96th, 143rd, and 150th of 461 by P(contradicted) and called all three
+"consistent". Of its top 20 REAL rows by P(contradicted), the readers confirmed none as
+contradicted (0 of 20, Wilson upper bound 16%); no consistent row scored at or above 0.90.
+Across the sample Jev's choice matched the label on 110 of 150 rows; its errors were 23
+"not checkable" calls on rows the readers could check, 11 "contradicted" calls on consistent
+rows, and the 3 misses above.
+
+**Verdict: kill, and a finding about the fleet rather than the model.** About one documented
+member in forty carries a comment its body contradicts, and the ones that do are subtle enough
+that a literal-reading model does not see them. The signal Jev does carry, "this comment does
+not belong to this code" (AUROC 0.90 post hoc), is not the question anyone needs answered
+here, because comments in this fleet are fixed in the same commit as the code. There is no
+product to propose for doc comments; the deterministic checks (parameter names, thrown types,
+referenced identifiers) remain the right tool for the part of the problem that exists.

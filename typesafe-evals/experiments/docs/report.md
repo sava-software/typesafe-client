@@ -17,7 +17,7 @@
 
 ## Jev
 
-Requests 834 (834 answered), input tokens 677206, cost $0.0284; recording hits 0, misses 834; 373 rows with both arms scored, 461 REAL rows scored.
+Requests 834 (834 answered), input tokens 677206, cost $0.0284; recording hits 834, misses 0; 373 rows with both arms scored, 461 REAL rows scored.
 
 ## Design 1: swapped comments (pre-registered decision table, first match wins)
 
@@ -28,7 +28,7 @@ AUROC 0.663 (bootstrap 95% 0.626 to 0.696), deterministic baseline (identifier m
 | P(contradicted) correlates with comment length | -0.090 | |r| <= 0.8 | yes |
 | separation AUROC, SWAPPED over REAL | 0.663 | >= 0.85 | NO |
 | lift over the deterministic baseline | 0.043 | >= 0.1 | NO |
-| contradicted comments confirmed among the top 30 REAL rows (0 read) | 0.000 | >= 5 | NO |
+| contradicted comments confirmed among the top 30 REAL rows (30 read) | 0.000 | >= 5 | NO |
 | **decision** | **kill: separation** | | |
 
 Choices, REAL arm: {consistent=316, contradicted=36, not_checkable=109}; SWAPPED arm: {consistent=40, contradicted=94, not_checkable=239}.
@@ -70,4 +70,12 @@ Choices, REAL arm: {consistent=316, contradicted=36, not_checkable=109}; SWAPPED
 
 ## Design 2: the real population (blind-labeled sample, a prevalence study)
 
-150 sampled rows scored; no labels yet (fill `labeling-sheet-sample.tsv` and rerun with `--labels-sample`).
+| stratum | labeled | contradicted | consistent | not checkable | prevalence (Wilson 95%) |
+| --- | --- | --- | --- | --- | --- |
+| random | 113 | 2 | 90 | 21 | 2 of 92 = 0.022 (0.006 to 0.076) |
+| stale-candidate | 37 | 1 | 31 | 5 | 1 of 32 = 0.031 (0.006 to 0.157) |
+| pooled | 150 | 3 | 121 | 26 | 3 of 124 = 0.024 (0.008 to 0.069) |
+
+Precision of the top 20 REAL rows by P(contradicted): 0 of 20 = 0.000 (0.000 to 0.161).
+Consistent rows at P(contradicted) >= 0.9: 0 of 121 = 0.000 (0.000 to 0.031); exact one-sided p against a 0.02 rate: 1.000.
+AUROC not reported: fewer than 20 rows are labeled contradicted, so a ranking statistic would be underpowered.
