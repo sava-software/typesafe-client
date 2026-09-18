@@ -14,9 +14,11 @@ Suites: `text` (lexical baselines and the path scrubber, `software.sava.typesafe
 `rot` (Experiment A: README note parsing, the brace-matching type index, member resolution,
 corpus rows, bars, and the report), `dedupe` (Experiment B: questions, corpus, pairs,
 bars, and the report), `docs` (Experiment C1: doc-comment attachment, member keys, the
-history miner, the stale/fresh pairing, and the miner's TSV output), and `hardening`
+history miner, the stale/fresh pairing, and the miner's TSV output), `hardening`
 (Experiment C2: baseline rows, README families, operator descriptions, the corpus with its
-swapped arm, the bars and decision table, and the driver).
+swapped arm, the bars and decision table, and the driver), and `drift` (Experiment D: the line
+diff, the change corpus with its retouch filter, the pair and batched questions, the amended
+decision table with its commit bootstrap, the blind sheet, and the driver).
 
 ## Untriaged debt
 
@@ -58,6 +60,31 @@ swapped arm, the bars and decision table, and the driver).
   injectable directory, which is what lets a test prove the file is removed and the
   failure message carries the whole stream without a race. `PublicRepoGate.normalize`
   validates both `owner/repo` segments instead of a blank check the slash test subsumed.
+  First observation of `drift` 2026-09-18: 603 mutants, 490 killed with 104 survivors, 3
+  timeout-detected, and 6 uncovered; it reached 588/603 killed with 13 accepted below and 2
+  timeout-detected and audited, with no production change. The debt was almost all one-sided
+  fixtures rather than missing code. `LineDiff.ops` had only ever been asked for diffs whose
+  greedy reading and whose longest common subsequence agree, so it gained an addition that has
+  to come before a kept line, one that has to come after, a case where pairing the sides off by
+  length would cost two more edits, and one where the removed side drains on its own.
+  `DriftCorpus` gained the comment-length and retouch bars at their own boundary (a comment of
+  exactly the minimum length as shown, and a new comment sharing exactly nine of ten united
+  tokens), a body longer than the line cap, and a comment of pure punctuation whose respacing
+  only the shown-text comparison can recognise as a retouch. `DriftBars` gained one fixture per
+  deterministic baseline, the correlation ceiling reached by both correlations at once and by
+  each alone, a lift of exactly the bar, and the value bar read with five and with four affected
+  rows in the top against a rest that loses and a rest that does not. Its commit bootstrap is
+  pinned by three fixtures: one commit collapses the interval onto the AUROC, two commits put
+  the separation bar inside it, and a four-commit fixture resamples finely enough at both ends
+  that one resample more, one draw more per resample, or one place either way on either
+  percentile index moves an end of the interval. `DriftBatch` gained the candidate bar at its own
+  boundary, an inherited comment, a diff stopped exactly at the changed-line cap, a request
+  holding one class, and a build over another repository's rows, a comment-only event, and a file
+  whose members carry no comment. `DriftExperiment` gained a labelling sheet and a row file read
+  from two repositories at once (the only way the sort and the seeded shuffle are observable when
+  a commit hash leads every id), a checkout that is not a repository, one that is not public, one
+  that is not a directory at all, a failed request, an answer with no usage block, and a labels
+  path that names no file.
 
 ## Accepted mutants
 
@@ -102,6 +129,66 @@ argued and then re-measured on a clean run before acceptance:
   killable only if a self-union ever has to be observable (for example, if union() started
   counting merges); re-triage then.
 
+Thirteen `drift` rows, each a guard whose mutated arm reaches the same value by another route,
+or a boundary no corpus can land on; every one was argued and then re-measured on a clean
+history-free run before acceptance:
+
+- `# copy-at-the-cap-is-the-same-lines` (`LineDiff.limit`, `ConditionalsBoundaryMutator` on the
+  input-length test). Property: input longer than MAX_LINES lines is diffed on its first
+  MAX_LINES lines. The mutant differs only at exactly MAX_LINES, where it copies the array
+  instead of returning it, and a full-length `Arrays.copyOf` holds the same lines in the same
+  order; the only caller reads the copy element by element and never compares identities.
+  Oracle: `LineDiffAndQuestionsTests.diffIsCappedWithTheCapStatedAndLongInputsAreTruncated`.
+- `# nan-survives-the-two-sided-fold` (`DriftBars.baseline`, `RemoveConditionalMutator_EQUAL_ELSE`
+  on the NaN test). Property: a feature with no AUROC has no two-sided strength either. With the
+  guard forced through, `Math.max(a, 1 - a)` is handed NaN on both sides and returns NaN, which
+  is what the guard returns; `best` filters on the same NaN test and is unmoved. Oracles:
+  `DriftCorpusAndBarsTests.separationBaselinesAndRanking` for the fold and
+  `DriftCorpusAndBarsTests.rank01AndBestHandleSingleRowsAndUnrankableBaselines` for the filter.
+- `# nan-never-clears-the-lift-bar` (`DriftBars.verdict`, `RemoveConditionalMutator_EQUAL_IF` on
+  the NaN test guarding the lift comparison). With no AUROC the mutant runs the comparison the
+  guard exists to skip, and a NaN difference is neither at nor above the bar, so the lift is
+  false either way. The sibling that forces the test the other way is killed by
+  `DriftCorpusAndBarsTests.theLiftBarMeasuresTheScoreAgainstTheBestBaseline`.
+- `# lift-value-is-nan-either-way` (`DriftBars.verdict`, `RemoveConditionalMutator_EQUAL_ELSE` on
+  the NaN test in the lift check's reported value). Subtracting the best baseline's strength from
+  a NaN AUROC and rounding the difference yields the NaN the guard would have written.
+- `# unread-co-edits-divide-to-nan` and `# unread-body-only-divides-to-nan`
+  (`DriftBars.verdict`, `RemoveConditionalMutator_EQUAL_ELSE` on the two zero-denominator tests
+  behind the oracle rates). A class no reader labelled has a zero numerator as well as a zero
+  denominator, because the two counters are incremented together, and 0.0 / 0 is the NaN the
+  guard returns.
+- `# ceiling-is-nan-either-way` (2 rows, `DriftBars.verdict`, `RemoveConditionalMutator_EQUAL_ELSE`
+  and `RemoveConditionalMutator_EQUAL_IF` on the two halves of the ceiling's unread-class guard).
+  Each mutant drops one half of the test; the rate that half protects is already NaN by the two
+  rows above, and the ceiling is one subtraction, one division, and one addition away from it, so
+  the mutant computes the NaN the guard wrote. The two siblings that force the same halves the
+  other way are killed by `DriftCorpusAndBarsTests.theDecisionTableWithLabels`.
+- `# no-commit-no-sample` (`DriftBars.clusterBootstrap`, `RemoveConditionalMutator_EQUAL_ELSE` on
+  the empty-cluster return). With no commit to resample the mutant enters the resampling loop,
+  whose inner draw loop runs over zero clusters, so every round asks for the AUROC of two empty
+  score lists, gets NaN, and records nothing; the empty-sample return below it then produces the
+  same pair of NaNs. The cluster count is read before it is used as a bound, so no draw is made
+  against an empty population. Oracle:
+  `DriftCorpusAndBarsTests.separationReadsTheCommitBootstrapAgainstTheBar`.
+- `# empty-rest-has-no-upper-bound` (2 rows, `DriftBars.verdict`, `ConditionalsBoundaryMutator`
+  and `RemoveConditionalMutator_ORDER_IF` on the read-count test in the value bar). A read count
+  is never negative, so that conjunct's only work is short-circuiting: when nothing outside the
+  top was read, the rest's Wilson bounds are NaN and the comparison the mutants let through is
+  false, which is the value the conjunct was standing in for. The sibling that forces it false
+  is killed by `DriftCorpusAndBarsTests.theValueBarNeedsEnoughAffectedRowsAndSeparationFromTheRest`.
+- `# wilson-bounds-never-tie` (`DriftBars.verdict`, `ConditionalsBoundaryMutator` on the
+  comparison between the top's Wilson lower bound and the rest's upper bound). The mutant differs
+  only where the two are the same double. The only exactly representable values either bound
+  takes are its clamps, 0 for a lower bound with nothing affected and 1 for an upper bound with
+  everything affected, and those cannot coincide; any other tie would need two different Wilson
+  expressions over integer counts to round to the same double. Becomes killable if the rule is
+  ever restated as "at least as high as the rest's upper bound", which would make the tie decide.
+- `# empty-mean-divides-to-nan` (`DriftBatch.meanRequestAuroc`,
+  `RemoveConditionalMutator_EQUAL_ELSE` on the no-request test). With no request holding both
+  classes the running sum is still 0.0, and 0.0 / 0 is the NaN the guard returns. Oracle:
+  `DriftBatchTests.aurocsOverScoredCandidates`.
+
 ## Audited timeout causes
 
 `rot-timeouts.csv` holds seven line-less keys (nine mutant instances), all `cause:liveness`:
@@ -130,3 +217,15 @@ and the watchdog is the detector by construction.
 Remedy considered and declined for now: a cycle budget inside `lineOf` and `mask` would
 convert these to assertion kills but would put a fake bound in a parser whose real inputs
 are whole source files; the audited set is the cheaper control while the corpus is small.
+
+`drift-timeouts.csv` holds one line-less key (two mutant instances), `cause:liveness`:
+
+- `DriftBars.clusterBootstrap` x2 (`RemoveConditionalMutator_ORDER_IF`): the resample loop and
+  the draw loop inside it each lose their only bound. Forced true, the resample counter never
+  reaches the resample budget and the draw counter never reaches the cluster count, so the
+  bootstrap never returns a pair of percentiles and no assertion downstream of it can run; the
+  watchdog is the detector by construction. Both are ordinary counted loops over constants, so
+  there is no seam a deterministic budget could bound without putting a fake ceiling on the
+  pre-registered resample count itself. The siblings that force the same two comparisons false
+  leave both loops empty, which is an outcome the corpus already states, and are killed by
+  `DriftCorpusAndBarsTests.separationReadsTheCommitBootstrapAgainstTheBar`.

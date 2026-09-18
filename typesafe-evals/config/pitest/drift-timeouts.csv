@@ -1,0 +1,15 @@
+# Audited TIMED_OUT set for the 'drift' suite (HARDENING.md, the audited-timeout
+# bullet): one line-less 'class,method,mutator' member per row. A timeout detects
+# slowness, not wrongness. This seeded file cannot certify until every row is
+# classified. Replace cause:untriaged with cause:liveness only when the mutated
+# path has no path-owned finite completion guarantee after deterministic seams/
+# budgets are exhausted. If a fixture bound is the claimed oracle but exceeds PIT's
+# duration * timeoutFactor + timeoutConst, it proves nothing: shorten and re-observe.
+# A later emergency ceiling may coexist with liveness but cannot prove it. A
+# straight-line path without a loop, retry, lock, wait, blocking call, or external
+# completion dependency is not credible liveness evidence. A finite
+# cause:resource mutant needs a contract-first disposition. Use cause:harness
+# only for a demonstrated finite covering-path/watchdog race; it remains
+# non-certifying until repaired. Treat '# line' tags as
+# diagnostic metadata and write every structural argument in config/pitest/README.md.
+software.sava.typesafe.evals.drift.DriftBars,clusterBootstrap,RemoveConditionalMutator_ORDER_IF # cause:liveness # lines 285, 288

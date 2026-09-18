@@ -57,6 +57,22 @@ final class LineDiffAndQuestionsTests {
   }
 
   @Test
+  void opsTakeTheLongestCommonSubsequenceAndDrainWhatIsLeft() {
+    // "x y" is the longest common subsequence: one addition keeps it, and pairing "x" with
+    // "z" would cost a removal and two additions instead
+    assertEquals(List.of("+z", " x", " y"), LineDiff.ops(new String[]{"x", "y"}, new String[]{"z", "x", "y"}));
+    // only one of the two lines can be kept; the removal comes first because a tie in the
+    // remaining subsequence lengths is resolved towards the left side
+    assertEquals(List.of("-x", " y", "+x"), LineDiff.ops(new String[]{"x", "y"}, new String[]{"y", "x"}));
+    // "B" is the whole common subsequence: keeping it costs three edits, and lining the two
+    // sides up by length instead would cost five
+    assertEquals(List.of("-A", " B", "+C", "+D"), LineDiff.ops(new String[]{"A", "B"}, new String[]{"B", "C", "D"}));
+    // b runs out first, so what is left of a drains as removals
+    assertEquals(List.of(" x", "-y"), LineDiff.ops(new String[]{"x", "y"}, new String[]{"x"}));
+    assertEquals(" x\n-y", LineDiff.of("x\ny", "x", 100).text());
+  }
+
+  @Test
   void renderKeepsContextAroundEveryChange() {
     final var ops = List.of(" a", " b", " c", "-d", " e", " f", " g", " h", " i", "+j", " k");
     assertEquals(List.of("@@ 1 unchanged lines @@", " b", " c", "-d", " e", " f", "@@ 1 unchanged lines @@", " h", " i", "+j", " k"), LineDiff.render(ops),

@@ -82,6 +82,68 @@ final class DriftBatchTests {
   }
 
   @Test
+  void aCandidateNeedsItsOwnCommentOfAtLeastTheMinimumLengthAsShown() {
+    final var before = new LinkedHashMap<FileMembers.Key, FileMembers.Snapshot>();
+    // 40 and 39 characters as shown, on either side of the minimum
+    final var atTheMinimum = snapshot("alpha", "Returns the running totals for this key.", "int alpha() {\n}");
+    final var oneShort = snapshot("beta", "Returns the running total for this key.", "int beta() {\n}");
+    final var inherited = snapshot("gamma", "{@inheritDoc} with a sentence long enough to clear the minimum length.", "int gamma() {\n}");
+    for (final var s : List.of(atTheMinimum, oneShort, inherited)) {
+      before.put(s.key(), s);
+    }
+    assertEquals(40, DriftCorpus.MIN_COMMENT_CHARS);
+    assertEquals(40, atTheMinimum.commentText().length());
+    assertEquals(39, oneShort.commentText().length());
+    final var batch = DriftBatch.batch("repo", "abc", "p/T.java", before, List.of(), Set.of(), Set.of());
+    assertEquals(List.of("T.alpha()"), batch.candidates().stream().map(c -> c.key().toString()).toList(),
+        "the minimum length itself counts, one character short does not, and an inherited comment is not the member's own");
+    assertEquals(1, batch.candidatesTotal());
+  }
+
+  @Test
+  void buildKeepsOneBatchPerChangedFileOfThisRepository() {
+    final var key = new FileMembers.Key("T", "alpha", "");
+    final var state = new DriftQuestions.State("c", List.of("a"), List.of("b"), "n", software.sava.typesafe.JsonContent.object().build(), "p/T.java");
+    final var mine = new DriftCorpus.Row("repo#c1#p/T.java#T.alpha()", "repo", "c1", "p/T.java", key, "method", DriftCorpus.CO_EDIT, "old", "new", 50, 2, 0.0, 3, 3, false, "-a\n+b", state);
+    final var theirs = new DriftCorpus.Row("other#c2#p/T.java#T.alpha()", "other", "c2", "p/T.java", key, "method", DriftCorpus.CO_EDIT, "old", "new", 50, 2, 0.0, 3, 3, false, "-a\n+b", state);
+    final var undocumented = new DriftCorpus.Row("repo#c3#p/U.java#U.plain()", "repo", "c3", "p/U.java", new FileMembers.Key("U", "plain", ""), "method",
+        DriftCorpus.BODY_ONLY, "old", "new", 50, 2, 0.0, 3, 3, false, "-a\n+b", state);
+    final var documented = "class T {\n  /// Returns the cached alpha total, computing it once on the first call only.\n  int alpha() {\n    return cache;\n  }\n}\n";
+    final var plain = "class U {\n  int plain() {\n    return 1;\n  }\n}\n";
+    final var miner = new HistoryMiner(new software.sava.typesafe.evals.corpus.GitRepo(java.nio.file.Path.of("/nowhere"),
+        (command, dir) -> command.getLast().endsWith("p/U.java") ? plain : documented), p -> true);
+    final var changed = change("alpha", "int alpha() {\n  return cache;\n}", "int alpha() {\n  return compute();\n}");
+    final var commentOnly = new HistoryMiner.Event("c1", 0, "p/T.java", key, "method", true, false, "x", "y", "s", "s",
+        "int alpha() {\n  return cache;\n}", "int alpha() {\n  return cache;\n}");
+    final var batches = DriftBatch.build("repo", List.of(mine, theirs, undocumented), List.of(changed, commentOnly), miner);
+    assertEquals(List.of("repo#c1#p/T.java"), batches.stream().map(DriftBatch.Batch::id).toList(),
+        "another repository's rows are not this one's batches, and a file whose members carry no comment has no candidate to judge");
+    assertEquals("// T.alpha()\n int alpha() {\n-  return cache;\n+  return compute();\n }", batches.getFirst().change(),
+        "a comment-only event changed no body, so it contributes no diff");
+  }
+
+  @Test
+  void theMeanRequestAurocAveragesOnlyRequestsHoldingBothClasses() {
+    final var a = DriftBatch.batch("repo", "a", "p/A.java", new LinkedHashMap<>(), List.of(), Set.of(), Set.of());
+    final var b = DriftBatch.batch("repo", "b", "p/B.java", new LinkedHashMap<>(), List.of(), Set.of(), Set.of());
+    final var c = DriftBatch.batch("repo", "c", "p/C.java", new LinkedHashMap<>(), List.of(), Set.of(), Set.of());
+    final var k1 = new FileMembers.Key("A", "x", "");
+    final var k2 = new FileMembers.Key("A", "y", "");
+    final var positive = new DriftBatch.Candidate(0, k1, "c", true, true);
+    final var negative = new DriftBatch.Candidate(1, k2, "c", false, false);
+    final var scored = List.of(
+        new DriftBatch.Scored(a, positive, 0.9),
+        new DriftBatch.Scored(a, negative, 0.4),
+        new DriftBatch.Scored(b, positive, 0.2),
+        new DriftBatch.Scored(b, negative, 0.8),
+        new DriftBatch.Scored(c, positive, 0.7));
+    // request a scores 1 and request b scores 0; request c holds no negative and is not averaged
+    assertEquals(0.5, DriftBatch.meanRequestAuroc(scored), 1e-12);
+    assertFalse(new DriftBatch.Batch("id", "repo", "c", "p/C.java", "", List.of(positive), 1, null).hasBothClasses(),
+        "a request with nothing but positives holds one class");
+  }
+
+  @Test
   void theChangesListEveryChangedMemberAndAreCapped() {
     final var before = new LinkedHashMap<FileMembers.Key, FileMembers.Snapshot>();
     final var a = snapshot("a", "Documented member a with a comment long enough to be counted here.", "int a() {\n  return 1;\n}");
@@ -99,6 +161,11 @@ final class DriftBatchTests {
     final var body = batch.request().withDefaultModel("m").body();
     assertTrue(body.startsWith("{\"state\":{\"changes\":[{\"member\":\"T.a()\",\"removed_lines\":[\"  return 1;\"],\"added_lines\":[\"  return 2;\"]},{\"member\":\"T.b()\",\"removed_lines\":[\"  x0();\""), body.substring(0, 200));
     assertTrue(body.contains("\"changes_capped\":true"), "800 changed lines exceed the cap");
+    // member a spends 2 of the 300 changed lines, so b contributes 298 removals and stops
+    // there, before any of its additions are reached
+    assertTrue(body.contains("\"  x297();\"],\"added_lines\":[]}]"), body);
+    assertFalse(body.contains("x298"), "the 301st changed line is not collected");
+    assertEquals(300, DriftBatch.DIFF_LINE_CAP);
     assertTrue(batch.change().startsWith("// T.a()\n int a() {\n-  return 1;\n+  return 2;\n }\n\n// T.b()\n"), batch.change());
   }
 

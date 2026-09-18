@@ -1,0 +1,14 @@
+!sava-hardening-baseline-schema,1
+software.sava.typesafe.evals.drift.DriftBars,baseline,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # nan-survives-the-two-sided-fold # line 123
+software.sava.typesafe.evals.drift.DriftBars,clusterBootstrap,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # no-commit-no-sample # line 280
+software.sava.typesafe.evals.drift.DriftBars,verdict,ConditionalsBoundaryMutator,SURVIVED # empty-rest-has-no-upper-bound # line 250
+software.sava.typesafe.evals.drift.DriftBars,verdict,ConditionalsBoundaryMutator,SURVIVED # wilson-bounds-never-tie # line 250
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # lift-value-is-nan-either-way # line 199
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # unread-co-edits-divide-to-nan # line 222
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # unread-body-only-divides-to-nan # line 223
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # ceiling-is-nan-either-way # line 224
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_IF,SURVIVED # nan-never-clears-the-lift-bar # line 197
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_EQUAL_IF,SURVIVED # ceiling-is-nan-either-way # line 224
+software.sava.typesafe.evals.drift.DriftBars,verdict,RemoveConditionalMutator_ORDER_IF,SURVIVED # empty-rest-has-no-upper-bound # line 250
+software.sava.typesafe.evals.drift.DriftBatch,meanRequestAuroc,RemoveConditionalMutator_EQUAL_ELSE,SURVIVED # empty-mean-divides-to-nan # line 218
+software.sava.typesafe.evals.drift.LineDiff,limit,ConditionalsBoundaryMutator,SURVIVED # copy-at-the-cap-is-the-same-lines # line 51

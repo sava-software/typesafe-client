@@ -82,6 +82,7 @@ final class DriftCorpusAndBarsTests {
     assertTrue(DriftCorpus.bodiless("  int m();  "));
     assertFalse(DriftCorpus.bodiless("int m() { }"));
     assertFalse(DriftCorpus.bodiless("int m()"), "no semicolon, no braces: not a bodiless declaration");
+    assertFalse(DriftCorpus.bodiless("int[] a = new int[]{1};"), "a braced initializer is a body however the declaration ends");
     final var many = new java.util.ArrayList<String>();
     for (int i = 0; i < 205; i++) {
       many.add("l" + i);
@@ -90,6 +91,58 @@ final class DriftCorpusAndBarsTests {
     assertEquals(201, capped.size());
     assertEquals("// … 5 more lines not shown", capped.getLast());
     assertEquals(List.of("a"), DriftCorpus.cap(List.of("a")));
+    assertEquals(many.subList(0, 200), DriftCorpus.cap(many.subList(0, 200)), "the cap itself is shown whole, with nothing left to state");
+  }
+
+  @Test
+  void aNewBodyLongerThanTheLineCapIsShownWithTheCapStated() {
+    final var body = new StringBuilder("int compute(int x) {");
+    for (int i = 0; i < 205; i++) {
+      body.append("\n  step").append(i).append("();");
+    }
+    body.append("\n}");
+    final var rows = DriftCorpus.rows("repo", List.of(event("c1", LONG, LONG, "int compute(int x) {\n  return 0;\n}", body.toString())));
+    final var row = rows.rows().getFirst();
+    // the head, 205 steps, and the closing brace are 207 lines; 200 are shown and 7 stated
+    assertEquals(207, row.linesAfter());
+    assertTrue(row.state().newSource().endsWith("\n  step198();\n// … 7 more lines not shown"), row.state().newSource());
+  }
+
+  @Test
+  void theCommentLengthAndRetouchBarsAreDecidedAtTheirOwnBoundary() {
+    final var atTheMinimum = "Returns the running totals for this key.";
+    final var oneShort = "Returns the running total for this key.";
+    assertEquals(DriftCorpus.MIN_COMMENT_CHARS, atTheMinimum.length());
+    assertEquals(DriftCorpus.MIN_COMMENT_CHARS - 1, oneShort.length());
+    assertEquals(1, DriftCorpus.rows("repo", List.of(event("c1", atTheMinimum, atTheMinimum, "{a}", "{b}"))).rows().size(),
+        "a comment of exactly the minimum length as shown is long enough");
+    final var dropped = DriftCorpus.rows("repo", List.of(event("c2", oneShort, oneShort, "{a}", "{b}")));
+    assertEquals(List.of(), dropped.rows());
+    assertEquals(1, count(dropped, "comment shorter"));
+    // nine tokens shared of ten united is exactly the retouch bar
+    final var nine = "alpha beta gamma delta epsilon zeta eta theta iota";
+    final var ten = nine + " kappa";
+    final var retouched = DriftCorpus.rows("repo", List.of(event("c3", nine, ten, "{a}", "{b}")));
+    assertEquals(List.of(), retouched.rows(), "a jaccard of exactly 0.9 is a retouch, not a co-edit");
+    assertEquals(1, count(retouched, "comment retouched"));
+    // one more token on the new side alone drops the similarity to nine of eleven
+    final var coEdit = DriftCorpus.rows("repo", List.of(event("c4", nine, ten + " lambda", "{a}", "{b}")));
+    assertEquals(List.of("repo#c4#p/T.java#T.compute(int)"), coEdit.rows().stream().map(DriftCorpus.Row::id).toList());
+    assertEquals(DriftCorpus.CO_EDIT, coEdit.rows().getFirst().klass());
+    assertEquals(0, count(coEdit, "comment retouched"));
+    // a comment with no letters or digits shares no token with itself, so only the shown-text
+    // comparison can see that respacing it changed nothing
+    final var separator = "--- --- --- --- --- --- --- --- --- --- ---";
+    final var respaced = separator.replaceFirst("--- ---", "---  ---");
+    assertNotEquals(separator, respaced);
+    assertEquals(0.0, software.sava.typesafe.evals.text.Jaccard.similarity(separator, respaced));
+    final var spacingOnly = DriftCorpus.rows("repo", List.of(event("c5", separator, respaced, "{a}", "{b}")));
+    assertEquals(List.of(), spacingOnly.rows(), "a comment that only changed its spacing is a retouch, not a co-edit");
+    assertEquals(1, count(spacingOnly, "comment retouched"));
+  }
+
+  static int count(final DriftCorpus.Result result, final String reasonPrefix) {
+    return result.excluded().stream().filter(e -> e.reason().startsWith(reasonPrefix)).mapToInt(DriftCorpus.Excluded::count).sum();
   }
 
   @Test
@@ -101,6 +154,8 @@ final class DriftCorpusAndBarsTests {
     assertEquals(1.0, DriftCorpus.overlap("Reads `total`.", removed, added));
     assertEquals(0.0, DriftCorpus.overlap("Reads `total`.", List.of(), List.of()), "no changed lines, nothing overlaps");
     assertEquals(Set.of("cacheSize", "MAX_ITEMS", "unrelatedThing"), DriftCorpus.identifiers("`cacheSize` and MAX_ITEMS; `Outer.unrelatedThing(x)` <METHOD>"));
+    assertEquals(Set.of("cacheSize"), DriftCorpus.identifiers("`cacheSize` and `.` and `()` and `2ndTry`"),
+        "a backticked span with nothing left after the last dot or the parameter list, or one that cannot start an identifier, names nothing");
     assertEquals("Widget", DriftCorpus.memberName(new FileMembers.Key("Outer$Widget", "<init>", "")));
     assertEquals("compute", DriftCorpus.memberName(KEY));
   }
@@ -247,6 +302,192 @@ final class DriftCorpusAndBarsTests {
     final var t = DriftBars.verdict(toggled, Map.of());
     assertTrue(Double.isNaN(t.aurocNoToggle()), "removing the toggle row leaves no positive");
     assertEquals(1.0, t.baselines().get(6).twoSided(), "the toggle bit separates these two perfectly");
+  }
+
+  @Test
+  void rank01AndBestHandleSingleRowsAndUnrankableBaselines() {
+    final var one = List.of(scored("only", DriftCorpus.BODY_ONLY, 0.4, 7, 0.0));
+    assertEquals(Map.of("only", 0.5), DriftBars.rank01(one, s -> (double) s.row().diffSize()),
+        "a single row has nothing to rank against and sits in the middle");
+    final var baselines = List.of(new DriftBars.Baseline("unrankable", Double.NaN, Double.NaN),
+        new DriftBars.Baseline("strong", 0.9, 0.9), new DriftBars.Baseline("weak", 0.6, 0.6));
+    assertEquals("strong", DriftBars.best(baselines).name(), "a NaN baseline never wins and the strongest two-sided score does");
+    assertEquals(List.of("a", "b"), DriftBars.rankedBodyOnly(List.of(
+            scored("b", DriftCorpus.BODY_ONLY, 0.5, 1, 0.0), scored("a", DriftCorpus.BODY_ONLY, 0.5, 1, 0.0)))
+        .stream().map(s -> s.row().id()).toList(), "rows tied on the score rank by id, not by arrival");
+    assertEquals(0, DriftBars.Rate.of(2, 0).count(), "with no denominator the rate is empty, whatever count is claimed");
+  }
+
+  @Test
+  void everyDeterministicBaselineReadsItsOwnFeature() {
+    // the CO_EDIT row leads on size, member lines, and comment length, and trails on overlap
+    final var rows = List.of(
+        scored("a", "c1", DriftCorpus.CO_EDIT, 0.9, 40, 0.1, 9, 11, 90, true),
+        scored("b", "c2", DriftCorpus.BODY_ONLY, 0.2, 10, 0.9, 5, 7, 60, false),
+        scored("c", "c3", DriftCorpus.BODY_ONLY, 0.1, 20, 0.2, 3, 5, 30, false));
+    final var baselines = DriftBars.baselines(rows);
+    assertEquals(1.0, baselines.get(0).auroc(), "40 changed lines over 10 and 20");
+    assertEquals(0.0, baselines.get(1).auroc(), "overlap 0.1 under both 0.9 and 0.2");
+    // size ranks a=1, b=0, c=0.5 against overlap ranks a=0, b=1, c=0.5: the rank-max is
+    // a=1, b=1, c=0.5, so the one pair a shares with b is a tie and the pair with c is a win
+    assertEquals(0.75, baselines.get(2).auroc(), 1e-12);
+    assertEquals(1.0, baselines.get(3).auroc(), "9 lines before over 5 and 3");
+    assertEquals(1.0, baselines.get(4).auroc(), "11 lines after over 7 and 5");
+    assertEquals(1.0, baselines.get(5).auroc(), "90 comment characters over 60 and 30");
+    assertEquals(1.0, baselines.get(6).auroc(), "the only member that toggled is the CO_EDIT row");
+  }
+
+  @Test
+  void theProxyRuleReadsBothCorrelationsAndTheCeilingItselfPasses() {
+    // scores and sizes are both evenly spaced with two adjacent pairs swapped: sum d^2 = 4
+    // over n = 5 is Spearman 1 - 6*4/(5*24) = 0.8, and evenly spaced values make Pearson agree
+    final var atTheCeiling = List.of(
+        scored("a", DriftCorpus.CO_EDIT, 0.9, 50, 0.0),
+        scored("b", DriftCorpus.CO_EDIT, 0.7, 30, 0.0),
+        scored("c", DriftCorpus.CO_EDIT, 0.5, 40, 0.0),
+        scored("d", DriftCorpus.BODY_ONLY, 0.3, 10, 0.0),
+        scored("e", DriftCorpus.BODY_ONLY, 0.1, 20, 0.0));
+    final var ceiling = DriftBars.verdict(atTheCeiling, Map.of());
+    assertEquals(DriftBars.CORRELATION_CEILING, DriftBars.round(ceiling.pearson()));
+    assertEquals(DriftBars.CORRELATION_CEILING, DriftBars.round(ceiling.spearman()));
+    assertTrue(ceiling.checks().getFirst().pass(), "the ceiling itself is not above it");
+    assertNotEquals("kill: proxy", ceiling.decision());
+    // Pearson alone: one huge diff drags the line through the scores while the ranks disagree
+    final var linearOnly = List.of(
+        scored("a", DriftCorpus.CO_EDIT, 0.99, 1000, 0.0),
+        scored("b", DriftCorpus.CO_EDIT, 0.3, 1, 0.0),
+        scored("c", DriftCorpus.BODY_ONLY, 0.2, 5, 0.0),
+        scored("d", DriftCorpus.BODY_ONLY, 0.1, 10, 0.0));
+    final var linear = DriftBars.verdict(linearOnly, Map.of());
+    assertTrue(DriftBars.round(linear.pearson()) > DriftBars.CORRELATION_CEILING, "" + linear.pearson());
+    assertTrue(Math.abs(DriftBars.round(linear.spearman())) <= DriftBars.CORRELATION_CEILING, "" + linear.spearman());
+    assertFalse(linear.checks().getFirst().pass());
+    assertEquals("kill: proxy", linear.decision(), "either correlation over the ceiling is enough");
+    // Spearman alone: the sizes track the score order exactly, but one score dwarfs the rest
+    final var rankOnly = List.of(
+        scored("a", DriftCorpus.CO_EDIT, 1.0, 4, 0.0),
+        scored("b", DriftCorpus.CO_EDIT, 0.01, 3, 0.0),
+        scored("c", DriftCorpus.BODY_ONLY, 0.005, 2, 0.0),
+        scored("d", DriftCorpus.BODY_ONLY, 0.0, 1, 0.0));
+    final var rank = DriftBars.verdict(rankOnly, Map.of());
+    assertTrue(Math.abs(DriftBars.round(rank.pearson())) <= DriftBars.CORRELATION_CEILING, "" + rank.pearson());
+    assertEquals(1.0, DriftBars.round(rank.spearman()));
+    assertEquals("kill: proxy", rank.decision());
+  }
+
+  @Test
+  void theLiftBarMeasuresTheScoreAgainstTheBestBaseline() {
+    // the score separates perfectly; diff size wins 9 of its 10 pairs, so the lift is
+    // exactly 1.0 - 0.9 = 0.10, the bar itself
+    final var rows = List.of(
+        scored("p1", "c1", DriftCorpus.CO_EDIT, 0.9, 100, 0.0, 3, 3, 50, false),
+        scored("p2", "c2", DriftCorpus.CO_EDIT, 0.8, 90, 0.0, 3, 3, 50, false),
+        scored("n1", "c3", DriftCorpus.BODY_ONLY, 0.7, 80, 0.0, 3, 3, 50, false),
+        scored("n2", "c4", DriftCorpus.BODY_ONLY, 0.6, 70, 0.0, 3, 3, 50, false),
+        scored("n3", "c5", DriftCorpus.BODY_ONLY, 0.5, 60, 0.0, 3, 3, 50, false),
+        scored("n4", "c6", DriftCorpus.BODY_ONLY, 0.4, 50, 0.0, 3, 3, 50, false),
+        scored("n5", "c7", DriftCorpus.BODY_ONLY, 0.3, 95, 0.0, 3, 3, 50, false));
+    final var v = DriftBars.verdict(rows, Map.of());
+    assertEquals(1.0, v.auroc());
+    assertEquals(1.0, v.aurocNoToggle(), "no member toggled, so dropping the toggle rows drops nothing");
+    assertEquals("diff size", v.best().name());
+    assertEquals(0.9, v.best().twoSided(), 1e-12);
+    assertEquals(DriftBars.LIFT_BAR, v.checks().get(2).value(), 1e-12, "AUROC 1.0 less the best baseline's 0.9");
+    assertTrue(v.checks().get(2).pass(), "the bar is a floor the lift may sit on");
+    assertEquals("value bar pending", v.decision(), "no label has been read yet");
+  }
+
+  @Test
+  void separationReadsTheCommitBootstrapAgainstTheBar() {
+    // one commit, so every resample is the same four rows and the interval collapses onto
+    // the AUROC itself: 3 of the 4 pairs won, exactly the bar
+    final var oneCommit = List.of(
+        scored("a", "c1", DriftCorpus.CO_EDIT, 0.9, 3, 0.0, 3, 3, 50, false),
+        scored("b", "c1", DriftCorpus.CO_EDIT, 0.5, 3, 0.0, 3, 3, 50, false),
+        scored("c", "c1", DriftCorpus.BODY_ONLY, 0.7, 3, 0.0, 3, 3, 50, false),
+        scored("d", "c1", DriftCorpus.BODY_ONLY, 0.4, 3, 0.0, 3, 3, 50, false));
+    assertEquals(DriftBars.SEPARATION_BAR, DriftBars.auroc(oneCommit), 1e-12);
+    assertArrayEquals(new double[]{0.75, 0.75}, DriftBars.clusterBootstrap(oneCommit));
+    assertEquals("pass", DriftBars.verdict(oneCommit, Map.of()).separation(), "a lower bound on the bar clears it");
+    // add a second commit holding one high-scoring BODY_ONLY row: drawing both commits scores
+    // 0.5, drawing the first twice scores 0.75, and drawing the second twice holds no CO_EDIT
+    // row at all and is not counted, so half the resamples sit at each value
+    final var twoCommits = new java.util.ArrayList<>(oneCommit);
+    twoCommits.add(scored("e", "c2", DriftCorpus.BODY_ONLY, 0.99, 3, 0.0, 3, 3, 50, false));
+    assertArrayEquals(new double[]{0.5, 0.75}, DriftBars.clusterBootstrap(twoCommits));
+    assertEquals("undetermined", DriftBars.verdict(twoCommits, Map.of()).separation(), "an upper bound on the bar does not kill");
+    // one class only: no resample has an AUROC, so there is nothing to take a percentile of
+    assertArrayEquals(new double[]{Double.NaN, Double.NaN},
+        DriftBars.clusterBootstrap(List.of(scored("a", "c1", DriftCorpus.CO_EDIT, 0.9, 3, 0.0, 3, 3, 50, false))));
+  }
+
+  @Test
+  void theBootstrapTakesThePercentilesOfAThousandCommitResamples() {
+    // four commits, each holding rows of both classes, so every one of the 1000 resamples has
+    // an AUROC. The interval is the 25th smallest sample (index floor(0.025 * 999) = 24) and
+    // the 976th (index ceil(0.975 * 999) = 975); under this seed the neighbouring samples are
+    // 0.0 below the first and 0.9464 above the second, so one resample more, one draw more
+    // per resample, or one place either way on either index moves an end of the interval
+    final var rows = List.of(
+        scored("a", "c1", DriftCorpus.CO_EDIT, 0.8, 3, 0.0, 3, 3, 50, false),
+        scored("b", "c1", DriftCorpus.BODY_ONLY, 0.6, 3, 0.0, 3, 3, 50, false),
+        scored("c", "c2", DriftCorpus.CO_EDIT, 0.9, 3, 0.0, 3, 3, 50, false),
+        scored("d", "c2", DriftCorpus.CO_EDIT, 0.5, 3, 0.0, 3, 3, 50, false),
+        scored("e", "c2", DriftCorpus.BODY_ONLY, 0.8, 3, 0.0, 3, 3, 50, false),
+        scored("f", "c3", DriftCorpus.CO_EDIT, 0.6, 3, 0.0, 3, 3, 50, false),
+        scored("g", "c3", DriftCorpus.BODY_ONLY, 0.5, 3, 0.0, 3, 3, 50, false),
+        scored("h", "c3", DriftCorpus.BODY_ONLY, 0.1, 3, 0.0, 3, 3, 50, false),
+        scored("i", "c4", DriftCorpus.CO_EDIT, 0.4, 3, 0.0, 3, 3, 50, false),
+        scored("j", "c4", DriftCorpus.BODY_ONLY, 0.6, 3, 0.0, 3, 3, 50, false));
+    assertEquals(1000, DriftBars.RESAMPLES);
+    assertEquals(7L, DriftBars.SEED);
+    assertArrayEquals(new double[]{0.2, 0.925}, DriftBars.clusterBootstrap(rows));
+  }
+
+  /// Ten CO_EDIT rows, seven of them scored above every BODY_ONLY row and three below, in two
+  /// commits: the first holds the seven and all 130 BODY_ONLY rows, the second holds the three.
+  static List<DriftBars.Scored> valueBarRows() {
+    final var rows = new java.util.ArrayList<DriftBars.Scored>();
+    for (int i = 0; i < 7; i++) {
+      rows.add(scored("co" + i, "c1", DriftCorpus.CO_EDIT, 0.95 - i * 0.001, 3, 0.0, 3, 3, 50, false));
+    }
+    for (int i = 0; i < 3; i++) {
+      rows.add(scored("lo" + i, "c2", DriftCorpus.CO_EDIT, 0.01, 3, 0.0, 3, 3, 50, false));
+    }
+    for (int i = 0; i < 130; i++) {
+      rows.add(scored(String.format("bo%03d", i), "c1", DriftCorpus.BODY_ONLY, 0.8 - i * 0.005, 3, 0.0, 3, 3, 50, false));
+    }
+    return List.copyOf(rows);
+  }
+
+  /// Blind labels over every BODY_ONLY row of `valueBarRows`: `top` of the 30 highest scored
+  /// and `rest` of the other 100 marked affected, the remainder marked unaffected.
+  static Map<String, String> valueBarLabels(final int top, final int rest) {
+    final var labels = new HashMap<String, String>();
+    for (int i = 0; i < 130; i++) {
+      labels.put(String.format("bo%03d", i), i < top || (i >= DriftBars.TOP_N && i < DriftBars.TOP_N + rest)
+          ? "contradicted_by_change" : "unaffected");
+    }
+    return labels;
+  }
+
+  @Test
+  void theValueBarNeedsEnoughAffectedRowsAndSeparationFromTheRest() {
+    final var rows = valueBarRows();
+    // 7 of the 10 CO_EDIT rows beat all 130 BODY_ONLY rows and 3 beat none of them
+    assertEquals(0.7, DriftBars.auroc(rows), 1e-12);
+    final var v = DriftBars.verdict(rows, valueBarLabels(DriftBars.VALUE_BAR, 0));
+    assertEquals("undetermined", v.separation(), "a resample of the first commit alone separates perfectly, a mixed one does not");
+    assertEquals(30, v.topRate().of());
+    assertEquals(DriftBars.VALUE_BAR, v.topRate().count());
+    assertEquals(100, v.restRate().of());
+    assertEquals(0, v.restRate().count());
+    assertEquals("keep (separation undetermined)", v.decision(), "5 of 30 against 0 of 100, with the bar inside the interval");
+    assertEquals("nothing missed", DriftBars.verdict(rows, valueBarLabels(DriftBars.VALUE_BAR - 1, 0)).decision(),
+        "one row short of the value bar, however well the top separates from the rest");
+    final var mixed = DriftBars.verdict(rows, valueBarLabels(DriftBars.VALUE_BAR, 20));
+    assertEquals(20, mixed.restRate().count());
+    assertEquals("ranking not shown", mixed.decision(), "enough affected rows in the top, but the rest holds as many");
   }
 
   @Test
